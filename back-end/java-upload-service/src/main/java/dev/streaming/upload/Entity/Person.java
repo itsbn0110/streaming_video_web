@@ -2,54 +2,49 @@ package dev.streaming.upload.Entity;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
-
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "users")
-public class User {
+@Table(name = "persons")
+public class Person {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    String username;
+    String name;
 
-    String password;
+    LocalDate birthDate;
 
-    String email;
+    @Lob
+    byte[] avatar;
 
-    String fullName;
+    String roles;
 
-    LocalDate dob;
+    @ManyToMany(mappedBy = "directors")
+    @JsonIgnore
+    List<Movie> directedMovies;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Comment> comments;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Rating> ratings;
-
-    @ManyToMany
-    Set<Role> roles;
+    @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
+    List<Movie> actedMovies;
 }
