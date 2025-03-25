@@ -27,11 +27,15 @@ public class RoleService {
 
     public RoleResponse create(RoleRequest request) {
         var role = roleMapper.toRole(request);
+        log.info("role: {}", role.getDescription());
+        
         var permissions = permissionRepository.findAllById(request.getPermissions());
+        log.info("permissions: {}", permissions);
+
         role.setPermissions(new HashSet<>(permissions));
 
         role = roleRepositiory.save(role);
-
+        
         return roleMapper.toRoleResponse(role);
     }
 
