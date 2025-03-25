@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -79,6 +80,17 @@ public class GlobalExceptionHandler {
                                 Objects.nonNull(attributes)
                                         ? mapAttribute(errorCode.getMessage(), attributes)
                                         : errorCode.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiResponse> handleMissingParams(MissingServletRequestParameterException ex) {
+        String message = ErrorCode.MISSING_FILE + " " + ex.getParameterName();
+
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.builder()
+                        .code(ErrorCode.MISSING_FILE.getCode())
+                        .message(message)
                         .build());
     }
 

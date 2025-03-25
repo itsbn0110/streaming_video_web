@@ -2,6 +2,7 @@ package dev.streaming.upload.configuration;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.streaming.upload.DTO.ApiResponse;
@@ -32,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
-        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
+        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh", "/v1/google-drive/upload","categories","categories/{categoryName}"
     };
 
     // @Value("${jwt.signerKey}")
@@ -92,20 +94,20 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration corsConfiguration = new CorsConfiguration();
-    
-    // Cấu hình CORS
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        // Cấu hình CORS
         corsConfiguration.setAllowedOriginPatterns(List.of("*"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
-        
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = 
-            new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
+                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
-    
-    return source;
-}
+
+        return source;
+    }
 
     @Bean
     public CorsFilter corsFilter() {

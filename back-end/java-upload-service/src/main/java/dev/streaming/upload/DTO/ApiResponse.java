@@ -11,6 +11,7 @@ import lombok.Data;
 public class ApiResponse<T> {
     @Builder.Default
     private int code = 1000;
+
     private String message;
     T result;
 }
