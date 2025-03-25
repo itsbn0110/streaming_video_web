@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url:  jdbc:mysql://localhost:3306/streaming_web_demo
+    url:  jdbc:mysql://localhost:3306/streaming_web
     username: root
     password: 
   
@@ -14,7 +14,12 @@ spring:
     generate-ddl: true
     show-sql: true
     
+  servlet:
+    multipart:
+      max-file-size: 10000MB
+      max-request-size: 10000MB
+
 jwt:
   signerKey : "tEKQpGumqFCmyq7bnVRym2aJWMZ0mwdJL4Q2zqtb/3hnaJ6sNXQRSXfMQsGQnFah"
-  valid-duration: 20 #second
-  refreshable-duration: 120 
+  valid-duration: 3600 #second
+  refreshable-duration: 12000

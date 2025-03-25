@@ -16,7 +16,9 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1006, "USER_NOT_EXISTED", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1007, "UNAUTHENTICATED_ERROR", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "DO_NOT_HAVE_PERMISSION!", HttpStatus.FORBIDDEN),
-    INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN);
+    INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN),
+    MISSING_FILE(1010, "Missing field: ", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(1011, "Error while uploading movie", HttpStatus.BAD_REQUEST);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
