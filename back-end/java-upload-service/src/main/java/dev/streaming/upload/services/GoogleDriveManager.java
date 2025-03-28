@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GoogleDriveManager {
     private final GoogleDriveConfig googleDriveConfig;
 
-    private String findFolderById(String parentId, String folderName) {
+    public String findFolderById(String parentId, String folderName) {
         String folderId = null;
         String pageToken = null;
 
@@ -56,7 +56,7 @@ public class GoogleDriveManager {
         return folderId;
     }
 
-    private String findOrCreateFolder(String parentId, String folderName) {
+    public String findOrCreateFolder(String parentId, String folderName) {
         String folderId = findFolderById(parentId, folderName);
 
         if (folderId != null) {
@@ -84,29 +84,20 @@ public class GoogleDriveManager {
         }
     }
 
-    // Thêm vào GoogleDriveManager
 
-    // public double getVideoDurationFromDrive(String fileId) throws IOException {
-    //     try {
-    //         File file = googleDriveConfig.getDrive().files().get(fileId)
-    //             .setFields("id, name, mimeType, videoMediaMetadata")
-    //             .execute();
-
-    //         System.out.println("Metadata: " + file.toPrettyString()); // In toàn bộ metadata để debug
-
-    //         if (file.getVideoMediaMetadata() != null && file.getVideoMediaMetadata().getDurationMillis() != null) {
-    //             return file.getVideoMediaMetadata().getDurationMillis() / 1000.0; // Chuyển sang giây
-    //         }
-    //         return 0.0;
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         return 0.0;
-    //     }
-    // }
 
     public String getFolderId(String movieName) {
-        String parentFolderId = findOrCreateFolder(null, "ALL Movie"); // Tạo thư mục ALL Movie
+        String parentFolderId = findOrCreateFolder(null, "ALL-Movie"); // Tạo thư mục ALL Movie
         return findOrCreateFolder(parentFolderId, movieName); // Tạo thư mục con theo tên phim
+    }
+
+
+    public void deleteFileOrFolderById(String id) {
+        try {
+            googleDriveConfig.getDrive().files().delete(id).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Movie uploadMovie(MultipartFile thumbnailFile, MultipartFile movieFile, String folderName, String movieName, Movie movie) {
@@ -160,15 +151,11 @@ public class GoogleDriveManager {
             log.info("uploadedThumbnail: {}", uploadedThumbnail);
 
             String videoId = uploadedMovie.getId();
-            log.info("videoId: {}", videoId);
 
             String streamUrl = uploadedMovie.getWebViewLink();
-            log.info("streamUrl: {}", streamUrl);
 
             String thumbnail = uploadedThumbnail.getWebViewLink();
-            log.info("thumbnail: {}", thumbnail);
-
-            // Trả về Movie object (hoặc lưu vào DB)
+            movie.setFolderId(folderId);
             movie.setThumbnail(thumbnail);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
