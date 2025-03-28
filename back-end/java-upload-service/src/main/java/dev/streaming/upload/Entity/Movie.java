@@ -31,8 +31,9 @@ import lombok.experimental.FieldDefaults;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
+
 
     @Column(nullable = false)
     String title;
@@ -46,8 +47,8 @@ public class Movie {
     @Column(nullable = false)
     String thumbnail;
 
-    @Column(nullable = false)
-    String openingDate;
+
+    String folderId; 
 
     @Column(nullable = false)
     double duration;
