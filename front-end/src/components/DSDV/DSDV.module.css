@@ -1,0 +1,104 @@
+.dien-vien-container {
+  padding: 20px;
+  background-color: #1a1a1a; /* Màu nền tối */
+  color: white;
+}
+
+.dien-vien-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: left; /* Căn giữa tiêu đề */
+}
+
+.dien-vien-list {
+  display: flex;
+  gap: 20px; /* Khoảng cách giữa các mục */
+  flex-wrap: nowrap; /* Không cho phép xuống dòng */
+  overflow-x: auto; /* Cho phép cuộn ngang */
+  scroll-snap-type: x mandatory; /* Kích hoạt snap khi cuộn */
+  padding-bottom: 10px; /* Thêm khoảng cách dưới để cuộn dễ dàng */
+}
+
+.dien-vien-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:20%; /* Chiều rộng mặc định */
+  flex-shrink: 0; /* Không cho phép mục co lại */
+  scroll-snap-align: start; /* Snap từng mục khi cuộn */
+  margin-bottom: 20px;
+}
+
+.dien-vien-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.dien-vien-info {
+  text-align: center;
+}
+
+.dien-vien-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.dien-vien-vai {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .dien-vien-list {
+    gap: 15px; /* Giảm khoảng cách giữa các mục */
+  }
+
+  .dien-vien-item {
+    width: 150px; /* Giảm kích thước item trên màn hình nhỏ */
+  }
+
+  .dien-vien-image {
+    width: 100px; /* Giảm kích thước ảnh */
+    height: 100px;
+  }
+
+  .dien-vien-title {
+    font-size: 20px; /* Giảm kích thước tiêu đề */
+  }
+
+  .dien-vien-vai {
+    font-size: 12px; /* Giảm kích thước chữ vai diễn */
+  }
+}
+
+@media (max-width: 480px) {
+  .dien-vien-list {
+    gap: 10px; /* Giảm khoảng cách giữa các mục */
+  }
+
+  .dien-vien-item {
+    width: 80%; /* Tăng chiều rộng trên màn hình rất nhỏ */
+  }
+
+  .dien-vien-title {
+    font-size: 18px; /* Giảm kích thước tiêu đề */
+  }
+
+  .dien-vien-vai {
+    font-size: 12px; /* Giảm kích thước chữ vai diễn */
+  }
+}
+
+/* Ẩn scrollbar trên các trình duyệt */
+.dien-vien-list::-webkit-scrollbar {
+  display: none; /* Ẩn scrollbar trên Chrome, Safari */
+}
+
+.dien-vien-list {
+  -ms-overflow-style: none; /* Ẩn scrollbar trên IE và Edge */
+  scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+}

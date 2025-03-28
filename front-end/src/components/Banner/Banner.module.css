@@ -1,0 +1,86 @@
+:root {
+    --banner-height: 600px;
+    --button-bg-color: #ffffff;
+    --button-hover-bg-color: #f0f0f0;
+    --button-text-color: #000;
+  }
+  
+  .banner {
+    position: relative;
+    color: white;
+    background-size: cover;
+    background-position: center;
+    height: var(--banner-height);
+  }
+  
+  .banner-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .banner-title {
+    margin-bottom: 15px;
+  }
+  
+  .banner-button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .banner-button:hover {
+    background-color: var(--button-hover-bg-color);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .banner {
+      height: 300px; /* Giảm chiều cao trên màn hình nhỏ */
+    }
+  
+    .banner-title {
+      font-size: 18px; /* Giảm kích thước chữ */
+    }
+  
+    .banner-button {
+      padding: 8px 16px; /* Giảm padding của nút */
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .banner {
+      height: 250px; /* Giảm chiều cao hơn nữa trên màn hình rất nhỏ */
+    }
+  
+    .banner-content {
+      bottom: 10px; /* Điều chỉnh vị trí nội dung */
+      left: 10px;
+    }
+  
+    .banner-title {
+      font-size: 16px;
+    }
+  
+    .banner-button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
