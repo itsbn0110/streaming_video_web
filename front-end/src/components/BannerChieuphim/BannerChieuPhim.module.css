@@ -1,0 +1,372 @@
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  color: white;
+}
+
+/* Video Section */
+.video {
+  position: relative;
+  width: 100%;
+  height: 620px;
+  overflow: hidden;
+  background: black;
+}
+
+.video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  color: black;
+  padding: 20px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.playButton:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Progress Bar (luôn hiển thị) */
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 5px;
+  background: #444;
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1; /* Đảm bảo thanh progress nằm trên video */
+}
+
+.progress {
+  width: 30%; /* Example progress */
+  height: 100%;
+  background: #2563eb; /* Blue color */
+  transition: width 0.3s ease;
+}
+
+/* Video Controls */
+.videoControls {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column; /* Sắp xếp theo cột */
+  gap: 10px;
+  padding: 10px;
+  opacity: 0; /* Ẩn toàn bộ controls */
+  transform: translateY(100%); /* Đẩy controls xuống dưới */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt */
+}
+
+/* Hiển thị video controls khi hover vào video */
+.video:hover .videoControls {
+  opacity: 1; /* Hiển thị controls */
+  transform: translateY(0); /* Đưa controls lên */
+}
+
+/* Control Buttons */
+.controlButtons {
+  display: flex;
+  justify-content: space-between; /* Chia đều hai nhóm nút */
+  align-items: center;
+}
+
+/* Group for left-side controls */
+.controlButtonsLeft {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Group for right-side controls */
+.controlButtonsRight {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Control Buttons */
+.controlButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.controlButton:hover {
+  color: #2563eb; /* Blue color on hover */
+}
+/* Movie Info */
+.movieInfo {
+  margin-top: 16px;
+}
+
+.movieTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+}
+
+.movieDescription {
+  font-size: 1.125rem;
+  margin-top: 8px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.star {
+  font-size: 1.5rem;
+}
+
+.starFilled {
+  color: #facc15; /* Màu vàng */
+}
+
+.starEmpty {
+  color: #9ca3af; /* Màu xám */
+}
+
+/* Episode List */
+.episodeSection {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.episodeList {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Để các nút xuống dòng trên màn hình nhỏ */
+}
+
+.episodeButton {
+  background: #1f2937;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.episodeButton:hover {
+  background: #2563eb;
+}
+
+.episodeButtonActive {
+  background: #2563eb;
+}
+
+/* Movie Description */
+.movieDescriptionSection {
+  margin-top: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.moviePoster {
+  border-radius: 10px;
+  object-fit: cover;
+  width: 200px;
+  height: auto;
+}
+
+.movieDetailsTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.movieDetailsDescription {
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Comments Section */
+.commentsSection {
+  margin-top: 16px;
+}
+
+.commentInputSection {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.commentInput {
+  flex: 1;
+  background: #1f2937;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+.commentSubmitButton {
+  background: #2563eb;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.commentSubmitButton:hover {
+  background: #1d4ed8;
+}
+
+.comment {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  align-items: flex-start;
+}
+
+.commentAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.commentContent {
+  flex: 1;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+}
+
+.commentUser {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Khoảng cách giữa tên và icon sao */
+}
+
+.commentRating {
+  display: flex;
+  gap: 2px;
+}
+
+.commentText {
+  margin-top: 4px;
+  line-height: 1.5;
+  color: #d1d5db; /* Màu xám nhạt */
+}
+
+.star {
+  font-size: 14px;
+  color: #facc15; /* Màu vàng */
+}
+
+/* Recommendations Section */
+.recommendationsSection {
+  margin-top: 16px;
+}
+
+.recommendationsList {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: nowrap; /* Không xuống dòng */
+  overflow-x: auto; /* Kích hoạt cuộn ngang */
+  scroll-snap-type: x mandatory; /* Bật scroll snapping */
+  padding-bottom: 10px; /* Thêm khoảng cách dưới để cuộn dễ dàng */
+}
+
+.recommendationImage {
+  border-radius: 5px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  width: 150px;
+  height: 100px;
+  flex-shrink: 0; /* Đảm bảo các ảnh không co lại */
+  scroll-snap-align: start; /* Căn chỉnh từng ảnh khi cuộn */
+}
+
+.recommendationImage:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .video {
+    height: 300px; /* Giảm chiều cao video trên màn hình nhỏ */
+  }
+
+  .movieTitle {
+    font-size: 1.5rem; /* Giảm kích thước tiêu đề */
+  }
+
+  .movieDescription {
+    font-size: 1rem; /* Giảm kích thước mô tả */
+  }
+
+  .movieDescriptionSection {
+    flex-direction: column; /* Chuyển sang hiển thị theo cột */
+    align-items: center;
+  }
+
+  .moviePoster {
+    width: 100%; /* Chiều rộng đầy đủ trên màn hình nhỏ */
+    height: auto;
+  }
+
+  .episodeList {
+    justify-content: center; /* Căn giữa danh sách tập */
+  }
+
+  .recommendationsList {
+    overflow-x: auto; /* Kích hoạt cuộn ngang */
+    flex-wrap: nowrap; /* Không xuống dòng */
+  }
+
+  .recommendationImage {
+    width: 120px; /* Giảm kích thước ảnh gợi ý */
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .playButton {
+    padding: 15px; /* Giảm kích thước nút play */
+    font-size: 20px;
+  }
+
+  .movieTitle {
+    font-size: 1.25rem; /* Giảm kích thước tiêu đề hơn nữa */
+  }
+
+  .movieDescription {
+    font-size: 0.875rem; /* Giảm kích thước mô tả hơn nữa */
+  }
+
+  .recommendationImage {
+    width: 100px; /* Giảm kích thước ảnh gợi ý hơn nữa */
+    height: 70px;
+  }
+}

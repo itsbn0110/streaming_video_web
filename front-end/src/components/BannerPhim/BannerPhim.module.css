@@ -1,0 +1,154 @@
+/* Banner container */
+.banner-phim {
+    position: relative; /* Để sử dụng pseudo-element */
+    background-image: url('../../assets/th.jpg'); /* Đường dẫn ảnh nền */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 50px;
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+  }
+  
+  .banner-phim::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ màu đen với độ trong suốt */
+    z-index: 1; /* Đặt lớp phủ phía trên ảnh nền */
+  }
+  
+  .banner-content {
+    position: relative; /* Đặt nội dung phía trên lớp phủ */
+    z-index: 2;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Banner content layout */
+  .banner-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .banner-left {
+    width: 30%;
+  }
+  
+  .banner-right {
+    width: 70%;
+    padding-left: 30px;
+  }
+  
+  .banner-poster {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  /* Title and description */
+  .banner-title {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  
+  .banner-description {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+  
+  /* Details section */
+  .banner-details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  .banner-detail-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .banner-detail-item i {
+    margin-right: 5px;
+  }
+  
+  /* Genres section */
+  .banner-genres {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .banner-genre {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .banner-genre:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+  }
+  
+  /* Button */
+  .banner-button {
+    background-color: #e50914;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .banner-button:hover {
+    background-color: #b20710;
+    transform: scale(1.05);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .banner-content {
+      flex-direction: column;
+    }
+  
+    .banner-left,
+    .banner-right {
+      width: 100%;
+      padding: 0;
+    }
+  
+    .banner-right {
+      padding-top: 20px;
+    }
+  
+    .banner-title {
+      font-size: 22px;
+    }
+  
+    .banner-description {
+      font-size: 14px;
+    }
+  
+    .banner-button {
+      width: 100%;
+      text-align: center;
+    }
+  }
