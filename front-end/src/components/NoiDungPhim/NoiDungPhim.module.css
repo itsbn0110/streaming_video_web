@@ -1,0 +1,20 @@
+.noi-dung-phim {
+    padding: 20px 50px;
+    background:#333;  /* Màu nền nhạt */
+    color: #f9f9f9; /* Màu chữ */
+    border-radius: 10px; /* Bo góc */
+    margin: 20px auto;
+    max-width: 1200px; /* Giới hạn chiều rộng */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  }
+  
+  .noi-dung-text {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  /* Responsive styles */
+@media (max-width: 768px) {
+  .noi-dung-phim {
+    display: none; /* Ẩn phần nội dung phim trên màn hình nhỏ */
+  }
+}
