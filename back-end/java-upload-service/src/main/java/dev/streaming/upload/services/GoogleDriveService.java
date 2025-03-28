@@ -43,6 +43,8 @@ public class GoogleDriveService {
             folderName = "Movies";
         }
 
+
+
         var categories = categoryRepository.findByNameIn(request.getCategories());
         var genres = genreRepository.findByNameIn(request.getGenres());
         var countries = countryRepository.findByNameIn(request.getCountries());
@@ -54,13 +56,14 @@ public class GoogleDriveService {
 
         // Tải lên Google Drive và cập nhật các thuộc tính cần thiết
         googleDriveManager.uploadMovie(avatarFile, movieFile, folderName, movieName, movie);
-
+        
         log.info("movie: {}", movie);
         movie.setCategories(new HashSet<>(categories));
         movie.setGenres(new HashSet<>(genres));
         movie.setCountries(new HashSet<>(countries));
         movie.setActors(new HashSet<>(actors));
         movie.setDirectors(new HashSet<>(directors));
+        
         movie.setCreatedAt(LocalDateTime.now());
 
 

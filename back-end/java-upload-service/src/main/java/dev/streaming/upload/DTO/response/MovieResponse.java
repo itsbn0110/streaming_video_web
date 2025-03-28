@@ -16,7 +16,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class MovieResponse {
+    String id;
+
     String title;
+
     String description;
 
     int releaseYear;
@@ -26,9 +29,6 @@ public class MovieResponse {
     double duration;
 
     String streamUrl;
-
-    String videoId;
-
    
     Set<GenreResponse> genres;
 
