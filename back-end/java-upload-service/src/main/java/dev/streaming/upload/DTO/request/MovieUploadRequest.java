@@ -21,7 +21,8 @@ public class MovieUploadRequest {
     String title;
 
     int releaseYear;
-
+    
+    
     @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
     String description;
 
@@ -36,6 +37,7 @@ public class MovieUploadRequest {
     List<String> directors;
 
     String folderName;
+
 
     double duration;
 }

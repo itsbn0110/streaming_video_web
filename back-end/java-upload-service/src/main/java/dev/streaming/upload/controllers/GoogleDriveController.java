@@ -1,5 +1,6 @@
 package dev.streaming.upload.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ public class GoogleDriveController {
 
     GoogleDriveService googleDriveService;
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping("/upload")
     public ApiResponse<MovieResponse> uploadMovie(
             @RequestParam("request") String requestJson,
@@ -37,12 +39,11 @@ public class GoogleDriveController {
         ObjectMapper mapper = new ObjectMapper();
         MovieUploadRequest request = mapper.readValue(requestJson, MovieUploadRequest.class);
 
-        log.info("thumbnailFile: {}", thumbnailFile.getOriginalFilename());
-        log.info("movieFile: {}", movieFile.getOriginalFilename());
-        log.info("request: {}", request);
-
         return ApiResponse.<MovieResponse>builder()
                 .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile))
                 .build();
     }
+
 }
+
+
