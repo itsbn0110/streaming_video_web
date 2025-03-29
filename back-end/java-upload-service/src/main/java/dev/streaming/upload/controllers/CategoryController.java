@@ -1,6 +1,7 @@
 package dev.streaming.upload.controllers;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryController {
     
     CategoryService categoryService;
-
+    
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
         log.info("categoryName:{}",request.getCategoryName());
@@ -34,7 +36,7 @@ public class CategoryController {
                 .build();
     }
 
-
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping
     ApiResponse<Void> delete(@RequestParam String categoryName) {
         categoryService.delete(categoryName);
