@@ -1,7 +1,7 @@
 package dev.streaming.upload.controllers;
 
 import java.util.List;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleController {
     RoleService roleService;
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
         log.info("request: {}", request);
@@ -35,6 +36,7 @@ public class RoleController {
                 .build();
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @GetMapping
     ApiResponse<List<RoleResponse>> getAll() {
         return ApiResponse.<List<RoleResponse>>builder()
@@ -42,6 +44,8 @@ public class RoleController {
                 .build();
     }
 
+
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/{role}")
     ApiResponse<Void> delete(@PathVariable String role) {
         roleService.delete(role);
