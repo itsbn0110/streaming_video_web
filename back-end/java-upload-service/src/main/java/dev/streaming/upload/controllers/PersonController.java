@@ -2,6 +2,7 @@ package dev.streaming.upload.controllers;
 
 
 import java.io.IOException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,8 @@ public class PersonController {
     
     PersonService personService;
 
+    
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<PersonResponse> create(
                                 @RequestParam("request") String requestJson,
@@ -47,6 +50,7 @@ public class PersonController {
     }
 
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/{personId}")
     ApiResponse<Void> delete(@PathVariable Long personId) {
         personService.delete(personId);

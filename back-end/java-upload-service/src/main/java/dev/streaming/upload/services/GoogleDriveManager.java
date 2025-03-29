@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-
+import com.google.api.services.drive.model.Permission;
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.configuration.GoogleDriveConfig;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GoogleDriveManager {
     private final GoogleDriveConfig googleDriveConfig;
+
+    private final Drive driveService;
+
+    public void setPublicPermission(Drive driveService, String fileId) throws IOException {
+        Permission permission = new Permission();
+        permission.setType("anyone");  
+        permission.setRole("reader"); 
+    
+        driveService.permissions().create(fileId, permission)
+                .setFields("id")
+                .execute();
+    }
+
 
     public String findFolderById(String parentId, String folderName) {
         String folderId = null;
@@ -155,12 +169,18 @@ public class GoogleDriveManager {
             String streamUrl = uploadedMovie.getWebViewLink();
 
             String thumbnail = uploadedThumbnail.getWebViewLink();
+
+
+            setPublicPermission(driveService, uploadedMovie.getId());
+
+
             movie.setFolderId(folderId);
             movie.setThumbnail(thumbnail);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
             log.info("movie sau khi update: {}", movie);
- 
+            
+
             return movie;
         } catch (IOException e) {
             throw new RuntimeException("Upload failed: " + e.getMessage(), e);
