@@ -7,7 +7,8 @@
 .dien-vien-title {
   font-size: 24px;
   margin-bottom: 20px;
-  text-align: left; /* Căn giữa tiêu đề */
+  text-align: left; /* Căn trái tiêu đề */
+  color: aliceblue;
 }
 
 .dien-vien-list {

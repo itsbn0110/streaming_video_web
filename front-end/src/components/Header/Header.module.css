@@ -1,3 +1,4 @@
+/* Header chính */
 .header {
   display: flex;
   justify-content: space-between;
@@ -10,84 +11,22 @@
     rgba(3, 3, 3, 0.3) 100%
   );
   color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
+/* Logo */
 .logo {
   height: 50px;
+  cursor: pointer;
 }
 
+/* Danh sách menu */
 .navList {
-  display: flex;
-  gap: 15px;
-  list-style: none;
-}
-/* Search Bar */
-.searchBar {
-  display: flex;
-  align-items: center;
-  margin-top: 5px; /* Khoảng cách ngay dưới chữ "Tìm kiếm" */
-  background-color: #161414;
-  padding: 5px 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.searchInput {
-  flex: 1;
-  border: none;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 5px;
-  outline: none;
-  background-color: #190909;
-}
-
-.searchButton {
-  background-color: #d3d4e2;
-  color: #ffffff3c;
-  border: none;
-  padding: 8px 15px;
-  margin-left: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.searchButton i {
-  font-size: 16px; /* Kích thước icon */
-}
-
-.searchButton:hover {
-  background-color: #3c46c0;
-}
-.loginButton {
-  background-color: black;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  cursor: pointer;
-}
-.loginButton:hover {
-  background-color: #dbd6c2;
-}
-/* Biểu tượng 3 dấu gạch ngang */
-.menuButton {
-  display: none; /* Ẩn trên màn hình lớn */
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Menu dạng hàng dọc */
-.navList {
-  list-style: none;
   display: flex;
   gap: 20px;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -102,8 +41,10 @@
   padding: 10px;
   border-radius: 5px;
   z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Link trong menu */
 .navLink {
   text-decoration: none;
   color: #ffffff;
@@ -113,6 +54,80 @@
 
 .navLink:hover {
   color: #ffcc00; /* Màu khi hover */
+}
+
+/* Search Bar */
+.searchBar {
+  display: flex;
+  align-items: center;
+  margin-top: 5px; /* Khoảng cách ngay dưới chữ "Tìm kiếm" */
+  background-color: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  outline: none;
+  background-color: #222d42b9;
+  color: white;
+}
+
+.searchButton {
+  background-color: #c8ccd4;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto; /* Đảm bảo nút chỉ chiếm không gian vừa đủ */
+}
+
+.searchButton i {
+  font-size: 16px; /* Kích thước icon */
+}
+
+.searchButton:hover {
+  background-color: #e68a8a; /* Màu xanh đậm hơn khi hover */
+}
+
+/* Nút đăng nhập */
+.loginButton {
+  background-color: #222d42b9;
+  color: white;
+  padding: 8px 12px;
+  margin: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: auto; /* Đảm bảo nút chỉ chiếm không gian vừa đủ */
+  max-width: 150px; /* Giới hạn chiều rộng tối đa */
+  text-align: center; /* Căn giữa nội dung */
+}
+
+.loginButton:hover {
+  background-color: #d81d1d;
+}
+
+/* Biểu tượng 3 dấu gạch ngang */
+.menuButton {
+  display: none; /* Ẩn trên màn hình lớn */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 /* Responsive: Ẩn menu và hiển thị biểu tượng trên màn hình nhỏ */
