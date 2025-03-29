@@ -26,18 +26,23 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8); /* Màu nền trắng với độ trong suốt */
   border: none;
   color: black;
-  padding: 20px;
-  border-radius: 50%;
-  font-size: 24px;
+  width: 60px; /* Đặt chiều rộng */
+  height: 60px; /* Đặt chiều cao bằng chiều rộng để tạo hình tròn */
+  border-radius: 50%; /* Tạo hình tròn */
+  font-size: 24px; /* Kích thước chữ hoặc icon */
   cursor: pointer;
-  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.2s ease; /* Hiệu ứng hover */
 }
 
 .playButton:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 1); /* Màu nền trắng đậm hơn khi hover */
+  transform: translate(-50%, -50%) scale(1.1); /* Phóng to nhẹ khi hover */
 }
 
 /* Progress Bar (luôn hiển thị) */
@@ -64,11 +69,11 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: none;
   display: flex;
   flex-direction: column; /* Sắp xếp theo cột */
   gap: 10px;
-  padding: 10px;
+  padding-bottom: 10px; /* Thêm padding cho controls */
   opacity: 0; /* Ẩn toàn bộ controls */
   transform: translateY(100%); /* Đẩy controls xuống dưới */
   transition: opacity 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt */
@@ -112,8 +117,11 @@
 }
 
 .controlButton:hover {
-  color: #2563eb; /* Blue color on hover */
+  color: #3b82f6; /* Màu xanh sáng hơn khi hover */
+  transform: scale(1.2); /* Phóng to nhẹ khi hover */
+  transition: color 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt */
 }
+
 /* Movie Info */
 .movieInfo {
   margin-top: 16px;
@@ -158,7 +166,11 @@
 .episodeList {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap; /* Để các nút xuống dòng trên màn hình nhỏ */
+  flex-wrap: nowrap; /* Không cho các nút xuống dòng */
+  overflow-x: auto; /* Kích hoạt cuộn ngang nếu danh sách quá dài */
+  padding-bottom: 10px; /* Thêm khoảng cách dưới để cuộn dễ dàng */
+  scrollbar-width: thin; /* Hiển thị thanh cuộn mỏng (Firefox) */
+  scrollbar-color: #2563eb transparent; /* Màu thanh cuộn (Firefox) */
 }
 
 .episodeButton {
@@ -196,11 +208,13 @@
 .movieDetailsTitle {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #d1d5db;
 }
 
 .movieDetailsDescription {
   margin-top: 8px;
   line-height: 1.5;
+  text-align: center;
 }
 
 /* Comments Section */
@@ -231,6 +245,8 @@
   border: none;
   cursor: pointer;
   transition: background 0.3s ease;
+  width: auto;
+  margin: auto;
 }
 
 .commentSubmitButton:hover {
@@ -265,6 +281,7 @@
   display: flex;
   align-items: center;
   gap: 5px; /* Khoảng cách giữa tên và icon sao */
+  margin-top: 8px;
 }
 
 .commentRating {

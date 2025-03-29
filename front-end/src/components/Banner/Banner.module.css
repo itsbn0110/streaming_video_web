@@ -1,86 +1,102 @@
 :root {
-    --banner-height: 600px;
-    --button-bg-color: #ffffff;
-    --button-hover-bg-color: #f0f0f0;
-    --button-text-color: #000;
-  }
-  
-  .banner {
-    position: relative;
-    color: white;
-    background-size: cover;
-    background-position: center;
-    height: var(--banner-height);
-  }
-  
-  .banner-content {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+  --banner-height: 600px;
+  --button-bg-color: #ffffff; /* Màu nền nút */
+  --button-hover-bg-color: #f0f0f0; /* Màu nền nút khi hover */
+  --button-text-color: #000; /* Màu chữ nút */
+  --title-text-color: #beb591; /* Màu chữ tiêu đề */
+}
+
+.banner {
+  position: relative;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  height: var(--banner-height);
+}
+
+.banner-content {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
     opacity: 0;
-    animation: fadeIn 1s ease-in-out forwards;
+    transform: translateY(20px);
   }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
+}
+
+/* Tiêu đề */
+.banner-title {
+  margin-bottom: 15px;
+  color: var(--title-text-color); /* Áp dụng màu chữ từ biến */
+  font-size: 50px; /* Kích thước chữ mặc định */
+  font-weight: bold;
+  max-width: 60%; /* Giới hạn chiều rộng tiêu đề chỉ chiếm 40% màn hình */
+  text-align: left; /* Căn chữ sang trái */
+  word-wrap: break-word; /* Tự động xuống dòng nếu nội dung quá dài */
+}
+
+/* Nút */
+.banner-button {
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  padding: 12px 24px; /* Tăng kích thước padding để nút lớn hơn */
+  font-size: 16px; /* Tăng kích thước chữ */
+  width: auto; /* Đảm bảo nút chỉ chiếm không gian vừa đủ */
+  max-width: 150px; /* Giới hạn chiều rộng tối đa */
+  cursor: pointer;
+  border-radius: 5px; /* Bo góc nút */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.banner-button:hover {
+  background-color: var(--button-hover-bg-color);
+  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .banner {
+    height: 300px; /* Giảm chiều cao trên màn hình nhỏ */
+  }
+
   .banner-title {
-    margin-bottom: 15px;
+    font-size: 24px; /* Giảm kích thước chữ */
+    max-width: 60%; /* Tiêu đề chiếm 60% màn hình trên màn hình nhỏ */
   }
-  
+
   .banner-button {
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 10px 20px; /* Giảm padding của nút */
+    font-size: 14px; /* Giảm kích thước chữ */
   }
-  
-  .banner-button:hover {
-    background-color: var(--button-hover-bg-color);
+}
+
+@media (max-width: 576px) {
+  .banner {
+    height: 250px; /* Giảm chiều cao hơn nữa trên màn hình rất nhỏ */
   }
-  
-  /* Responsive styles */
-  @media (max-width: 768px) {
-    .banner {
-      height: 300px; /* Giảm chiều cao trên màn hình nhỏ */
-    }
-  
-    .banner-title {
-      font-size: 18px; /* Giảm kích thước chữ */
-    }
-  
-    .banner-button {
-      padding: 8px 16px; /* Giảm padding của nút */
-      font-size: 14px;
-    }
+
+  .banner-content {
+    bottom: 10px; /* Điều chỉnh vị trí nội dung */
+    left: 10px;
   }
-  
-  @media (max-width: 576px) {
-    .banner {
-      height: 250px; /* Giảm chiều cao hơn nữa trên màn hình rất nhỏ */
-    }
-  
-    .banner-content {
-      bottom: 10px; /* Điều chỉnh vị trí nội dung */
-      left: 10px;
-    }
-  
-    .banner-title {
-      font-size: 16px;
-    }
-  
-    .banner-button {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
+
+  .banner-title {
+    font-size: 18px; /* Giảm kích thước chữ hơn nữa */
+    max-width: 80%; /* Tiêu đề chiếm 80% màn hình trên màn hình rất nhỏ */
   }
+
+  .banner-button {
+    padding: 8px 16px; /* Giảm padding của nút */
+    font-size: 12px; /* Giảm kích thước chữ */
+  }
+}

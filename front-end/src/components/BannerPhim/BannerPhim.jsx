@@ -9,6 +9,7 @@ const BannerPhim = () => {
       <div className={styles['banner-content']}>
         <div className={styles['banner-left']}>
           <img src={bannerPoster} alt="Poster Phim" className={styles['banner-poster']} />
+          <button className={styles['banner-button']}>XEM PHIM</button> {/* Di chuyển nút xuống đây */}
         </div>
         <div className={styles['banner-right']}>
           <h2 className={styles['banner-title']}>Dragon Ball Super Movie: Broly</h2>
@@ -35,7 +36,6 @@ const BannerPhim = () => {
           <p>Đạo diễn: Tatsuya Nagamine</p>
           <p>Quốc gia: Nhật Bản</p>
           <p>Khởi chiếu: 14/12/2018</p>
-          <button className={styles['banner-button']}>XEM PHIM</button>
         </div>
       </div>
     </div>
