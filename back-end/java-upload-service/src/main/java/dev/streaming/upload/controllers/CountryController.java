@@ -1,6 +1,7 @@
 package dev.streaming.upload.controllers;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CountryController {
     
     CountryService countryService;
-
+    
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CountryResponse> create(@RequestBody CountryRequest request) {
         return ApiResponse.<CountryResponse>builder()
@@ -33,7 +35,7 @@ public class CountryController {
                 .build();
     }
 
-
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping
     ApiResponse<Void> delete(@RequestParam String countryName) {
         countryService.delete(countryName);

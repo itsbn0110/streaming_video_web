@@ -1,6 +1,7 @@
 package dev.streaming.upload.controllers;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GenreController {
-    
-    GenreService genreService;
 
+    GenreService genreService;
+    
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<GenreResponse> create(@RequestBody GenreRequest request) {
         return ApiResponse.<GenreResponse>builder()

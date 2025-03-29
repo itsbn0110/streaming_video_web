@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,6 @@ public class UserController {
 
     @PostMapping
     public UserResponse createUser(@RequestBody @Valid UserCreationRequest request) {
-
         return userService.createUser(request);
     }
 
@@ -44,6 +44,7 @@ public class UserController {
                 .result(userService.getAllUsers())
                 .build();
     }
+
 
     @GetMapping("/{userId}")
     UserResponse getUserById(@PathVariable String userId) {
@@ -62,6 +63,7 @@ public class UserController {
         return userService.updateUser(request, userId);
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     String deteleUserByEmail(@PathVariable String userId) {
         userService.deleteUser(userId);
