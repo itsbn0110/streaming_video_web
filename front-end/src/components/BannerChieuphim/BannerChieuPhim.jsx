@@ -88,20 +88,20 @@ const BannerChieuPhim = () => {
         {/* Episode List */}
         <div className={styles.episodeSection}>
             <div>
-            <p>Danh sách tập</p>
-            <div className={styles.episodeList}>
-                {[...Array(10)].map((_, i) => (
-                <button
-                    key={i}
-                    onClick={() => setSelectedEpisode(i + 1)}
-                    className={`${styles.episodeButton} ${
-                    selectedEpisode === i + 1 ? styles.episodeButtonActive : ""
-                    }`}
-                >
-                    {i + 1}
-                </button>
-                ))}
-            </div>
+                <p>Danh sách tập</p>
+                <div className={styles.episodeList}>
+                    {[...Array(10)].map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setSelectedEpisode(i + 1)}
+                        className={`${styles.episodeButton} ${
+                        selectedEpisode === i + 1 ? styles.episodeButtonActive : ""
+                        }`}
+                    >
+                        {i + 1}
+                    </button>
+                    ))}
+                </div>
             </div>
         </div>
 
@@ -113,16 +113,15 @@ const BannerChieuPhim = () => {
             className={styles.moviePoster}
             />
             <div>
-            <h2 className={styles.movieDetailsTitle}>
-                Dragon Ball Super Movie: Broly
-            </h2>
-            <p className={styles.movieDetailsDescription}>
-                Bảy Viên Ngọc Rồng Siêu Cấp: Huyền Thoại Broly (2018)
-            </p>
-            <p>
-                Cốt truyện của "Bảy Viên Ngọc Rồng" xoay quanh việc tìm kiếm và thu
-                thập bảy viên ngọc rồng...
-            </p>
+                <h2 className={styles.movieDetailsTitle}>
+                    Dragon Ball Super Movie: Broly
+                </h2>
+                <p className={styles.movieDetailsDescription}>
+                    Bảy Viên Ngọc Rồng Siêu Cấp: Huyền Thoại Broly (2018)
+                </p>
+                <p>
+                Chào mừng bạn đến với trang web MoonPlay - nơi bạn có thể khám phá thế giới tuyệt vời của điện ảnh và trải nghiệm những bộ phim đẹp và đầy cảm xúc. Với một thư viện phong phú chứa đựng hàng ngàn tác phẩm từ mọi thể loại, chúng tôi mang đến cho bạn những giờ phút thư giãn và hứng khởi. Cốt truyện của "Bảy Viên Ngọc Rồng" xoay quanh việc tìm kiếm và thu thập bảy viên ngọc rồng. Mỗi viên ngọc có khả năng...
+                </p>
             </div>
         </div>
 
@@ -146,28 +145,28 @@ const BannerChieuPhim = () => {
             </div>
             {comments.map((c, i) => (
                 <div key={i} className={styles.comment}>
-                {/* Avatar */}
-                <img
-                    src={`https://i.pravatar.cc/40?img=${i + 1}`} // Avatar giả lập
-                    alt="Avatar"
-                    className={styles.commentAvatar}
-                />
-                <div className={styles.commentContent}>
-                    {/* Tên người dùng và đánh giá */}
-                    <div className={styles.commentHeader}>
-                    <p className={styles.commentUser}>
-                        {c.user}
-                        <span className={styles.commentRating}>
-                        {[...Array(c.rating)].map((_, i) => (
-                            <FaStar key={i} className={styles.star} />
-                        ))}
-                        </span>
-                    </p>
+                    {/* Avatar */}
+                    <img
+                        src={`https://i.pravatar.cc/40?img=${i + 1}`} // Avatar giả lập
+                        alt="Avatar"
+                        className={styles.commentAvatar}
+                    />
+                    <div className={styles.commentContent}>
+                        {/* Tên người dùng và đánh giá */}
+                        <div className={styles.commentHeader}>
+                            <p className={styles.commentUser}>
+                                {c.user}
+                                <span className={styles.commentRating}>
+                                {[...Array(c.rating)].map((_, i) => (
+                                    <FaStar key={i} className={styles.star} />
+                                ))}
+                                </span>
+                            </p>
+                        </div>
+                        {/* Nội dung bình luận */}
+                        <p className={styles.commentText}>{c.text}</p>
                     </div>
-                    {/* Nội dung bình luận */}
-                    <p className={styles.commentText}>{c.text}</p>
                 </div>
-            </div>
             ))}
         </div>
 
