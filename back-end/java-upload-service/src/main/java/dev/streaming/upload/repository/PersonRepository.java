@@ -11,5 +11,6 @@ import dev.streaming.upload.Entity.Person;
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     List<Person> findByNameIn(List<String> personNames);
+    List<Person> findByRole(String role);
 
 }

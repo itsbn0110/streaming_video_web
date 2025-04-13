@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import dev.streaming.upload.Entity.Movie;
 
 @Repository
@@ -34,4 +33,9 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
       // Tìm phim theo quốc gia
       @Query("SELECT DISTINCT m FROM Movie m JOIN m.countries c WHERE (:countryId IS NULL OR c.id = :countryId)")
       List<Movie> findByCountry(@Param("countryId") String countryId);
-}
+
+      @Query("SELECT DISTINCT m FROM Movie m JOIN m.genres g WHERE g.id IN :genreIds AND m.id <> :movieId")
+      List<Movie> findRelatedMovies (@Param("genreIds") List<Long> genreIds, @Param("movieId") String movieId);
+
+      List<Movie> findByCategoriesSlugOrderByUpdatedAtDesc(String categorySlug);
+    }

@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
+import dev.streaming.upload.DTO.response.VideoIdResponse;
 import dev.streaming.upload.Entity.Movie;
 
 @Mapper(componentModel = "spring")
@@ -16,4 +17,6 @@ public interface MovieMapper {
     Movie toMovie(MovieUploadRequest request);
 
     MovieResponse toMovieResponse (Movie movie);
+    VideoIdResponse toVideoIdResponse (Movie movie);
+
 }

@@ -1,9 +1,11 @@
 package dev.streaming.upload.DTO.request;
 
 import java.time.LocalDate;
-import java.util.List;
+
 
 import dev.streaming.upload.validator.DobConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +16,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UpdateRequest {
-    String username;
+    @Email(message = "INVALID_EMAIL")
     String email;
+
+    @Size(min = 3, message = "INVALID_PASSWORD")
     String password;
 
-    @DobConstraint(min = 18, message = "INVALID_DOB")
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
 
-    List<String> roles;
+    String fullName;
+
+    String avatar;
+
+    String role;
 }

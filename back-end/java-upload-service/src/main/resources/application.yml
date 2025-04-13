@@ -1,7 +1,7 @@
 server:
   port: 8082
   servlet: 
-    context-path : "/api"
+    context-path : /api
 spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
@@ -16,10 +16,18 @@ spring:
     
   servlet:
     multipart:
-      max-file-size: 10000MB
-      max-request-size: 10000MB
+      max-file-size: 1000000MB
+      max-request-size: 1000000MB
+
+      
 
 jwt:
   signerKey : "tEKQpGumqFCmyq7bnVRym2aJWMZ0mwdJL4Q2zqtb/3hnaJ6sNXQRSXfMQsGQnFah"
-  valid-duration: 3600 #second
-  refreshable-duration: 12000
+  valid-duration: 3600000 #second
+  refreshable-duration: 12000000
+
+cloudinary:
+  cloud_name: dhn3lfvlf
+  api_key: 482343361921138
+  api_secret: orkp2yKDNw9Ip0VBkep3UXmDA0g
+  secure : true

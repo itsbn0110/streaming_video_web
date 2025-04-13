@@ -1,13 +1,11 @@
 package dev.streaming.upload.Entity;
 
-import java.time.LocalDate;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -28,17 +26,18 @@ import lombok.experimental.FieldDefaults;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     String name;
 
-    LocalDate birthDate;
+    String birthDate;
 
-    @Lob
-    byte[] avatar;
+    String biography;
 
-    String roles;
+    String avatar;
+
+    String role;
 
     @ManyToMany(mappedBy = "directors")
     @JsonIgnore

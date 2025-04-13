@@ -4,10 +4,12 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,10 +32,14 @@ import dev.streaming.upload.DTO.request.RefreshRequest;
 import dev.streaming.upload.DTO.response.AuthenticationResponse;
 import dev.streaming.upload.DTO.response.IntrospectResponse;
 import dev.streaming.upload.Entity.InvalidatedToken;
+import dev.streaming.upload.Entity.Role;
 import dev.streaming.upload.Entity.User;
+import dev.streaming.upload.constant.PredefinedRole;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
+import dev.streaming.upload.mapper.UserMapper;
 import dev.streaming.upload.repository.InvalidatedRepository;
+import dev.streaming.upload.repository.RoleRepositiory;
 import dev.streaming.upload.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +68,13 @@ public class AuthenticationService {
 
     InvalidatedRepository invalidatedRepository;
 
+    RoleRepositiory roleRepositiory;
+
     PasswordEncoder passwordEncoder;
+
+    UserMapper userMapper;
+
+
 
     public IntrospectResponse introspect(IntrospectRequest request) {
         try {
@@ -97,11 +109,49 @@ public class AuthenticationService {
 
         var token = generateToken(user);
 
+        
+
         return AuthenticationResponse.builder()
                 .authenticated(authenticated)
                 .token(token)
+                .user(userMapper.toUserResponse(user))
                 .build();
     }
+
+
+    public AuthenticationResponse register(AuthenticationRequest request) {
+        var existedUser = userRepository
+                .findByusername(request.getUsername())
+                .orElse(null);
+                
+        if (existedUser != null) {
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
+        }
+        
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+        
+        HashSet<Role> roles = new HashSet<>();
+        roleRepositiory.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        user.setRoles(roles);
+        
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new AppException(ErrorCode.USER_ALREADY_EXIST);
+        }
+        
+        String token = generateToken(user);
+        
+        return AuthenticationResponse.builder()
+                .authenticated(true)
+                .token(token)
+                .user(userMapper.toUserResponse(user))
+                .build();
+    }
+
 
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
 

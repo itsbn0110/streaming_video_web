@@ -1,19 +1,23 @@
 package dev.streaming.upload.services;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
+import dev.streaming.upload.DTO.response.MovieResponse;
+import dev.streaming.upload.Entity.Category;
+import dev.streaming.upload.Entity.Country;
+import dev.streaming.upload.Entity.Genre;
 import dev.streaming.upload.Entity.Movie;
+import dev.streaming.upload.Entity.Person;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
+import dev.streaming.upload.mapper.MovieMapper;
 import dev.streaming.upload.repository.CategoryRepository;
 import dev.streaming.upload.repository.CountryRepository;
 import dev.streaming.upload.repository.GenreRepository;
@@ -36,6 +40,7 @@ public class MovieService {
     CountryRepository countryRepository;
     PersonRepository personRepository;
     MovieRepository movieRepository;
+    MovieMapper movieMapper;
 
     public Page<Movie> getAllMovies (int page, int size) { 
         Pageable pageable = PageRequest.of(page, size);
@@ -44,20 +49,50 @@ public class MovieService {
     }
 
     public Movie getMovieById(String movieId) {
-        log.info("movieId", movieId);
+        
 
     return movieRepository.findById(movieId)
             .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
     }
 
+
+    public Movie getVideoId(String movieId) {
+        return movieRepository.findById(movieId)
+                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+    }
+
+
+    public List<MovieResponse> getMovieRelated ( String movieId) {
+       Movie movie = movieRepository.findById(movieId).orElseThrow( () -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+
+       List <Long> genreIds = movie.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
+
+       
+       List <Movie> relatedMovies = movieRepository.findRelatedMovies(genreIds, movieId);
+
+
+       return relatedMovies.stream().map(relatedMovie -> movieMapper.toMovieResponse(relatedMovie)).collect(Collectors.toList());
+       
+    }
+
+
     public List<Movie> getMovieByCategories (String slug) {
        return movieRepository.findByCategorySlug(slug);
     }
 
+
+    public List<MovieResponse> getNewlyUpdatedByCategory(String categorySlug) {
+        List<Movie> movies = movieRepository.findByCategoriesSlugOrderByUpdatedAtDesc(categorySlug);
+        return movies.stream()
+                .map(movieMapper::toMovieResponse)
+                .collect(Collectors.toList());
+    }
     public List<Movie> filterMovies (
         String categorySlug,
         Integer releaseYear,
-        Long countryId) {
+        Long countryId,
+        String duration
+        ) {
         List<Movie> movies = movieRepository.findAll();
 
         if (categorySlug != null) {
@@ -76,12 +111,34 @@ public class MovieService {
                     .collect(Collectors.toList());
         }
 
+        if (duration != null) {
+            switch (duration.toLowerCase()) {
+                case "short":
+                    movies = movies.stream()
+                            .filter(movie -> movie.getDuration() < 90)
+                            .collect(Collectors.toList());
+                    break;
+                case "medium":
+                    movies = movies.stream()
+                            .filter(movie -> movie.getDuration() >= 90 && movie.getDuration() <= 120)
+                            .collect(Collectors.toList());
+                    break;
+                case "long":
+                    movies = movies.stream()
+                            .filter(movie -> movie.getDuration() > 120)
+                            .collect(Collectors.toList());
+                    if (!movies.isEmpty()) {
+                        log.info("First long movie duration: {}", movies.get(0).getDuration());
+                    }
+                    break;
+                default:
+                    log.warn("Invalid duration filter: {}", duration);
+            }
+        }
+
         return movies;
      }
 
-
-
-     
 
       public Movie updateMovie (MovieUploadRequest request, String movieId) {
         var categories = categoryRepository.findByNameIn(request.getCategories());
@@ -107,23 +164,49 @@ public class MovieService {
 
 
         public void deleteMovie (String movieId) {
-            Optional<Movie> movieOptional = movieRepository.findById(movieId);
+            Movie movie = movieRepository.findById(movieId).orElseThrow( () ->  new AppException(ErrorCode.MOVIE_NOT_FOUND));
+            
 
-            if (movieOptional == null) {
-                throw new AppException(ErrorCode.MOVIE_NOT_FOUND);
+            for (Person actor : movie.getActors()) {
+                actor.getActedMovies().remove(movie);
             }
+            movie.getActors().clear();
 
-            Movie movie = movieOptional.get();
+            for (Person director : movie.getDirectors()) {
+                director.getDirectedMovies().remove(movie);
+            }
+            movie.getDirectors().clear();
 
+            for (Genre genre : movie.getGenres()) {
+                genre.getMovies().remove(movie);
+            }
+            movie.getGenres().clear();
+
+            for (Country country : movie.getCountries()) {
+                country.getMovies().remove(movie);
+            }
+            movie.getCountries().clear();
+
+            for (Category category : movie.getCategories()) {
+                category.getMovies().remove(movie);
+            }
+            movie.getCategories().clear();
+
+            
+            
             String folderId = movie.getFolderId();
             if (folderId == null) {
                 throw new AppException(ErrorCode.FILE_OR_FOLDER_NOT_EXSIST);
             }
-
-            googleDriveManager.deleteFileOrFolderById(folderId);
-
+            
+            movieRepository.delete(movie);
+            if (folderId != null) {
+                try {
+                    googleDriveManager.deleteFileOrFolderById(folderId);
+                } catch (Exception e) {
+                    log.error("Error deleting folder from Google Drive: " + e.getMessage(), e);
+                }
+            }
         }
-
-    
 
 }

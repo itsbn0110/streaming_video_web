@@ -1,5 +1,4 @@
 package dev.streaming.upload.DTO.response;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -14,8 +13,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class MovieResponse {
+
+public class VideoIdResponse {
     String id;
+
+    String videoId;
 
     String title;
 
@@ -28,16 +30,10 @@ public class MovieResponse {
     int releaseYear;
 
     String thumbnail;
-    
-    String backdrop;
 
     double duration;
 
     String streamUrl;
-
-    String status;
-
-    Boolean premium;
    
     Set<GenreResponse> genres;
 
@@ -54,5 +50,6 @@ public class MovieResponse {
     Set<PersonResponse> actors;
 
     LocalDateTime createdAt;
-
 }
+
+

@@ -114,12 +114,10 @@ public class GoogleDriveManager {
         }
     }
 
-    public Movie uploadMovie(MultipartFile thumbnailFile, MultipartFile movieFile, String folderName, String movieName, Movie movie) {
+    public Movie uploadMovie( MultipartFile movieFile, String movieName, Movie movie) {
 
-        log.info("chay vao day roi movie : {}", movie);
-        if (thumbnailFile.getContentType() == null || !thumbnailFile.getContentType().startsWith("image/")) {
-            throw new IllegalArgumentException("Avatar file must be an image");
-        }
+        
+    
 
         if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
             throw new IllegalArgumentException("Movie file must be a video");
@@ -142,43 +140,26 @@ public class GoogleDriveManager {
                     .create(
                             videoMetadata,
                             new InputStreamContent(
-                                    movieFile.getContentType(), new ByteArrayInputStream(movieFile.getBytes())))
+                                    movieFile.getContentType(), movieFile.getInputStream()))
                     .setFields("id, name, webViewLink")
                     .execute();
-            log.info("uploadedMovie: {}", uploadedMovie);
 
-            // 🟢 Upload thumbnail
-            File thumbnailMetadata = new File();
-            thumbnailMetadata.setParents(Collections.singletonList(folderId));
-            thumbnailMetadata.setName(movieName + "_thumbnail.jpg");
+            
+         
 
-            File uploadedThumbnail = googleDriveConfig
-                    .getDrive()
-                    .files()
-                    .create(
-                            thumbnailMetadata,
-                            new InputStreamContent(
-                                    thumbnailFile.getContentType(), new ByteArrayInputStream(thumbnailFile.getBytes())))
-                    .setFields("id, webViewLink")
-                    .execute();
-
-            log.info("uploadedThumbnail: {}", uploadedThumbnail);
+          
 
             String videoId = uploadedMovie.getId();
 
             String streamUrl = uploadedMovie.getWebViewLink();
 
-            String thumbnail = uploadedThumbnail.getWebViewLink();
+            
 
 
             setPublicPermission(driveService, uploadedMovie.getId());
-
-
             movie.setFolderId(folderId);
-            movie.setThumbnail(thumbnail);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
-            log.info("movie sau khi update: {}", movie);
             
 
             return movie;

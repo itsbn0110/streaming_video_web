@@ -33,14 +33,16 @@ public class GoogleDriveController {
     public ApiResponse<MovieResponse> uploadMovie(
             @RequestParam("request") String requestJson,
             @RequestPart("thumbnailFile") MultipartFile thumbnailFile,
-            @RequestPart("movieFile") MultipartFile movieFile)
+            @RequestPart("movieFile") MultipartFile movieFile,
+            @RequestPart("movieBackDrop") MultipartFile movieBackDrop
+            )
             throws Exception {
-        // Chuyển đổi JSON string thành MovieUploadRequest object
+
         ObjectMapper mapper = new ObjectMapper();
         MovieUploadRequest request = mapper.readValue(requestJson, MovieUploadRequest.class);
 
         return ApiResponse.<MovieResponse>builder()
-                .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile))
+                .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile,movieBackDrop))
                 .build();
     }
 

@@ -2,6 +2,8 @@ package dev.streaming.upload.DTO.request;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,9 +30,12 @@ public class UserCreationRequest {
     String password;
 
     @DobConstraint(min = 16, message = "INVALID_DOB")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dob;
 
     String fullName;
 
     String avatar;
+
+    String role;
 }

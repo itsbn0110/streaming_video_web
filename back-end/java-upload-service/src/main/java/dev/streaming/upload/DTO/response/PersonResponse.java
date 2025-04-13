@@ -13,6 +13,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PersonResponse {
+    Long id;
     String name;
-    String roles;
+    String role;
+    String birthDate;
+    String avatar;
+    String biography;
 }

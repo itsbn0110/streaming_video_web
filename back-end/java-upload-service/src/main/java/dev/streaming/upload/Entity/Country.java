@@ -30,6 +30,7 @@ public class Country {
     Long id;
 
     @Column(nullable = false)
+    
     String name;
 
     @ManyToMany(mappedBy = "countries")

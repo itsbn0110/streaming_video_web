@@ -38,5 +38,6 @@ public class Category {
     @JsonIgnore  // Tránh vòng lặp JSON
     List<Movie> movies;
 
+
     String slug;
 }

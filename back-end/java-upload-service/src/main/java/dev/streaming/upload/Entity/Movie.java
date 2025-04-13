@@ -38,15 +38,32 @@ public class Movie {
     @Column(nullable = false)
     String title;
 
+    @Column(name ="original_title")
+    String originalTitle;
+
+    @Column(name ="trailer_link")
+    String trailerLink;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     String description;
 
     @Column(name = "release_year", nullable = false)
     int releaseYear;
-
+    
     @Column(nullable = false)
     String thumbnail;
+   
+    @Column(nullable = false)
+    String backdrop;
+    
+//     @Column(nullable = false)
+//     String thumbnailPreview;
 
+    @Column(nullable = false)
+    String status;
+
+    @Column(nullable = false)
+    Boolean premium;
 
     String folderId; 
 
