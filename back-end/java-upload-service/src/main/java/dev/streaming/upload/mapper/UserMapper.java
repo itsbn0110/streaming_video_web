@@ -1,10 +1,16 @@
 package dev.streaming.upload.mapper;
 
+<<<<<<< HEAD
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+=======
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
 import dev.streaming.upload.DTO.request.UpdateRequest;
 import dev.streaming.upload.DTO.request.UserCreationRequest;
@@ -20,7 +26,10 @@ public interface UserMapper {
     void updateUser(@MappingTarget User user, UpdateRequest request);
     // UserResponse toUserResponse (User user);
     UserResponse toUserResponse(User user);
+<<<<<<< HEAD
 
      @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromRequest(UpdateRequest request, @MappingTarget User user);
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 }

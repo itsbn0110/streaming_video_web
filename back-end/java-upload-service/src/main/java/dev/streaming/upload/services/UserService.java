@@ -1,5 +1,6 @@
 package dev.streaming.upload.services;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -9,17 +10,30 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+=======
+import java.util.HashSet;
+import java.util.List;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PostAuthorize;
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+<<<<<<< HEAD
 import org.springframework.web.multipart.MultipartFile;
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
 import dev.streaming.upload.DTO.request.UpdateRequest;
 import dev.streaming.upload.DTO.request.UserCreationRequest;
 import dev.streaming.upload.DTO.response.UserResponse;
 import dev.streaming.upload.Entity.Role;
 import dev.streaming.upload.Entity.User;
+<<<<<<< HEAD
+=======
+import dev.streaming.upload.constant.PredefinedRole;
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
 import dev.streaming.upload.mapper.UserMapper;
@@ -39,14 +53,20 @@ public class UserService {
     UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     RoleRepositiory roleRepository;
+<<<<<<< HEAD
     CloudinaryService cloudinaryService;
     public UserResponse createUser(UserCreationRequest request,MultipartFile avatarFile) throws IOException {
         // userRepository.findByusername(request.getUsername()).orElseThrow(() ->  new AppException(ErrorCode.USER_ALREADY_EXISTED));
         
+=======
+
+    public UserResponse createUser(UserCreationRequest request) {
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         HashSet<Role> roles = new HashSet<>();
+<<<<<<< HEAD
         Optional<Role> userRole = roleRepository.findById(request.getRole());
         if (userRole.isPresent()) {
             roles.add(userRole.get());
@@ -59,6 +79,11 @@ public class UserService {
 
         user.setAvatar(avatar);
         
+=======
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+
+        user.setRoles(roles);
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
         try {
             user = userRepository.save(user);
@@ -69,6 +94,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+<<<<<<< HEAD
     
 
     @PreAuthorize(value = "hasRole('ADMIN')")
@@ -82,6 +108,14 @@ public class UserService {
     }
 
   
+=======
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    }
+
+    @PostAuthorize("returnObject.username == authentication.name")
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     public UserResponse getUserById(String userId) {
         log.info("in getuser by id");
         return userMapper.toUserResponse(
@@ -96,6 +130,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+<<<<<<< HEAD
     public UserResponse updateUser(UpdateRequest request, MultipartFile avatarFile, String userId) {
         User existedUser = userRepository.findById(userId)
             .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
@@ -128,6 +163,23 @@ public class UserService {
     {   
         var existedUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         existedUser.getRoles().clear();
+=======
+    public UserResponse updateUser(UpdateRequest request, String userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("not found"));
+
+        userMapper.updateUser(user, request);
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public void deleteUser(String userId) {
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         userRepository.deleteById(userId);
     }
 }

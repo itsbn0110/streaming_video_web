@@ -7,8 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import dev.streaming.upload.DTO.request.PersonRequest;
 import dev.streaming.upload.DTO.response.PersonResponse;
 import dev.streaming.upload.Entity.Person;
+<<<<<<< HEAD
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.mapper.PersonMapper;
 import dev.streaming.upload.repository.PersonRepository;
 import lombok.AccessLevel;
@@ -22,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PersonService {
 
+<<<<<<< HEAD
     CloudinaryService cloudinaryService;
     PersonRepository personRepository;
     PersonMapper personMapper;
@@ -35,11 +39,18 @@ public class PersonService {
             .birthDate(request.getBirthDate())
             .avatar(avatar)
             .build());
+=======
+    PersonRepository personRepository;
+    PersonMapper personMapper;
+    public PersonResponse create( PersonRequest request, MultipartFile personAvatar ) throws IOException {
+        Person person= personRepository.save(Person.builder().name(request.getPersonName()).roles(request.getPersonRole()).avatar(personAvatar.getBytes()).build());
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
         PersonResponse personResponse = personMapper.toPersonResponse(person);
         return personResponse;
     }
 
+<<<<<<< HEAD
     public List<Person> getAllDirectors(String role) {
         List<Person> directors = personRepository.findByRole(role);
         return directors;
@@ -69,6 +80,13 @@ public class PersonService {
 
 
 
+=======
+      public List<Person> getAll() {
+        List<Person> countries = personRepository.findAll();
+        return countries;
+    }
+
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     public void delete(Long personId) {
         personRepository.deleteById(personId);
     }
