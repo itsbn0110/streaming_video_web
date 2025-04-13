@@ -38,3 +38,5 @@ tokens/
 StoredCredential
 **/StoredCredential
 **/tokens/
+back-end/java-upload-service/tokens/
+back-end/java-upload-service/tokens/StoredCredential
