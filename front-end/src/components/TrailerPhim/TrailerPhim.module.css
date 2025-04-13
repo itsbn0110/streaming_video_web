@@ -17,6 +17,7 @@
     overflow-x: auto; /* Cho phép cuộn ngang */
     scroll-snap-type: x mandatory; /* Kích hoạt snap khi cuộn */
     padding-bottom: 10px; /* Thêm khoảng cách dưới để cuộn dễ dàng */
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
   }
   
   .trailer-item {
@@ -86,12 +87,11 @@
     }
   }
   
-  /* Ẩn scrollbar trên các trình duyệt */
   .trailer-list::-webkit-scrollbar {
-    display: none; /* Ẩn scrollbar trên Chrome, Safari */
+    display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
   }
   
-  .trailer-list {
-    -ms-overflow-style: none; /* Ẩn scrollbar trên IE và Edge */
-    scrollbar-width: none; /* Ẩn scrollbar trên Firefox */
+  /* Hiển thị thanh cuộn khi hover */
+  .trailer-list:hover {
+    scrollbar-width: thin; /* Hiển thị thanh cuộn mỏng trên Firefox */
   }
