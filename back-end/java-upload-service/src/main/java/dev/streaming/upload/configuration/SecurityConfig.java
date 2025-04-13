@@ -21,8 +21,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.enums.Role;
@@ -35,12 +38,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+<<<<<<< HEAD
     private final String[] PUBLIC_ENDPOINTS_POST = {
         "/users", "/auth/login", "/auth/introspect","/auth/register", "/auth/logout", "/auth/refresh", "/v1/google-drive/upload","categories","categories/{categoryName}"
     };
 
     private final String[]  PUBLIC_ENDPOINTS_GET = {
         "/movies/**","/countries/**","/genres/**","categories/**","/person/**","/users/**"
+=======
+    private final String[] PUBLIC_ENDPOINTS = {
+        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh", "/v1/google-drive/upload","categories","categories/{categoryName}"
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     };
 
     // @Value("${jwt.signerKey}")
@@ -50,9 +58,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+<<<<<<< HEAD
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+=======
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/users")
                 .hasRole(Role.ADMIN.name())
@@ -122,6 +134,7 @@ public class SecurityConfig {
         return new CorsFilter(corsConfigurationSource());
     }
 
+<<<<<<< HEAD
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -130,6 +143,8 @@ public class SecurityConfig {
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return objectMapper;
     }
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     // @Bean
     // JwtDecoder jwtDecoder () {
     //     SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512" );

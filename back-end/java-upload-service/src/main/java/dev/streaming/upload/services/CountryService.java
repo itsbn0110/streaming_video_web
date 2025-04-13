@@ -4,10 +4,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import dev.streaming.upload.DTO.response.CountryResponse;
 import dev.streaming.upload.Entity.Country;
+<<<<<<< HEAD
 
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
+=======
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.mapper.CountryMapper;
 import dev.streaming.upload.repository.CountryRepository;
 import dev.streaming.upload.utils.SlugUtils;
@@ -32,12 +35,17 @@ public class CountryService {
         return countryResponse;
     }
 
+<<<<<<< HEAD
       
     public List<Country> getAll() {
+=======
+      public List<Country> getAll() {
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         List<Country> countries = countryRepository.findAll();
         return countries;
     }
 
+<<<<<<< HEAD
 
     public CountryResponse update( Long countryId , String countryName) {
         String slug = SlugUtils.toSlug(countryName);
@@ -66,6 +74,10 @@ public class CountryService {
 
     
         countryRepository.delete(country);
+=======
+    public void delete(String countryName) {
+        countryRepository.deleteByName(countryName);
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     }
 
 

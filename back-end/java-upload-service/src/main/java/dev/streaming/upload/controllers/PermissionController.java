@@ -47,6 +47,10 @@ public class PermissionController {
     @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/{permission}")
     ApiResponse<Void> delete(@PathVariable String permission) {
+<<<<<<< HEAD
+=======
+        log.info("permission:", permission);
+>>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         permissionService.delete(permission);
         return ApiResponse.<Void>builder().build();
     }
