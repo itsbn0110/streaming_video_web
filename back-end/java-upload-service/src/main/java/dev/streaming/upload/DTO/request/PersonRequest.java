@@ -13,15 +13,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PersonRequest {
-<<<<<<< HEAD
     String name;
     String role;
     String birthDate;
     String biography;
     String avatar;
-=======
-    String personName;
-    String personRole;
-    String personBirthDate;
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 }

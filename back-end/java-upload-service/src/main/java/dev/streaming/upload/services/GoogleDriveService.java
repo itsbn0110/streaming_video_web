@@ -26,11 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GoogleDriveService {
-<<<<<<< HEAD
     CloudinaryService cloudinaryService;
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     MovieRepository movieRepository;
     GoogleDriveManager googleDriveManager;
     CategoryRepository categoryRepository;
@@ -39,7 +36,6 @@ public class GoogleDriveService {
     PersonRepository personRepository;
     MovieMapper movieMapper;
 
-<<<<<<< HEAD
     public MovieResponse uploadMovie(MovieUploadRequest request, MultipartFile avatarFile, MultipartFile movieFile, MultipartFile movieBackDrop)
             throws IOException {
         String movieName = request.getTitle();
@@ -53,19 +49,6 @@ public class GoogleDriveService {
 
         String backDrop = cloudinaryService.uploadImage(movieBackDrop);
     
-=======
-    public MovieResponse uploadMovie(MovieUploadRequest request, MultipartFile avatarFile, MultipartFile movieFile)
-            throws IOException {
-        String folderName = request.getFolderName();
-        String movieName = request.getTitle();
-     
-        if (folderName == null || folderName.trim().isEmpty()) {
-            folderName = "Movies";
-        }
-
-
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         var categories = categoryRepository.findByNameIn(request.getCategories());
         var genres = genreRepository.findByNameIn(request.getGenres());
         var countries = countryRepository.findByNameIn(request.getCountries());
@@ -76,28 +59,17 @@ public class GoogleDriveService {
         Movie movie = movieMapper.toMovie(request);
 
         // Tải lên Google Drive và cập nhật các thuộc tính cần thiết
-<<<<<<< HEAD
         googleDriveManager.uploadMovie( movieFile, movieName, movie);
         
-=======
-        googleDriveManager.uploadMovie(avatarFile, movieFile, folderName, movieName, movie);
-        
-        log.info("movie: {}", movie);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         movie.setCategories(new HashSet<>(categories));
         movie.setGenres(new HashSet<>(genres));
         movie.setCountries(new HashSet<>(countries));
         movie.setActors(new HashSet<>(actors));
         movie.setDirectors(new HashSet<>(directors));
-<<<<<<< HEAD
         movie.setCreatedAt(LocalDateTime.now());
         movie.setThumbnail(thumbnail);
         movie.setBackdrop(backDrop);
 
-=======
-        
-        movie.setCreatedAt(LocalDateTime.now());
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
 
         movieRepository.save(movie);

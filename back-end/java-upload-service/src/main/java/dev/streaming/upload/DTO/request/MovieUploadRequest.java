@@ -20,7 +20,6 @@ public class MovieUploadRequest {
     @NotBlank(message = "NOT_BLANK_TITLE")
     String title;
 
-<<<<<<< HEAD
     String originalTitle;
 
     String trailerLink;
@@ -33,11 +32,6 @@ public class MovieUploadRequest {
 
     Boolean premium;
 
-=======
-    int releaseYear;
-    
-    
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
     String description;
 
@@ -51,10 +45,6 @@ public class MovieUploadRequest {
 
     List<String> directors;
 
-<<<<<<< HEAD
-=======
-    String folderName;
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
 
     double duration;

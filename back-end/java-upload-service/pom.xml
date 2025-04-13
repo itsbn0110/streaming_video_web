@@ -112,7 +112,6 @@
 			<version>v3-rev20230822-2.0.0</version>
 		</dependency>
 
-<<<<<<< HEAD
 
 		<dependency>
 			<groupId>com.cloudinary</groupId>
@@ -130,8 +129,6 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 	</dependencies>
 
 	<build>
@@ -156,6 +153,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>

@@ -4,18 +4,12 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-<<<<<<< HEAD
 import java.util.HashSet;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-<<<<<<< HEAD
 import org.springframework.dao.DataIntegrityViolationException;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,7 +32,6 @@ import dev.streaming.upload.DTO.request.RefreshRequest;
 import dev.streaming.upload.DTO.response.AuthenticationResponse;
 import dev.streaming.upload.DTO.response.IntrospectResponse;
 import dev.streaming.upload.Entity.InvalidatedToken;
-<<<<<<< HEAD
 import dev.streaming.upload.Entity.Role;
 import dev.streaming.upload.Entity.User;
 import dev.streaming.upload.constant.PredefinedRole;
@@ -47,12 +40,6 @@ import dev.streaming.upload.exception.ErrorCode;
 import dev.streaming.upload.mapper.UserMapper;
 import dev.streaming.upload.repository.InvalidatedRepository;
 import dev.streaming.upload.repository.RoleRepositiory;
-=======
-import dev.streaming.upload.Entity.User;
-import dev.streaming.upload.exception.AppException;
-import dev.streaming.upload.exception.ErrorCode;
-import dev.streaming.upload.repository.InvalidatedRepository;
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +68,6 @@ public class AuthenticationService {
 
     InvalidatedRepository invalidatedRepository;
 
-<<<<<<< HEAD
     RoleRepositiory roleRepositiory;
 
     PasswordEncoder passwordEncoder;
@@ -90,10 +76,6 @@ public class AuthenticationService {
 
 
 
-=======
-    PasswordEncoder passwordEncoder;
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     public IntrospectResponse introspect(IntrospectRequest request) {
         try {
             var token = request.getToken();
@@ -127,7 +109,6 @@ public class AuthenticationService {
 
         var token = generateToken(user);
 
-<<<<<<< HEAD
         
 
         return AuthenticationResponse.builder()
@@ -172,14 +153,6 @@ public class AuthenticationService {
     }
 
 
-=======
-        return AuthenticationResponse.builder()
-                .authenticated(authenticated)
-                .token(token)
-                .build();
-    }
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
 
         try {

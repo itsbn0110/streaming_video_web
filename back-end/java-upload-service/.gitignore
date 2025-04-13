@@ -31,7 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-<<<<<<< HEAD
 
 
 # Credentials and tokens
@@ -39,5 +38,3 @@ tokens/
 StoredCredential
 **/StoredCredential
 **/tokens/
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52

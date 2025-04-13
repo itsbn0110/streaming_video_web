@@ -4,11 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-<<<<<<< HEAD
-import com.fasterxml.jackson.annotation.JsonFormat;
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,11 +39,8 @@ public class User {
 
     String password;
 
-<<<<<<< HEAD
     String avatar;
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     String email;
 
     String fullName;

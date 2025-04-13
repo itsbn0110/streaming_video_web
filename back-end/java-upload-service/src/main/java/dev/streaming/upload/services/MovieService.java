@@ -1,23 +1,14 @@
 package dev.streaming.upload.services;
 
-<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-=======
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
-<<<<<<< HEAD
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.Entity.Category;
 import dev.streaming.upload.Entity.Country;
@@ -27,11 +18,6 @@ import dev.streaming.upload.Entity.Person;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
 import dev.streaming.upload.mapper.MovieMapper;
-=======
-import dev.streaming.upload.Entity.Movie;
-import dev.streaming.upload.exception.AppException;
-import dev.streaming.upload.exception.ErrorCode;
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.repository.CategoryRepository;
 import dev.streaming.upload.repository.CountryRepository;
 import dev.streaming.upload.repository.GenreRepository;
@@ -54,10 +40,7 @@ public class MovieService {
     CountryRepository countryRepository;
     PersonRepository personRepository;
     MovieRepository movieRepository;
-<<<<<<< HEAD
     MovieMapper movieMapper;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
     public Page<Movie> getAllMovies (int page, int size) { 
         Pageable pageable = PageRequest.of(page, size);
@@ -66,17 +49,12 @@ public class MovieService {
     }
 
     public Movie getMovieById(String movieId) {
-<<<<<<< HEAD
         
-=======
-        log.info("movieId", movieId);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
     return movieRepository.findById(movieId)
             .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
     }
 
-<<<<<<< HEAD
 
     public Movie getVideoId(String movieId) {
         return movieRepository.findById(movieId)
@@ -98,13 +76,10 @@ public class MovieService {
     }
 
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     public List<Movie> getMovieByCategories (String slug) {
        return movieRepository.findByCategorySlug(slug);
     }
 
-<<<<<<< HEAD
 
     public List<MovieResponse> getNewlyUpdatedByCategory(String categorySlug) {
         List<Movie> movies = movieRepository.findByCategoriesSlugOrderByUpdatedAtDesc(categorySlug);
@@ -118,12 +93,6 @@ public class MovieService {
         Long countryId,
         String duration
         ) {
-=======
-    public List<Movie> filterMovies (
-        String categorySlug,
-        Integer releaseYear,
-        Long countryId) {
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         List<Movie> movies = movieRepository.findAll();
 
         if (categorySlug != null) {
@@ -142,7 +111,6 @@ public class MovieService {
                     .collect(Collectors.toList());
         }
 
-<<<<<<< HEAD
         if (duration != null) {
             switch (duration.toLowerCase()) {
                 case "short":
@@ -168,18 +136,10 @@ public class MovieService {
             }
         }
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         return movies;
      }
 
 
-<<<<<<< HEAD
-=======
-
-     
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
       public Movie updateMovie (MovieUploadRequest request, String movieId) {
         var categories = categoryRepository.findByNameIn(request.getCategories());
         var genres = genreRepository.findByNameIn(request.getGenres());
@@ -204,7 +164,6 @@ public class MovieService {
 
 
         public void deleteMovie (String movieId) {
-<<<<<<< HEAD
             Movie movie = movieRepository.findById(movieId).orElseThrow( () ->  new AppException(ErrorCode.MOVIE_NOT_FOUND));
             
 
@@ -235,21 +194,10 @@ public class MovieService {
 
             
             
-=======
-            Optional<Movie> movieOptional = movieRepository.findById(movieId);
-
-            if (movieOptional == null) {
-                throw new AppException(ErrorCode.MOVIE_NOT_FOUND);
-            }
-
-            Movie movie = movieOptional.get();
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
             String folderId = movie.getFolderId();
             if (folderId == null) {
                 throw new AppException(ErrorCode.FILE_OR_FOLDER_NOT_EXSIST);
             }
-<<<<<<< HEAD
             
             movieRepository.delete(movie);
             if (folderId != null) {
@@ -261,13 +209,4 @@ public class MovieService {
             }
         }
 
-=======
-
-            googleDriveManager.deleteFileOrFolderById(folderId);
-
-        }
-
-    
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 }
