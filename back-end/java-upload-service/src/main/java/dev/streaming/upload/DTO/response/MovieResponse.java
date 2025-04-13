@@ -14,43 +14,30 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-<<<<<<< HEAD
-=======
-
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 public class MovieResponse {
     String id;
 
     String title;
 
-<<<<<<< HEAD
     String originalTitle;
 
     String trailerLink;
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     String description;
 
     int releaseYear;
 
     String thumbnail;
-<<<<<<< HEAD
     
     String backdrop;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 
     double duration;
 
     String streamUrl;
-<<<<<<< HEAD
 
     String status;
 
     Boolean premium;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
    
     Set<GenreResponse> genres;
 

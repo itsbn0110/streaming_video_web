@@ -1,10 +1,6 @@
 package dev.streaming.upload.controllers;
 
 import java.util.List;
-<<<<<<< HEAD
-
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,10 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
-<<<<<<< HEAD
 import dev.streaming.upload.DTO.response.VideoIdResponse;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.mapper.MovieMapper;
 import dev.streaming.upload.services.MovieService;
@@ -47,15 +40,11 @@ public class MovieController {
             @RequestParam(defaultValue = "15") int size) {
 
         var results = movieService.getAllMovies(page,size);
-<<<<<<< HEAD
         
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         return ApiResponse.<Page<Movie>>builder().result(results).build();
     }
 
     @GetMapping("/{movieId}")
-<<<<<<< HEAD
     public ApiResponse<MovieResponse> getMovieById(
             @PathVariable String movieId
            ) {
@@ -80,15 +69,6 @@ public class MovieController {
 
         var results = movieService.getMovieRelated(movieId);
         return  ApiResponse.<List<MovieResponse>>builder().result(results).build();
-=======
-    public ApiResponse<Movie> getMovieById(
-            @PathVariable String movieId
-           ) {
-        
-        log.info("movieId", movieId);
-        var results = movieService.getMovieById(movieId);
-        return ApiResponse.<Movie>builder().result(results).build();
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     }
 
     @GetMapping ("/category/{slug}")
@@ -100,7 +80,6 @@ public class MovieController {
         
     }
 
-<<<<<<< HEAD
 
     @GetMapping("/newly-updated/{categorySlug}")
     public ApiResponse<List<MovieResponse>> getNewlyUpdatedByCategory(@PathVariable String categorySlug) {
@@ -108,24 +87,15 @@ public class MovieController {
         return ApiResponse.<List<MovieResponse>>builder().result(results).build();
     }
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     @GetMapping ("/filter")
     public ApiResponse<List<Movie>> filterMovies (
         @RequestParam(required = false) String categorySlug,
         @RequestParam(required = false) Integer releaseYear,
-<<<<<<< HEAD
         @RequestParam(required = false) Long countryId,
         @RequestParam(required = false) String duration
 
     ) {
         var results = movieService.filterMovies(categorySlug,releaseYear,countryId,duration);
-=======
-        @RequestParam(required = false) Long countryId
-    ) {
-        
-        var results = movieService.filterMovies(categorySlug,releaseYear,countryId);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         return ApiResponse.<List<Movie>>builder().result(results).build();
     }
 
@@ -146,10 +116,6 @@ public class MovieController {
             .build();
     }   
 
-<<<<<<< HEAD
-=======
-    @PreAuthorize(value = "hasRole('ADMIN')")
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     @DeleteMapping("/delete/{movieId}")
     public ApiResponse<Void> deleteMovie (@PathVariable String movieId ) {
         movieService.deleteMovie(movieId);

@@ -29,25 +29,18 @@ public class AuthenticationController {
 
     AuthenticationService authenticationService;
 
-<<<<<<< HEAD
     @PostMapping("/login")
-=======
-    @PostMapping("login")
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
-<<<<<<< HEAD
     @PostMapping("/register")
     ApiResponse<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.register(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) {
         var result = authenticationService.introspect(request);

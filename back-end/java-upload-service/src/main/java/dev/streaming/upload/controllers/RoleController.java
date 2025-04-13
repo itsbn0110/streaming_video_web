@@ -30,10 +30,6 @@ public class RoleController {
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<RoleResponse> create(@RequestBody RoleRequest request) {
-<<<<<<< HEAD
-=======
-        log.info("request: {}", request);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         return ApiResponse.<RoleResponse>builder()
                 .result(roleService.create(request))
                 .build();

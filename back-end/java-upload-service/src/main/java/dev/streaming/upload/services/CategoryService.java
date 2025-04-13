@@ -4,10 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import dev.streaming.upload.DTO.response.CategoryResponse;
 import dev.streaming.upload.Entity.Category;
-<<<<<<< HEAD
 import dev.streaming.upload.Entity.Movie;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.mapper.CategoryMapper;
 import dev.streaming.upload.repository.CategoryRepository;
 import dev.streaming.upload.utils.SlugUtils;
@@ -33,16 +30,11 @@ public class CategoryService {
         return categoryResponse;
     }
 
-<<<<<<< HEAD
     public List<Category> getAll() {
-=======
-      public List<Category> getAll() {
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         List<Category> categories = categoryRepository.findAll();
         return categories;
     }
 
-<<<<<<< HEAD
     public void delete(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -56,10 +48,6 @@ public class CategoryService {
 
     
         categoryRepository.delete(category);
-=======
-    public void delete(String categoryName) {
-        categoryRepository.deleteByName(categoryName);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     }
 
 

@@ -4,12 +4,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import dev.streaming.upload.DTO.response.GenreResponse;
 import dev.streaming.upload.Entity.Genre;
-<<<<<<< HEAD
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
-=======
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
 import dev.streaming.upload.mapper.GenreMapper;
 import dev.streaming.upload.repository.GenreRepository;
 import dev.streaming.upload.utils.SlugUtils;
@@ -34,16 +31,11 @@ public class GenreService {
         return genreResponse;
     }
 
-<<<<<<< HEAD
     public List<Genre> getAll() {
-=======
-      public List<Genre> getAll() {
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
         List<Genre> genres = genreRepository.findAll();
         return genres;
     }
 
-<<<<<<< HEAD
 
     public GenreResponse update( Long genreId , String genreName) {
         String slug = SlugUtils.toSlug(genreName);
@@ -72,10 +64,6 @@ public class GenreService {
 
     
         genreRepository.delete(genre);
-=======
-    public void delete(String genreName) {
-        genreRepository.deleteByName(genreName);
->>>>>>> bc2372312a5c8b78049ba06d9e36853f03138c52
     }
 
 
