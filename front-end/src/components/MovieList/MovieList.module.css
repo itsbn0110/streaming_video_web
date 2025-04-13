@@ -23,12 +23,18 @@
   display: flex;
   flex-wrap: wrap;
   margin: -10px; /* Để bù khoảng cách giữa các cột */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+
 }
 
 .row::-webkit-scrollbar {
-  display: none; /* Ẩn thanh cuộn ngang */
+  display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
 }
 
+/* Hiển thị thanh cuộn khi hover */
+.row:hover {
+  scrollbar-width: thin; /* Hiển thị thanh cuộn mỏng trên Firefox */
+}
 /* Cột phim */
 .custom-col {
   flex: 0 0 auto; /* Đảm bảo các cột không co lại */
@@ -111,16 +117,21 @@
   padding: 10px; /* Khoảng cách giữa các cột */
 }
 
-.hot-movies-row {
+.hot-movies-row{
   display: flex;
-  justify-content: space-between; /* Cách đều các phim */
-  margin: -10px; /* Khoảng cách trên dưới */
+  flex-wrap: wrap;
+  margin: -10px; /* Để bù khoảng cách giữa các cột */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
 }
 
 .hot-movies-row::-webkit-scrollbar {
-  display: none; /* Ẩn thanh cuộn ngang */
+  display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
 }
 
+/* Hiển thị thanh cuộn khi hover */
+.hot-movies-row:hover {
+  scrollbar-width: thin; /* Hiển thị thanh cuộn mỏng trên Firefox */
+}
 @media (max-width: 768px) {
   .hot-movie-col {
     width: 50%; /* Trên màn hình nhỏ, mỗi phim chiếm 50% chiều rộng */
