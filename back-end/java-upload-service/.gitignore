@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Credentials and tokens
+tokens/
+StoredCredential
+**/StoredCredential
+**/tokens/
