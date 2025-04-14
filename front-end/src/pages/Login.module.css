@@ -1,0 +1,92 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url('../assets/LR.jpg'); /* Đường dẫn đến ảnh nền */
+    background-size: cover; /* Đảm bảo ảnh phủ toàn bộ màn hình */
+    background-position: center; /* Căn giữa ảnh nền */
+    background-repeat: no-repeat; /* Không lặp lại ảnh nền */ 
+    color: white;
+    padding: 20px;
+  }
+  
+  .login-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+    align-self: flex-start;
+    margin-left: calc((100% - 400px) / 2);
+    transform: translateX(-50%);
+  }
+  
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    background-color: #2c2c2c; /* Màu nền form */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateX(-25%);
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: rgb(165, 166, 166);
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1f2937; /* Màu nền input */
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .form-input:focus {
+    outline: none;
+    border: 2px solid #2563eb; /* Màu viền khi focus */
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2563eb; /* Màu xanh */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #1d4ed8; /* Màu xanh đậm hơn khi hover */
+  }
+  
+  .register-link {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+    margin-left: calc((100% - 400px) / 2);
+    transform: translateX(-35%);
+  }
+  
+  .register-link a {
+    color: #3b82f6; /* Màu xanh link */
+    text-decoration: none;
+  }
+  
+  .register-link a:hover {
+    text-decoration: underline;
+  }
