@@ -1,0 +1,229 @@
+$darker-background: #080c11;
+$text-color: #ffffff;
+$secondary-text: #a0a0a0;
+$button-bg: #242c37;
+$button-active-bg: #2e9c2e;
+
+.movie-player-page {
+  background-color: $darker-background;
+  min-height: 100vh;
+  color: $text-color;
+}
+
+
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.movie-player {
+  width: 100%;
+  background-color: #000;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 800px;
+  .video-element {
+    width: 100%;
+    height: 100%;
+    outline: none;
+  }
+  
+  .video-loading,
+  .video-error {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $text-color;
+    
+    p {
+      margin-top: 1rem;
+    }
+  }
+  
+  .video-error {
+    color: #ff4444;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--primary);
+  animation: spin 1s linear infinite;
+}
+
+.movie-info {
+    margin: 20px 0 40px;
+    .back-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #aaa;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+    .movie-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.2rem;
+    }
+  
+    .movie-original-title {
+        font-size: 1rem;
+        color: $secondary-text;
+        margin: 10px 0;
+    }
+  
+    .movie-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        color: $secondary-text;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        
+        span::after {
+        content: "•";
+        margin-left: 1rem;
+        display: inline-block;
+        }
+        
+        span:last-child::after {
+        content: "";
+        }
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+            
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+          }
+    }
+      
+
+}
+
+
+  
+.episodes-container {
+  color:rgba(255, 255, 255, 0.2);
+}
+
+.description {
+  margin-bottom: 1rem;
+  
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: $secondary-text;
+    line-height: 1.5;
+  }
+}
+
+.credits {
+  margin-bottom: 1rem;
+  
+  .directors,
+  .actors {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    
+    .label {
+      font-weight: bold;
+    }
+  }
+}
+
+.trailer {
+  margin-bottom: 1rem;
+  
+  .trailer-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary);
+    color: $text-color;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.notification {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--primary);
+  margin-bottom: 1rem;
+  
+  .notification-text {
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: spin 1s linear infinite;
+  }
+}
+
+
+
+
+

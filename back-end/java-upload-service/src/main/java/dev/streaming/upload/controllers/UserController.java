@@ -1,12 +1,9 @@
 package dev.streaming.upload.controllers;
 
-
-
-import org.springframework.data.domain.Page;
-
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,31 +41,24 @@ public class UserController {
 
     @PostMapping("/create")
     public UserResponse createUser(
-            @RequestParam("request") String requestJson,
-            @RequestPart("avatarFile") MultipartFile avatarFile
-        ) throws IOException {
+            @RequestParam("request") String requestJson, @RequestPart("avatarFile") MultipartFile avatarFile)
+            throws IOException {
 
-        ObjectMapper mapper = new ObjectMapper()
-        .registerModule(new JavaTimeModule());
-        
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
         UserCreationRequest request = mapper.readValue(requestJson, UserCreationRequest.class);
-            return userService.createUser(request,avatarFile);
-            
+        return userService.createUser(request, avatarFile);
     }
 
     @GetMapping()
     ApiResponse<Page<UserResponse>> getAllUsers(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "15") int size
-    ) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        
+
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-        
 
         return ApiResponse.<Page<UserResponse>>builder()
-                .result( userService.getAllUsers(page, size))
+                .result(userService.getAllUsers(page, size))
                 .build();
     }
 
@@ -86,17 +76,15 @@ public class UserController {
 
     @PutMapping("/{userId}")
     UserResponse updateUser(
-        @RequestParam (value = "request", required = false) String requestJson,
-        @RequestPart(value = "avatarFile", required = false) MultipartFile avatarFile,
-        @PathVariable String userId
-        
-    ) throws JsonMappingException, JsonProcessingException {
-        
-        ObjectMapper mapper = new ObjectMapper()
-        .registerModule(new JavaTimeModule());
-        
+            @RequestParam(value = "request", required = false) String requestJson,
+            @RequestPart(value = "avatarFile", required = false) MultipartFile avatarFile,
+            @PathVariable String userId)
+            throws JsonMappingException, JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
         UpdateRequest request = mapper.readValue(requestJson, UpdateRequest.class);
-        return userService.updateUser(request,avatarFile, userId);
+        return userService.updateUser(request, avatarFile, userId);
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")

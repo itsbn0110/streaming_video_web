@@ -24,13 +24,13 @@ public class ApplicationInitConfig {
 
     private final PasswordEncoder passwordEncoder;
 
-
     @NonFinal
     static final String ADMIN_USER_NAME = "admin";
 
     @NonFinal
     static final String ADMIN_PASSWORD = "admin123";
- @Bean
+
+    @Bean
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driverClassName",

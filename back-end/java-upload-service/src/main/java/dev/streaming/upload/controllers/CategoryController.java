@@ -1,7 +1,7 @@
 package dev.streaming.upload.controllers;
 
-
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.CategoryRequest;
 import dev.streaming.upload.DTO.response.CategoryResponse;
@@ -26,9 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CategoryController {
-    
+
     CategoryService categoryService;
-    
+
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
@@ -38,12 +39,11 @@ public class CategoryController {
                 .build();
     }
 
-
     @GetMapping
     ApiResponse<List<Category>> getAllCategories() {
         return ApiResponse.<List<Category>>builder()
-        .result(categoryService.getAll())
-        .build();
+                .result(categoryService.getAll())
+                .build();
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")

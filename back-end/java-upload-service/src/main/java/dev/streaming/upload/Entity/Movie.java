@@ -34,14 +34,13 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-
     @Column(nullable = false)
     String title;
 
-    @Column(name ="original_title")
+    @Column(name = "original_title")
     String originalTitle;
 
-    @Column(name ="trailer_link")
+    @Column(name = "trailer_link")
     String trailerLink;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -49,15 +48,15 @@ public class Movie {
 
     @Column(name = "release_year", nullable = false)
     int releaseYear;
-    
+
     @Column(nullable = false)
     String thumbnail;
-   
+
     @Column(nullable = false)
     String backdrop;
-    
-//     @Column(nullable = false)
-//     String thumbnailPreview;
+
+    //     @Column(nullable = false)
+    //     String thumbnailPreview;
 
     @Column(nullable = false)
     String status;
@@ -65,7 +64,7 @@ public class Movie {
     @Column(nullable = false)
     Boolean premium;
 
-    String folderId; 
+    String folderId;
 
     @Column(nullable = false)
     double duration;
@@ -112,13 +111,13 @@ public class Movie {
     Set<Person> actors;
 
     @Column
-    int views = 0;
+    Integer views = 0;
 
     @Column(name = "average_rating")
-    double averageRating = 0.0;
+    Double averageRating = 0.0;
 
     @Column(name = "rating_count")
-    int ratingCount = 0;
+    Integer ratingCount = 0;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;

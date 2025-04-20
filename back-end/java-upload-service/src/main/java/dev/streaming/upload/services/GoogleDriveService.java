@@ -36,11 +36,11 @@ public class GoogleDriveService {
     PersonRepository personRepository;
     MovieMapper movieMapper;
 
-    public MovieResponse uploadMovie(MovieUploadRequest request, MultipartFile avatarFile, MultipartFile movieFile, MultipartFile movieBackDrop)
+    public MovieResponse uploadMovie(
+            MovieUploadRequest request, MultipartFile avatarFile, MultipartFile movieFile, MultipartFile movieBackDrop)
             throws IOException {
         String movieName = request.getTitle();
-     
-       
+
         if (avatarFile.getContentType() == null || !avatarFile.getContentType().startsWith("image/")) {
             throw new IllegalArgumentException("Avatar file must be an image");
         }
@@ -48,7 +48,7 @@ public class GoogleDriveService {
         String thumbnail = cloudinaryService.uploadImage(avatarFile);
 
         String backDrop = cloudinaryService.uploadImage(movieBackDrop);
-    
+
         var categories = categoryRepository.findByNameIn(request.getCategories());
         var genres = genreRepository.findByNameIn(request.getGenres());
         var countries = countryRepository.findByNameIn(request.getCountries());
@@ -59,8 +59,8 @@ public class GoogleDriveService {
         Movie movie = movieMapper.toMovie(request);
 
         // Tải lên Google Drive và cập nhật các thuộc tính cần thiết
-        googleDriveManager.uploadMovie( movieFile, movieName, movie);
-        
+        googleDriveManager.uploadMovie(movieFile, movieName, movie);
+
         movie.setCategories(new HashSet<>(categories));
         movie.setGenres(new HashSet<>(genres));
         movie.setCountries(new HashSet<>(countries));
@@ -69,8 +69,6 @@ public class GoogleDriveService {
         movie.setCreatedAt(LocalDateTime.now());
         movie.setThumbnail(thumbnail);
         movie.setBackdrop(backDrop);
-
-
 
         movieRepository.save(movie);
         MovieResponse movieResponse = movieMapper.toMovieResponse(movie);

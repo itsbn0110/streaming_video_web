@@ -11,6 +11,6 @@ import dev.streaming.upload.Entity.Country;
 public interface CountryRepository extends JpaRepository<Country, Long> {
 
     List<Country> findByNameIn(List<String> countries);
-    void deleteByName (String countryName);
 
+    void deleteByName(String countryName);
 }

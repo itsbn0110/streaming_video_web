@@ -34,18 +34,14 @@ public class GoogleDriveController {
             @RequestParam("request") String requestJson,
             @RequestPart("thumbnailFile") MultipartFile thumbnailFile,
             @RequestPart("movieFile") MultipartFile movieFile,
-            @RequestPart("movieBackDrop") MultipartFile movieBackDrop
-            )
+            @RequestPart("movieBackDrop") MultipartFile movieBackDrop)
             throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
         MovieUploadRequest request = mapper.readValue(requestJson, MovieUploadRequest.class);
 
         return ApiResponse.<MovieResponse>builder()
-                .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile,movieBackDrop))
+                .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile, movieBackDrop))
                 .build();
     }
-
 }
-
-

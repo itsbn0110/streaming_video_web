@@ -1,10 +1,11 @@
 package dev.streaming.upload.services;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import dev.streaming.upload.DTO.response.CountryResponse;
 import dev.streaming.upload.Entity.Country;
-
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.exception.AppException;
 import dev.streaming.upload.exception.ErrorCode;
@@ -24,29 +25,28 @@ public class CountryService {
 
     CountryRepository countryRepository;
     CountryMapper countryMapper;
-    public CountryResponse create( String countryName ) {
+
+    public CountryResponse create(String countryName) {
         String slug = SlugUtils.toSlug(countryName);
-        Country country= countryRepository.save(Country.builder().name(countryName).slug(slug).build());
+        Country country = countryRepository.save(
+                Country.builder().name(countryName).slug(slug).build());
 
         CountryResponse countryResponse = countryMapper.toCountryResponse(country);
         return countryResponse;
     }
 
-      
     public List<Country> getAll() {
         List<Country> countries = countryRepository.findAll();
         return countries;
     }
 
-
-    public CountryResponse update( Long countryId , String countryName) {
+    public CountryResponse update(Long countryId, String countryName) {
         String slug = SlugUtils.toSlug(countryName);
         var country = countryRepository.findById(countryId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
-
         country.setSlug(slug);
         country.setName(countryName);
-        
+
         countryRepository.save(country);
 
         CountryResponse countryResponse = countryMapper.toCountryResponse(country);
@@ -54,19 +54,15 @@ public class CountryService {
     }
 
     public void delete(Long countryId) {
-       Country country = countryRepository.findById(countryId)
-                    .orElseThrow(() -> new RuntimeException("Country not found"));
+        Country country =
+                countryRepository.findById(countryId).orElseThrow(() -> new RuntimeException("Country not found"));
 
         for (Movie movie : country.getMovies()) {
-            movie.getCountries().remove(country); 
+            movie.getCountries().remove(country);
         }
 
-    
         country.getMovies().clear();
 
-    
         countryRepository.delete(country);
     }
-
-
 }

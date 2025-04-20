@@ -2,6 +2,7 @@ package dev.streaming.upload.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.DTO.response.VideoIdResponse;
@@ -16,7 +17,7 @@ public interface MovieMapper {
     @Mapping(target = "genres", ignore = true)
     Movie toMovie(MovieUploadRequest request);
 
-    MovieResponse toMovieResponse (Movie movie);
-    VideoIdResponse toVideoIdResponse (Movie movie);
+    MovieResponse toMovieResponse(Movie movie);
 
+    VideoIdResponse toVideoIdResponse(Movie movie);
 }

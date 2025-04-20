@@ -1,7 +1,9 @@
 package dev.streaming.upload.services;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import dev.streaming.upload.DTO.response.GenreResponse;
 import dev.streaming.upload.Entity.Genre;
 import dev.streaming.upload.Entity.Movie;
@@ -23,9 +25,11 @@ public class GenreService {
 
     GenreRepository genreRepository;
     GenreMapper genreMapper;
-    public GenreResponse create( String genreName ) {
+
+    public GenreResponse create(String genreName) {
         String slug = SlugUtils.toSlug(genreName);
-        Genre genre= genreRepository.save(Genre.builder().name(genreName).slug(slug).build());
+        Genre genre =
+                genreRepository.save(Genre.builder().name(genreName).slug(slug).build());
 
         GenreResponse genreResponse = genreMapper.toGenreResponse(genre);
         return genreResponse;
@@ -36,15 +40,13 @@ public class GenreService {
         return genres;
     }
 
-
-    public GenreResponse update( Long genreId , String genreName) {
+    public GenreResponse update(Long genreId, String genreName) {
         String slug = SlugUtils.toSlug(genreName);
         var genre = genreRepository.findById(genreId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
-
         genre.setSlug(slug);
         genre.setName(genreName);
-        
+
         genreRepository.save(genre);
 
         GenreResponse genreResponse = genreMapper.toGenreResponse(genre);
@@ -52,19 +54,14 @@ public class GenreService {
     }
 
     public void delete(Long genreId) {
-        Genre genre = genreRepository.findById(genreId)
-                    .orElseThrow(() -> new RuntimeException("Genre not found"));
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new RuntimeException("Genre not found"));
 
         for (Movie movie : genre.getMovies()) {
-            movie.getGenres().remove(genre); 
+            movie.getGenres().remove(genre);
         }
 
-    
         genre.getMovies().clear();
 
-    
         genreRepository.delete(genre);
     }
-
-
 }

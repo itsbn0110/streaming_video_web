@@ -2,10 +2,10 @@ package dev.streaming.upload.DTO.request;
 
 import java.time.LocalDate;
 
-
-import dev.streaming.upload.validator.DobConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+
+import dev.streaming.upload.validator.DobConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

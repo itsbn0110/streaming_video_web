@@ -1,6 +1,7 @@
 package dev.streaming.upload.DTO.request;
 
 import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -27,7 +28,7 @@ public class MovieUploadRequest {
     // String thumbnailPreview;
 
     int releaseYear;
-    
+
     String status;
 
     Boolean premium;
@@ -44,8 +45,6 @@ public class MovieUploadRequest {
     List<String> actors;
 
     List<String> directors;
-
-
 
     double duration;
 }

@@ -74,8 +74,6 @@ public class AuthenticationService {
 
     UserMapper userMapper;
 
-
-
     public IntrospectResponse introspect(IntrospectRequest request) {
         try {
             var token = request.getToken();
@@ -109,8 +107,6 @@ public class AuthenticationService {
 
         var token = generateToken(user);
 
-        
-
         return AuthenticationResponse.builder()
                 .authenticated(authenticated)
                 .token(token)
@@ -118,40 +114,36 @@ public class AuthenticationService {
                 .build();
     }
 
-
     public AuthenticationResponse register(AuthenticationRequest request) {
-        var existedUser = userRepository
-                .findByusername(request.getUsername())
-                .orElse(null);
-                
+        var existedUser = userRepository.findByusername(request.getUsername()).orElse(null);
+
         if (existedUser != null) {
             throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
         }
-        
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
-        
+
         HashSet<Role> roles = new HashSet<>();
         roleRepositiory.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
-        
+
         try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException exception) {
             throw new AppException(ErrorCode.USER_ALREADY_EXIST);
         }
-        
+
         String token = generateToken(user);
-        
+
         return AuthenticationResponse.builder()
                 .authenticated(true)
                 .token(token)
                 .user(userMapper.toUserResponse(user))
                 .build();
     }
-
 
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
 

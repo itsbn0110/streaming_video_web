@@ -68,7 +68,6 @@ public class GlobalExceptionHandler {
 
             attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 
-
         } catch (IllegalArgumentException e) {
         }
         ;
@@ -81,7 +80,7 @@ public class GlobalExceptionHandler {
                                         : errorCode.getMessage())
                         .build());
     }
-    
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ApiResponse> handleMissingParams(MissingServletRequestParameterException ex) {
         String message = ErrorCode.MISSING_FILE + " " + ex.getParameterName();

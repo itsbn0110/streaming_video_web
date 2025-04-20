@@ -1,7 +1,9 @@
 package dev.streaming.upload.services;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import dev.streaming.upload.DTO.response.CategoryResponse;
 import dev.streaming.upload.Entity.Category;
 import dev.streaming.upload.Entity.Movie;
@@ -21,10 +23,12 @@ public class CategoryService {
 
     CategoryRepository categoryRepository;
     CategoryMapper categoryMapper;
-    public CategoryResponse create( String categoryName ) {
+
+    public CategoryResponse create(String categoryName) {
         String slug = SlugUtils.toSlug(categoryName);
         log.info("slug: {}", slug);
-        Category category= categoryRepository.save(Category.builder().name(categoryName).slug(slug).build());
+        Category category = categoryRepository.save(
+                Category.builder().name(categoryName).slug(slug).build());
 
         CategoryResponse categoryResponse = categoryMapper.toCategoryResponse(category);
         return categoryResponse;
@@ -36,19 +40,15 @@ public class CategoryService {
     }
 
     public void delete(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new RuntimeException("Category not found"));
+        Category category =
+                categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
 
         for (Movie movie : category.getMovies()) {
-            movie.getCategories().remove(category); 
+            movie.getCategories().remove(category);
         }
 
-    
         category.getMovies().clear();
 
-    
         categoryRepository.delete(category);
     }
-
-
 }

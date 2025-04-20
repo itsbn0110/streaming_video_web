@@ -2,10 +2,13 @@ package dev.streaming.upload.services;
 
 import java.io.IOException;
 import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +21,8 @@ public class CloudinaryService {
 
     @SuppressWarnings("unchecked")
     public String uploadImage(MultipartFile file) throws IOException {
-        Map<String, Object> uploadResult = (Map<String, Object>) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+        Map<String, Object> uploadResult =
+                (Map<String, Object>) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
         return uploadResult.get("secure_url").toString();
     }
 }

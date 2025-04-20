@@ -11,5 +11,6 @@ import dev.streaming.upload.Entity.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByNameIn(List<String> categories);
-    void deleteByName (String categoryName);
+
+    void deleteByName(String categoryName);
 }

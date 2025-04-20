@@ -36,11 +36,19 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_POST = {
-        "/users", "/auth/login", "/auth/introspect","/auth/register", "/auth/logout", "/auth/refresh", "/v1/google-drive/upload","categories","categories/{categoryName}"
+        "/users",
+        "/auth/login",
+        "/auth/introspect",
+        "/auth/register",
+        "/auth/logout",
+        "/auth/refresh",
+        "/v1/google-drive/upload",
+        "/categories",
+        "/categories/{categoryName}"
     };
 
-    private final String[]  PUBLIC_ENDPOINTS_GET = {
-        "/movies/**","/countries/**","/genres/**","categories/**","/person/**","/users/**"
+    private final String[] PUBLIC_ENDPOINTS_GET = {
+        "/movies/**", "/countries/**", "/genres/**", "/categories/**", "/person/**", "/users/**"
     };
 
     // @Value("${jwt.signerKey}")
@@ -122,10 +130,9 @@ public class SecurityConfig {
         return new CorsFilter(corsConfigurationSource());
     }
 
-
     @Bean
     public ObjectMapper objectMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         return objectMapper;

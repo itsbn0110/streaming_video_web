@@ -14,23 +14,19 @@ public enum ErrorCode {
     INVALID_PASSWORD(1004, "This is Invalid password!!!!", HttpStatus.BAD_REQUEST),
     INVALID_KEY(1005, "INVALID_KEY, CHECK SOMEWHERE!", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1006, "USER_NOT_EXISTED", HttpStatus.NOT_FOUND),
-    
+
     UNAUTHENTICATED(1007, "UNAUTHENTICATED_ERROR", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "DO_NOT_HAVE_PERMISSION!", HttpStatus.FORBIDDEN),
     INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN),
     MISSING_FILE(1010, "Missing field: ", HttpStatus.BAD_REQUEST),
     MOVIE_NOT_FOUND(1011, "Movie not found {movieId}: ", HttpStatus.NOT_FOUND),
     UPLOAD_FAILED(1012, "Error while uploading movie", HttpStatus.BAD_REQUEST),
-    FILE_OR_FOLDER_NOT_EXSIST(1013,"Can not find you file or folder",HttpStatus.NOT_FOUND),
+    FILE_OR_FOLDER_NOT_EXSIST(1013, "Can not find you file or folder", HttpStatus.NOT_FOUND),
     PERSON_NOT_EXISTED(1014, "PERSON_NOT_EXISTED", HttpStatus.NOT_FOUND),
     DELETE_FAILED(1014, "CANNOT DELETE THIS FIELD", HttpStatus.BAD_REQUEST),
-    NOT_FOUND (1014, "CANNOT FIND ENTITY", HttpStatus.NOT_FOUND),
+    NOT_FOUND(1014, "CANNOT FIND ENTITY", HttpStatus.NOT_FOUND),
     USER_ALREADY_EXISTED(1015, "User is already existed", HttpStatus.BAD_REQUEST),
-
     ;
-
-
-
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

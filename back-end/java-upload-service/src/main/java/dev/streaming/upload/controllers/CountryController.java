@@ -1,7 +1,7 @@
 package dev.streaming.upload.controllers;
 
-
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.CountryRequest;
 import dev.streaming.upload.DTO.response.CountryResponse;
@@ -29,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CountryController {
-    
+
     CountryService countryService;
-    
+
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping
     ApiResponse<CountryResponse> create(@RequestBody CountryRequest request) {
@@ -41,23 +42,20 @@ public class CountryController {
                 .build();
     }
 
-    
     @GetMapping
     ApiResponse<List<Country>> getAllCountries() {
         return ApiResponse.<List<Country>>builder()
-        .result(countryService.getAll())
-        .build();
+                .result(countryService.getAll())
+                .build();
     }
-
 
     @PutMapping("/{countryId}")
-    ApiResponse<CountryResponse> update(@PathVariable Long countryId,@RequestBody CountryRequest request) {
+    ApiResponse<CountryResponse> update(@PathVariable Long countryId, @RequestBody CountryRequest request) {
         return ApiResponse.<CountryResponse>builder()
-        .result(countryService.update(countryId,request.getCountryName()))
-        .message("Updated country successfully!")
-        .build();
+                .result(countryService.update(countryId, request.getCountryName()))
+                .message("Updated country successfully!")
+                .build();
     }
-
 
     @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("{countryId}")

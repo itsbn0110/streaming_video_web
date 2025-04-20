@@ -1,0 +1,14 @@
+.container{
+    background-color: #111111;
+}
+
+.default-layout {
+  .hidden {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .content {
+    margin-top: 60px; /* Đảm bảo nội dung không bị che bởi header */
+  }
+}

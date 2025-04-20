@@ -1,0 +1,116 @@
+.banner {
+    position: relative;
+    width: 100%;
+    height: 845px;
+    overflow: hidden;
+    z-index: 1;
+
+    .banner-slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .banner-image {
+            width: 100%;
+            height: 845px;
+            object-fit: cover;
+        }
+
+        .banner-content {
+            position: absolute;
+            bottom: 20%;
+            left: var(--default-layout-width);
+            color: #fff;
+            max-width: 50%;
+            z-index: 3;
+            .banner-title {
+                font-size: 2.5rem;
+                font-weight: bold;
+                margin-bottom: 10px;
+                z-index: 1;
+            }
+
+            .banner-description {
+                font-family: var(--font-family);
+                color:#ffffff8c;
+
+                position: relative;
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin: 30px 0;
+            }
+
+            .banner-button {
+                position: relative;
+                top: -2px;
+                background-color: var(--primary);
+                color: var(--white);
+                padding: 10px 20px;
+                font-size: 1rem;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+
+                &:hover {
+                    background-color: var(--primary);
+                }
+            }
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, #111 0, rgba(17, 17, 17, 0) 82%);
+            z-index: 2;
+        }
+    }
+
+    .slick-dots {
+        bottom: 20px;
+
+        li button:before {
+            color: #fff;
+        }
+    }
+
+    .custom-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        background-color: transparent;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 1.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        &.custom-next {
+            right: var(--default-layout-width);
+        }
+
+        &.custom-prev {
+            left: var(--default-layout-width);
+        }
+    }
+}
+
+@media (max-width:768px) {
+    .custom-arrow{
+        display: none !important;
+    }
+}

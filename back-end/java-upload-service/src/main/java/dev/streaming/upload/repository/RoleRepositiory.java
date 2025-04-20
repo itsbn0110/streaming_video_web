@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 import dev.streaming.upload.Entity.Role;
 
 @Repository
-public interface RoleRepositiory extends JpaRepository<Role, String> {
-    
-}
+public interface RoleRepositiory extends JpaRepository<Role, String> {}

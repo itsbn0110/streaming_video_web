@@ -1,7 +1,7 @@
 package dev.streaming.upload.Entity;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,11 +32,10 @@ public class Country {
     Long id;
 
     @Column(nullable = false)
-    
     String name;
 
     @ManyToMany(mappedBy = "countries")
-    @JsonIgnore 
+    @JsonIgnore
     List<Movie> movies;
 
     String slug;

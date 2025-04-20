@@ -2,6 +2,7 @@ package dev.streaming.upload.DTO.response;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public class MovieResponse {
     int releaseYear;
 
     String thumbnail;
-    
+
     String backdrop;
 
     double duration;
@@ -38,21 +39,16 @@ public class MovieResponse {
     String status;
 
     Boolean premium;
-   
+
     Set<GenreResponse> genres;
 
-  
     Set<CategoryResponse> categories;
 
-   
     Set<CountryResponse> countries;
 
-    
     Set<PersonResponse> directors;
 
-   
     Set<PersonResponse> actors;
 
     LocalDateTime createdAt;
-
 }

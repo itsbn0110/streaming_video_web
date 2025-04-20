@@ -1,0 +1,115 @@
+.actorSection {
+    margin: 40px 0;
+    .actor-wrapper{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .actorLabel {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #e1e4e8;
+            position: relative;
+            
+            &:after {
+              content: '';
+              position: absolute;
+              bottom: -8px;
+              left: 0;
+              width: 60px;
+              height: 3px;
+              background-color: #1f6feb;
+            }
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            .slider-property {
+                
+                top: 50%;
+                transform: translateY(-50%);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 40px; 
+                height: 40px; 
+                cursor: pointer;
+                z-index: 10;
+                font-size: 1.5rem;
+                transition: transform 0.2s ease, background-color 0.2s ease;
+                &:active {
+                    transform: scale(1.2); 
+                }
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.2); 
+                }
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.2); 
+                }
+               
+        
+            }
+            .slider-button-left, .slider-button-right {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+              
+            .show-left, .show-right {
+            opacity: 1;
+            }
+    }
+        
+    }
+}
+.slider-container {
+    margin-top: 30px;
+    position: relative;
+    overflow: hidden; 
+    
+}
+
+.slider {
+    display: flex;
+    gap: 3rem; 
+    overflow-x: hidden; 
+    scroll-behavior: smooth;
+    padding-bottom: 1rem;
+}
+
+.actor-item {
+    flex: 0 0 auto;
+    position: relative;
+    overflow: hidden;
+   
+
+    img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%; 
+        object-fit: cover;
+        &:hover {
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+        margin-bottom: 6px;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+    }
+
+}
+
+   
+
+    
+
+    

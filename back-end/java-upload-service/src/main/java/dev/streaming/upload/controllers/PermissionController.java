@@ -1,6 +1,7 @@
 package dev.streaming.upload.controllers;
 
 import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,6 @@ public class PermissionController {
                 .result(permissionService.getAll())
                 .build();
     }
-
 
     @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/{permission}")

@@ -40,9 +40,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     RoleRepositiory roleRepository;
     CloudinaryService cloudinaryService;
-    public UserResponse createUser(UserCreationRequest request,MultipartFile avatarFile) throws IOException {
-        // userRepository.findByusername(request.getUsername()).orElseThrow(() ->  new AppException(ErrorCode.USER_ALREADY_EXISTED));
-        
+
+    public UserResponse createUser(UserCreationRequest request, MultipartFile avatarFile) throws IOException {
+        // userRepository.findByusername(request.getUsername()).orElseThrow(() ->  new
+        // AppException(ErrorCode.USER_ALREADY_EXISTED));
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -58,7 +60,6 @@ public class UserService {
         var avatar = cloudinaryService.uploadImage(avatarFile);
 
         user.setAvatar(avatar);
-        
 
         try {
             user = userRepository.save(user);
@@ -69,19 +70,16 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    
-
     @PreAuthorize(value = "hasRole('ADMIN')")
     public Page<UserResponse> getAllUsers(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> users = userRepository.findAll(pageable);
-    
+
         Page<UserResponse> responsePage = users.map(user -> userMapper.toUserResponse(user));
-    
+
         return responsePage;
     }
 
-  
     public UserResponse getUserById(String userId) {
         log.info("in getuser by id");
         return userMapper.toUserResponse(
@@ -97,21 +95,19 @@ public class UserService {
     }
 
     public UserResponse updateUser(UpdateRequest request, MultipartFile avatarFile, String userId) {
-        User existedUser = userRepository.findById(userId)
-            .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-        
+        User existedUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
         userMapper.updateFromRequest(request, existedUser);
-        
+
         var roles = roleRepository.findAll().stream()
-            .filter(role -> role.getName().equals(request.getRole()))
-            .collect(Collectors.toSet());
-            existedUser.setRoles(new HashSet<>(roles));
-        
+                .filter(role -> role.getName().equals(request.getRole()))
+                .collect(Collectors.toSet());
+        existedUser.setRoles(new HashSet<>(roles));
+
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             existedUser.setPassword(passwordEncoder.encode(request.getPassword()));
         }
-        
-        
+
         if (avatarFile != null && !avatarFile.isEmpty()) {
             try {
                 var avatar = cloudinaryService.uploadImage(avatarFile);
@@ -120,13 +116,13 @@ public class UserService {
                 throw new RuntimeException("Failed to upload avatar", e);
             }
         }
-        
+
         return userMapper.toUserResponse(userRepository.save(existedUser));
     }
 
-    public void deleteUser(String userId) 
-    {   
-        var existedUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    public void deleteUser(String userId) {
+        var existedUser =
+                userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         existedUser.getRoles().clear();
         userRepository.deleteById(userId);
     }

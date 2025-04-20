@@ -2,11 +2,11 @@ package dev.streaming.upload.DTO.request;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import dev.streaming.upload.validator.DobConstraint;
 import lombok.AllArgsConstructor;

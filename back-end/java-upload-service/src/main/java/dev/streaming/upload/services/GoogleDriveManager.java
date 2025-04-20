@@ -11,6 +11,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
+
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.configuration.GoogleDriveConfig;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,11 @@ public class GoogleDriveManager {
 
     public void setPublicPermission(Drive driveService, String fileId) throws IOException {
         Permission permission = new Permission();
-        permission.setType("anyone");  
-        permission.setRole("reader"); 
-    
-        driveService.permissions().create(fileId, permission)
-                .setFields("id")
-                .execute();
-    }
+        permission.setType("anyone");
+        permission.setRole("reader");
 
+        driveService.permissions().create(fileId, permission).setFields("id").execute();
+    }
 
     public String findFolderById(String parentId, String folderName) {
         String folderId = null;
@@ -97,13 +95,10 @@ public class GoogleDriveManager {
         }
     }
 
-
-
     public String getFolderId(String movieName) {
         String parentFolderId = findOrCreateFolder(null, "ALL-Movie"); // Tạo thư mục ALL Movie
         return findOrCreateFolder(parentFolderId, movieName); // Tạo thư mục con theo tên phim
     }
-
 
     public void deleteFileOrFolderById(String id) {
         try {
@@ -113,10 +108,7 @@ public class GoogleDriveManager {
         }
     }
 
-    public Movie uploadMovie( MultipartFile movieFile, String movieName, Movie movie) {
-
-        
-    
+    public Movie uploadMovie(MultipartFile movieFile, String movieName, Movie movie) {
 
         if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
             throw new IllegalArgumentException("Movie file must be a video");
@@ -138,28 +130,18 @@ public class GoogleDriveManager {
                     .files()
                     .create(
                             videoMetadata,
-                            new InputStreamContent(
-                                    movieFile.getContentType(), movieFile.getInputStream()))
+                            new InputStreamContent(movieFile.getContentType(), movieFile.getInputStream()))
                     .setFields("id, name, webViewLink")
                     .execute();
-
-            
-         
-
-          
 
             String videoId = uploadedMovie.getId();
 
             String streamUrl = uploadedMovie.getWebViewLink();
 
-            
-
-
             setPublicPermission(driveService, uploadedMovie.getId());
             movie.setFolderId(folderId);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
-            
 
             return movie;
         } catch (IOException e) {
