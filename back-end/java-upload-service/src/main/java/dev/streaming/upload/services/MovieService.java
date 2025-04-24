@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.Entity.Category;
@@ -43,6 +43,7 @@ public class MovieService {
     PersonRepository personRepository;
     MovieRepository movieRepository;
     MovieMapper movieMapper;
+    CloudinaryService cloudinaryService;
 
     public Page<Movie> getAllMovies(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -131,28 +132,50 @@ public class MovieService {
         return movies;
     }
 
-    public Movie updateMovie(MovieUploadRequest request, String movieId) {
-        var categories = categoryRepository.findByNameIn(request.getCategories());
-        var genres = genreRepository.findByNameIn(request.getGenres());
-        var countries = countryRepository.findByNameIn(request.getCountries());
-        var actors = personRepository.findByNameIn(request.getActors());
-        var directors = personRepository.findByNameIn(request.getDirectors());
-        return movieRepository
-                .findById(movieId)
-                .map(movie -> {
-                    movie.setTitle(request.getTitle());
-                    movie.setDescription(request.getDescription());
-                    movie.setReleaseYear(request.getReleaseYear());
-                    movie.setDuration(request.getDuration());
-                    movie.setGenres(new HashSet<>(genres));
-                    movie.setCategories(new HashSet<>(categories));
-                    movie.setCountries(new HashSet<>(countries));
-                    movie.setDirectors(new HashSet<>(directors));
-                    movie.setActors(new HashSet<>(actors));
-                    movie.setUpdatedAt(LocalDateTime.now());
-                    return movieRepository.save(movie); // Lưu lại vào database
-                })
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+    public Movie updateMovie(
+            MovieUploadRequest request, 
+            String movieId, 
+            MultipartFile thumbnailFile,
+            MultipartFile movieFile, 
+            MultipartFile movieBackDrop
+            ) throws Exception {
+                var categories = categoryRepository.findByNameIn(request.getCategories());
+                var genres = genreRepository.findByNameIn(request.getGenres());
+                var countries = countryRepository.findByNameIn(request.getCountries());
+                var actors = personRepository.findByNameIn(request.getActors());
+                var directors = personRepository.findByNameIn(request.getDirectors());
+                Movie movie =  movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+
+                if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                    String thumbnail = cloudinaryService.uploadImage(thumbnailFile);
+                    movie.setThumbnail(thumbnail);
+                }
+
+                if (movieBackDrop != null && !movieBackDrop.isEmpty()) {
+                    String backdrop = cloudinaryService.uploadImage(movieBackDrop);
+                    movie.setBackdrop(backdrop);
+                }
+
+                if (movieFile != null && !movieFile.isEmpty()) {
+                    String movieName = request.getTitle();
+                    String oldFolderId = movie.getFolderId();
+                    googleDriveManager.uploadMovie(movieFile, movieName, movie);
+                    googleDriveManager.deleteFileOrFolderById(oldFolderId);
+                }
+
+                movie.setTitle(request.getTitle());
+                movie.setDescription(request.getDescription());
+                movie.setReleaseYear(request.getReleaseYear());
+                movie.setDuration(request.getDuration());
+                movie.setGenres(new HashSet<>(genres));
+                movie.setCategories(new HashSet<>(categories));
+                movie.setCountries(new HashSet<>(countries));
+                movie.setDirectors(new HashSet<>(directors));
+                movie.setActors(new HashSet<>(actors));
+                movie.setUpdatedAt(LocalDateTime.now());
+                
+
+                return movieRepository.save(movie);
     }
 
     public void deleteMovie(String movieId) {

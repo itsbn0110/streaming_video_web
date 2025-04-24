@@ -21,6 +21,10 @@ const adminRouteConfig = {
   createCountry: "/admin/quoc-gia/tao-quoc-gia",
   editCountry: "/admin/quoc-gia/chinh-sua",
 
+  listCategories: "/admin/danh-muc/danh-sach",
+  createCategory: "/admin/danh-muc/tao-danh-muc",
+  editCategory: "/admin/danh-muc/chinh-sua",
+
   listUsers: "/admin/user/danh-sach",
   createUsers: "/admin/users/create",
   editUsers: "/admin/users/edit",

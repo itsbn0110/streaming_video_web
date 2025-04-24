@@ -2,13 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "../../AdminLayout.module.scss";
-import axios from "axios";
 import { X, Upload, Save, ArrowLeft } from "lucide-react";
 import adminRouteConfig from "@/config/adminRoutes";
-
 const cx = classNames.bind(styles);
-
-import TagInput from "../TagInput/TagInput";
+import TagInput from "../TagInput";
+import {
+  createMovieDataAPI,
+  updateMovieDataAPI,
+  fetchAllCategoriesAPI,
+  fetchAllGenresAPI,
+  fetchAllCountriesAPI,
+  fetchAllPersonsAPI,
+  fetchMovieDataAPI,
+} from "@/apis";
 const MovieForm = ({ editMode = false, movieData = null }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -47,66 +53,76 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const token = localStorage.getItem("accessToken") || "";
-
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  useEffect(() => {
+    if (editMode && id) {
+      const fetchMovie = async () => {
+        try {
+          const res = await fetchMovieDataAPI(id);
+          if (res && res.result) {
+            const movie = res.result;
+            setFormData({
+              ...formData,
+              title: movie.title || "",
+              originalTitle: movie.originalTitle || "",
+              description: movie.description || "",
+              releaseYear: movie.releaseYear || new Date().getFullYear(),
+              status: movie.status || "PUBLIC",
+              categories: movie.categories || [],
+              genres: movie.genres || [],
+              countries: movie.countries || [],
+              directors: movie.directors || [],
+              actors: movie.actors || [],
+              thumbnail: null,
+              movieBackDrop: null,
+              thumbnailPreview: movie.thumbnail || null,
+              backDropPreview: movie.backdrop || null,
+              movieFile: null,
+              trailerLink: movie.trailerLink || "",
+              duration: movie.duration || 0,
+              premium: movie.premium || false,
+            });
+          }
+        } catch (err) {
+          console.log(err);
+          setError("Không thể lấy dữ liệu phim để chỉnh sửa");
+        }
+      };
+      fetchMovie();
+    }
+    // eslint-disable-next-line
+  }, [editMode, id]);
 
   // Fetch genres, countries, directors, actors from API
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const categoriesRes = await axios.get(`${API_BASE_URL}/categories`, {
-          headers,
-        });
-        console.log("categories: ", categoriesRes.data.result);
-        if (categoriesRes.data && categoriesRes.data.result) {
-          setCategoryOptions(categoriesRes.data.result || []);
+        const categoriesRes = await fetchAllCategoriesAPI();
+        if (categoriesRes && categoriesRes.result) {
+          setCategoryOptions(categoriesRes.result || []);
         }
 
-        // Get genres (genres)
-        const genresRes = await axios.get(`${API_BASE_URL}/genres`, {
-          headers,
-        });
-        console.log("genres: ", genresRes.data.result);
-        if (genresRes.data && genresRes.data.result) {
-          setGenreOptions(genresRes.data.result || []);
+        const genresRes = await fetchAllGenresAPI();
+        if (genresRes && genresRes.result) {
+          setGenreOptions(genresRes.result || []);
         }
 
-        // Get countries
-        const countriesRes = await axios.get(`${API_BASE_URL}/countries`, {
-          headers,
-        });
-        console.log("countries: ", countriesRes.data.result);
-        if (countriesRes.data && countriesRes.data.result) {
-          setCountryOptions(countriesRes.data.result || []);
+        const countriesRes = await fetchAllCountriesAPI();
+        if (countriesRes && countriesRes.result) {
+          setCountryOptions(countriesRes.result || []);
         }
 
-        // Get directors
-        const directorsRes = await axios.get(
-          `${API_BASE_URL}/person/directors`,
-          { headers }
-        );
-        console.log("directors: ", directorsRes.data.result);
-
-        if (directorsRes.data && directorsRes.data.result) {
-          setDirectorOptions(directorsRes.data.result || []);
+        const directorsRes = await fetchAllPersonsAPI("director");
+        if (directorsRes && directorsRes.result) {
+          setDirectorOptions(directorsRes.result || []);
         }
 
-        // Get actors
-        const actorsRes = await axios.get(`${API_BASE_URL}/person/actors`, {
-          headers,
-        });
-        console.log("actors: ", actorsRes);
-
-        if (actorsRes.data && actorsRes.data.result) {
-          setActorOptions(actorsRes.data.result || []);
+        const actorsRes = await fetchAllPersonsAPI("actor");
+        if (actorsRes && actorsRes.result) {
+          setActorOptions(actorsRes.result || []);
         }
       } catch (err) {
-        console.error("Error fetching options:", err);
-        setError("Không thể lấy dữ liệu. Vui lòng thử lại sau.");
+        console.error("Fetch lỗi :", err);
+        setError("Lỗi lấy dữ liệu");
       }
     };
 
@@ -167,7 +183,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
   };
 
   const handleActorsChange = (newActors) => {
-    console.log("newactor:", newActors);
     setFormData({
       ...formData,
       actors: newActors,
@@ -175,7 +190,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
   };
 
   const handleCategoriesChange = (newCategories) => {
-    console.log("newcategory:", newCategories);
     setFormData({
       ...formData,
       categories: newCategories,
@@ -183,7 +197,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
   };
 
   const prepareRequestData = () => {
-    // Create the request object to match the expected format
     const requestData = {
       title: formData.title,
       originalTitle: formData.originalTitle || "",
@@ -208,12 +221,11 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
     return JSON.stringify(requestData);
   };
 
+  console.log("formDAta:", formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    console.log(e);
 
     try {
       if (!formData.thumbnail && !editMode) {
@@ -224,56 +236,30 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         throw new Error("Vui lòng chọn file phim");
       }
 
-      console.log("request", prepareRequestData());
-      console.log("thumbnailFile", formData.thumbnail);
-      // console.log("thumbnailFile", formData.thumbnailPreview);
-
-      console.log("movieFile", formData.movieFile);
-      console.log("movieBackDrop", formData.movieBackDrop);
-
       let response;
+      const formDataToSend = new FormData();
+      formDataToSend.append("request", prepareRequestData());
+      formDataToSend.append("thumbnailFile", formData.thumbnail);
+      formDataToSend.append("movieFile", formData.movieFile);
+      formDataToSend.append("movieBackDrop", formData.movieBackDrop);
+
+      console.log("formDataToSend:", formDataToSend.get("movieFile"));
+      console.log("formDataToSend:", formDataToSend.get("request"));
+
       if (editMode) {
-        const formDataToSend = new FormData();
-        formDataToSend.append("request", prepareRequestData());
-
-        response = await axios.put(
-          `${API_BASE_URL}/movies/update/${id}`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              ...headers,
-            },
-          }
-        );
+        response = await updateMovieDataAPI(id, formDataToSend);
+        console.log("response:", response);
       } else {
-        const formDataToSend = new FormData();
-        formDataToSend.append("request", prepareRequestData());
-        formDataToSend.append("thumbnailFile", formData.thumbnail);
-        formDataToSend.append("movieFile", formData.movieFile);
-        formDataToSend.append("movieBackDrop", formData.movieBackDrop);
-
-        // formDataToSend.append("thumbnailPreview", formData.thumbnailPreview);
-
-        response = await axios.post(
-          `${API_BASE_URL}/v1/google-drive/upload`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              ...headers,
-            },
-          }
-        );
+        response = await createMovieDataAPI(formDataToSend);
       }
 
-      if (response.data && response.data.result) {
+      if (response && response.result) {
         alert(
           editMode ? "Phim đã được cập nhật!" : "Phim đã được tạo thành công!"
         );
         navigate(`${adminRouteConfig.list}`);
       } else {
-        throw new Error(response.data.message || "Có lỗi xảy ra");
+        throw new Error(response.message || "Có lỗi xảy ra");
       }
     } catch (err) {
       setError(err.message || "Có lỗi xảy ra khi lưu phim");
@@ -282,7 +268,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
       setLoading(false);
     }
   };
-
   return (
     <div>
       <div className={cx("page-header")}>
@@ -462,7 +447,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
 
             <div className={cx("form-group")}>
               <label className={cx("form-label")}>Diễn viên</label>
-              {console.log("actorOptions: ", actorOptions)}
               <div className={cx("dropdown-with-tags")}>
                 <TagInput
                   options={actorOptions}
@@ -503,96 +487,92 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
             </div>
           </div>
 
-          {!editMode ? (
-            <div className={cx("form-row")}>
-              <div className={cx("form-group")}>
-                <label className={cx("form-label")}>Thumbnail</label>
-                <div className={cx("image-upload")}>
-                  <input
-                    type="file"
-                    name="thumbnail"
-                    id="thumbnail"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="thumbnail">
-                    <div className={cx("upload-icon")}>
-                      <Upload size={36} />
-                    </div>
-                    <div className={cx("upload-text")}>
-                      Kéo thả hình ảnh vào đây hoặc click để chọn file
-                    </div>
-                  </label>
-                </div>
-                {formData.thumbnailPreview && (
-                  <img
-                    src={formData.thumbnailPreview}
-                    alt="Thumbnail preview"
-                    className={cx("preview-image")}
-                    style={{ maxHeight: "200px" }}
-                  />
-                )}
-              </div>
-
-              <div className={cx("form-group")}>
-                <label className={cx("form-label")}>Back Drop</label>
-                <div className={cx("image-upload")}>
-                  <input
-                    type="file"
-                    name="backDrop"
-                    id="backDrop"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="backDrop">
-                    <div className={cx("upload-icon")}>
-                      <Upload size={36} />
-                    </div>
-                    <div className={cx("upload-text")}>
-                      Kéo thả hình ảnh vào đây hoặc click để chọn file
-                    </div>
-                  </label>
-                </div>
-                {formData.backDropPreview && (
-                  <img
-                    src={formData.backDropPreview}
-                    alt="Backdrop preview"
-                    className={cx("preview-image")}
-                    style={{ maxHeight: "200px" }}
-                  />
-                )}
-              </div>
-
-              <div className={cx("form-group")}>
-                <label className={cx("form-label")}>File phim</label>
-                <div className={cx("image-upload")}>
-                  <input
-                    type="file"
-                    name="movieFile"
-                    id="movieFile"
-                    accept="video/*"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="movieFile">
-                    <div className={cx("upload-icon")}>
-                      <Upload size={36} />
-                    </div>
-                    <div className={cx("upload-text")}>
-                      Kéo thả file phim vào đây hoặc click để chọn file
-                    </div>
-                  </label>
-                </div>
-                {formData.movieFile && (
-                  <div style={{ marginTop: "12px" }}>
-                    <span style={{ fontWeight: "500" }}>File đã chọn:</span>{" "}
-                    {formData.movieFile.name}
+          <div className={cx("form-row")}>
+            <div className={cx("form-group")}>
+              <label className={cx("form-label")}>Thumbnail</label>
+              <div className={cx("image-upload")}>
+                <input
+                  type="file"
+                  name="thumbnail"
+                  id="thumbnail"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="thumbnail">
+                  <div className={cx("upload-icon")}>
+                    <Upload size={36} />
                   </div>
-                )}
+                  <div className={cx("upload-text")}>
+                    Kéo thả hình ảnh vào đây hoặc click để chọn file
+                  </div>
+                </label>
               </div>
+              {formData.thumbnailPreview && (
+                <img
+                  src={formData.thumbnailPreview}
+                  alt="Thumbnail preview"
+                  className={cx("preview-image")}
+                  style={{ maxHeight: "200px" }}
+                />
+              )}
             </div>
-          ) : (
-            <></>
-          )}
+
+            <div className={cx("form-group")}>
+              <label className={cx("form-label")}>Back Drop</label>
+              <div className={cx("image-upload")}>
+                <input
+                  type="file"
+                  name="backDrop"
+                  id="backDrop"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="backDrop">
+                  <div className={cx("upload-icon")}>
+                    <Upload size={36} />
+                  </div>
+                  <div className={cx("upload-text")}>
+                    Kéo thả hình ảnh vào đây hoặc click để chọn file
+                  </div>
+                </label>
+              </div>
+              {formData.backDropPreview && (
+                <img
+                  src={formData.backDropPreview}
+                  alt="Backdrop preview"
+                  className={cx("preview-image")}
+                  style={{ maxHeight: "200px" }}
+                />
+              )}
+            </div>
+
+            <div className={cx("form-group")}>
+              <label className={cx("form-label")}>File phim</label>
+              <div className={cx("image-upload")}>
+                <input
+                  type="file"
+                  name="movieFile"
+                  id="movieFile"
+                  accept="video/*"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="movieFile">
+                  <div className={cx("upload-icon")}>
+                    <Upload size={36} />
+                  </div>
+                  <div className={cx("upload-text")}>
+                    Kéo thả file phim vào đây hoặc click để chọn file
+                  </div>
+                </label>
+              </div>
+              {formData.movieFile && (
+                <div style={{ marginTop: "12px" }}>
+                  <span style={{ fontWeight: "500" }}>File đã chọn:</span>{" "}
+                  {formData.movieFile.name}
+                </div>
+              )}
+            </div>
+          </div>
         </form>
       </div>
     </div>

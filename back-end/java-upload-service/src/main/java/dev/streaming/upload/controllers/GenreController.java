@@ -56,6 +56,7 @@ public class GenreController {
     }
 
     @DeleteMapping("{genreId}")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     ApiResponse<Void> delete(@PathVariable Long genreId) {
         try {
             genreService.delete(genreId);

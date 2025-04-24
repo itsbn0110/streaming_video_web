@@ -113,6 +113,44 @@ export const deleteGenreDataAPI = async (genreId) => {
   return res.data;
 };
 
+// C
+export const fetchAllCategoriesAPI = async () => {
+  const res = await axios.get(`${API_BASE_URL}/categories`, { headers });
+  return res.data;
+};
+
+export const fetchCategoryDataAPI = async (categoryId) => {
+  const res = await axios.get(`${API_BASE_URL}/categories/${categoryId}`, {
+    headers,
+  });
+  return res.data;
+};
+
+export const createCategoryDataAPI = async (payload) => {
+  const res = await axios.post(`${API_BASE_URL}/categories`, payload, {
+    headers,
+  });
+  return res.data;
+};
+
+export const updateCategoryDataAPI = async (categoryId, payload) => {
+  const res = await axios.put(
+    `${API_BASE_URL}/categories/${categoryId}`,
+    payload,
+    {
+      headers,
+    }
+  );
+  return res.data;
+};
+
+export const deleteCategoryDataAPI = async (categoryId) => {
+  const res = await axios.delete(`${API_BASE_URL}/categories/${categoryId}`, {
+    headers,
+  });
+  return res.data;
+};
+
 export const fetchAllPersonsAPI = async (type) => {
   const endpoint = type === "actor" ? "actors" : "directors";
   const res = await axios.get(`${API_BASE_URL}/person/${endpoint}`, {

@@ -11,6 +11,7 @@ import {
   Folder,
   BarChart2,
   ShoppingBag,
+  Grid,
 } from "lucide-react";
 import adminRouteConfig from "@/config/adminRoutes";
 const cx = classNames.bind(styles);
@@ -22,6 +23,7 @@ const AdminLayout = () => {
     daodien: false,
     dienvien: false,
     theloai: false,
+    danhmuc: false,
     users: false,
     baiviet: false,
     donhang: false,
@@ -208,6 +210,51 @@ const AdminLayout = () => {
             )}
           </div>
 
+          {/* Thêm menu Danh mục */}
+          <div className={cx("menu-group")}>
+            <div
+              className={cx("menu-header", {
+                active: isActive("/admin/danh-muc"),
+              })}
+              onClick={() => toggleMenu("danhmuc")}
+            >
+              <div className={cx("menu-title")}>
+                <Grid size={20} />
+                <span>Danh mục</span>
+              </div>
+              <ChevronDown
+                size={16}
+                className={cx("chevron", { rotated: expandedMenus.danhmuc })}
+              />
+            </div>
+
+            {expandedMenus.danhmuc && (
+              <div className={cx("submenu")}>
+                <Link
+                  to={
+                    adminRouteConfig.listCategories ||
+                    "/admin/danh-muc/danh-sach"
+                  }
+                  className={cx("submenu-item", {
+                    active: isActive("/admin/danh-muc/danh-sach"),
+                  })}
+                >
+                  Danh sách danh mục
+                </Link>
+                <Link
+                  to={
+                    adminRouteConfig.createCategory || "/admin/danh-muc/tao-moi"
+                  }
+                  className={cx("submenu-item", {
+                    active: isActive("/admin/danh-muc/tao-moi"),
+                  })}
+                >
+                  Tạo danh mục mới
+                </Link>
+              </div>
+            )}
+          </div>
+
           <div className={cx("menu-group")}>
             <div
               className={cx("menu-header", { active: isActive("/admin/user") })}
@@ -228,7 +275,7 @@ const AdminLayout = () => {
                 <Link
                   to={adminRouteConfig.listUsers}
                   className={cx("submenu-item", {
-                    active: isActive(adminRouteConfig.createUsers),
+                    active: isActive(adminRouteConfig.listUsers),
                   })}
                 >
                   Danh sách người dùng

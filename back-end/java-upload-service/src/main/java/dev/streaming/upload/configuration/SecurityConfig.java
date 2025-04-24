@@ -48,7 +48,7 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-        "/movies/**", "/countries/**", "/genres/**", "/categories/**", "/person/**", "/users/**"
+        "/movies/**", "/countries/**", "/categories/**", "/person/**", "/users/**"
     };
 
     // @Value("${jwt.signerKey}")

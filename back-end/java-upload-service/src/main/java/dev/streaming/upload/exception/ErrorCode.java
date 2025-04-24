@@ -26,6 +26,7 @@ public enum ErrorCode {
     DELETE_FAILED(1014, "CANNOT DELETE THIS FIELD", HttpStatus.BAD_REQUEST),
     NOT_FOUND(1014, "CANNOT FIND ENTITY", HttpStatus.NOT_FOUND),
     USER_ALREADY_EXISTED(1015, "User is already existed", HttpStatus.BAD_REQUEST),
+    PASSWORD_OR_USERNAME_FAILED(1017, "Password or Username failed", HttpStatus.UNAUTHORIZED),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

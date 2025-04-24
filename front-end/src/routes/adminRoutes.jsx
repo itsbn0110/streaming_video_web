@@ -1,16 +1,18 @@
 import AdminLayout from "@/layout/AdminLayout";
 import AdminDashboard from "@/layout/AdminLayout/components/AdminDashBoard";
-import MovieForm from "@/layout/AdminLayout/components/MovieForm/MovieForm";
-import MovieList from "@/layout/AdminLayout/components/MovieList/MovieList";
 import adminRouteConfig from "@/config/adminRoutes";
-import PersonForm from "@/layout/AdminLayout/components/PersonForm/PersonForm";
-import PersonList from "@/layout/AdminLayout/components/PersonList/PersonList";
-import GenreList from "@/layout/AdminLayout/components/GenreList/GengeList";
-import CountryList from "@/layout/AdminLayout/components/CountryList/CountryList.";
-import GenreForm from "@/layout/AdminLayout/components/GenreForm/GenreForm";
-import CountryForm from "@/layout/AdminLayout/components/CountryForm/CountryForm";
-import UserList from "@/layout/AdminLayout/components/UserList/UserList";
-import UserForm from "@/layout/AdminLayout/components/UserForm/UserForm";
+import MovieForm from "@/layout/AdminLayout/components/MovieForm";
+import PersonList from "@/layout/AdminLayout/components/PersonList";
+import PersonForm from "@/layout/AdminLayout/components/PersonForm";
+import GenreList from "@/layout/AdminLayout/components/GenreList";
+import CountryList from "@/layout/AdminLayout/components/CountryList";
+import CategoryList from "@/layout/AdminLayout/components/CategoryList";
+import CategoryForm from "@/layout/AdminLayout/components/CategoryForm";
+import GenreForm from "@/layout/AdminLayout/components/GenreForm";
+import CountryForm from "@/layout/AdminLayout/components/CountryForm";
+import UserList from "@/layout/AdminLayout/components/UserList";
+import UserForm from "@/layout/AdminLayout/components/UserForm";
+import MovieList from "@/layout/AdminLayout/components/MovieList";
 const adminRoutes = [
   {
     path: adminRouteConfig.adminRoute,
@@ -58,7 +60,11 @@ const adminRoutes = [
         path: `${adminRouteConfig.listCountries}`,
         element: <CountryList />,
       },
-      // New routes for genre forms
+
+      {
+        path: `${adminRouteConfig.listCategories}`,
+        element: <CategoryList />,
+      },
       {
         path: adminRouteConfig.createGenre,
         element: <GenreForm />,
@@ -67,7 +73,6 @@ const adminRoutes = [
         path: `${adminRouteConfig.editGenre}/:id`,
         element: <GenreForm />,
       },
-      // New routes for country forms
       {
         path: adminRouteConfig.createCountry,
         element: <CountryForm />,
@@ -75,6 +80,14 @@ const adminRoutes = [
       {
         path: `${adminRouteConfig.editCountry}/:id`,
         element: <CountryForm editMode={true} />,
+      },
+      {
+        path: adminRouteConfig.createCategory,
+        element: <CategoryForm />,
+      },
+      {
+        path: `${adminRouteConfig.editCategory}/:id`,
+        element: <CategoryForm editMode={true} />,
       },
       {
         path: `${adminRouteConfig.listUsers}`,
