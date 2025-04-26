@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from '../../AdminLayout.module.scss';
-import { Save, ArrowLeft } from 'lucide-react';
+import { Save, ArrowLeft, CloudCog } from 'lucide-react';
 import adminRouteConfig from '@/config/adminRoutes';
 import { fetchGenreDataAPI, createGenreDataAPI, updateGenreDataAPI } from '@/apis';
 
@@ -18,6 +18,7 @@ const GenreForm = () => {
     const [error, setError] = useState(null);
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
+    console.log('component re-render');
     useEffect(() => {
         if (isEditMode) {
             fetchGenreData();
@@ -106,7 +107,10 @@ const GenreForm = () => {
                                 id="genreName"
                                 className={cx('form-control')}
                                 value={genreName}
-                                onChange={(e) => setGenreName(e.target.value)}
+                                onChange={(e) => {
+                                    console.log(e.target.value);
+                                    setGenreName(e.target.value);
+                                }}
                                 required
                                 placeholder="Nhập tên thể loại"
                             />

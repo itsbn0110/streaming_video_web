@@ -74,6 +74,7 @@ public class PersonController {
     }
 
     @PutMapping("/{personId}")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     ApiResponse<PersonResponse> updatePerson(
             @RequestParam("request") String requestJson,
             @RequestPart(value = "personAvatar", required = false) MultipartFile personAvatar,

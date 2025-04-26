@@ -1,10 +1,11 @@
 export const useAuth = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const roleNames = (user?.roles || []).map((role) => role.name);
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('user from useAuth', user);
+    const roleNames = (user?.roles || []).map((role) => role.name);
 
-  const hasRole = (role) => roleNames.includes(role);
+    const hasRole = (role) => roleNames.includes(role);
 
-  const hasAnyRole = (roleList) => roleList.some((r) => roleNames.includes(r));
+    const hasAnyRole = (roleList) => roleList.some((r) => roleNames.includes(r));
 
-  return { hasRole, hasAnyRole };
+    return { hasRole, hasAnyRole };
 };

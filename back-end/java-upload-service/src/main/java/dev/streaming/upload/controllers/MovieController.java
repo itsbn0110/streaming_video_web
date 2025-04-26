@@ -108,6 +108,7 @@ public class MovieController {
                 .build();
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @DeleteMapping("/delete/{movieId}")
     public ApiResponse<Void> deleteMovie(@PathVariable String movieId) {
         movieService.deleteMovie(movieId);

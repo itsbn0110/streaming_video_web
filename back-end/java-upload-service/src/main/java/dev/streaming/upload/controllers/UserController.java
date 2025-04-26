@@ -39,6 +39,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping("/create")
     public UserResponse createUser(
             @RequestParam("request") String requestJson, @RequestPart("avatarFile") MultipartFile avatarFile)
@@ -74,6 +75,7 @@ public class UserController {
                 .build();
     }
 
+    @PreAuthorize(value = "hasRole('ADMIN')")
     @PutMapping("/{userId}")
     UserResponse updateUser(
             @RequestParam(value = "request", required = false) String requestJson,

@@ -129,19 +129,9 @@ public class AuthenticationService {
         HashSet<Role> roles = new HashSet<>();
         roleRepositiory.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
-
-        try {
-            user = userRepository.save(user);
-        } catch (DataIntegrityViolationException exception) {
-            throw new AppException(ErrorCode.USER_ALREADY_EXIST);
-        }
-
-        String token = generateToken(user);
-
+        userRepository.save(user);
         return AuthenticationResponse.builder()
                 .authenticated(true)
-                .token(token)
-                .user(userMapper.toUserResponse(user))
                 .build();
     }
 

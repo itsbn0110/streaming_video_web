@@ -42,12 +42,14 @@ public class GenreController {
                 .build();
     }
 
+    
     @GetMapping
     ApiResponse<List<Genre>> getAllGenres() {
         return ApiResponse.<List<Genre>>builder().result(genreService.getAll()).build();
     }
 
     @PutMapping("/{genreId}")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     ApiResponse<GenreResponse> update(@PathVariable Long genreId, @RequestBody GenreRequest request) {
         return ApiResponse.<GenreResponse>builder()
                 .result(genreService.update(genreId, request.getGenreName()))

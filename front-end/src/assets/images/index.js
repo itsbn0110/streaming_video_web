@@ -5,6 +5,7 @@ import user_avatar from '@/assets/images/user_avatar.jpeg';
 import logoWeb from '@/assets/images/logo.svg';
 import logoTitle from '@/assets/images/logoTitle.svg';
 import mickey17 from '@/assets/images/mickey17.jpg';
+import fallBackAvatar from '@/assets/images/fallback-img-profile.png';
 const images = {
     logo,
     noImage,
@@ -13,6 +14,7 @@ const images = {
     logoWeb,
     mickey17,
     logoTitle,
+    fallBackAvatar,
 };
 
 export default images;

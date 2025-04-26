@@ -43,12 +43,11 @@ public class SecurityConfig {
         "/auth/logout",
         "/auth/refresh",
         "/v1/google-drive/upload",
-        "/categories",
-        "/categories/{categoryName}"
+       
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-        "/movies/**", "/countries/**", "/categories/**", "/person/**", "/users/**"
+        "/movies/**","/movies","genres/**", "/countries/**", "/categories/**", "/person/**", "/users/**"
     };
 
     // @Value("${jwt.signerKey}")
