@@ -34,16 +34,14 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        logger.info("Login request received: username={}, password=****", request.getUsername());
-        var result = authenticationService.authenticate(request);
-        logger.info("Login successful for username={}", request.getUsername());
+    ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+      
+        var result = authenticationService.login(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
 
     @PostMapping("/register")
     ApiResponse<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
-        logger.info("Received register request: {}", request);
         var result = authenticationService.register(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }

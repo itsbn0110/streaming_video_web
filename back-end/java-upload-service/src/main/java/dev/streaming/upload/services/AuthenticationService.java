@@ -95,7 +95,7 @@ public class AuthenticationService {
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse login(AuthenticationRequest request) {
         var user = userRepository
                 .findByusername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -118,7 +118,7 @@ public class AuthenticationService {
         var existedUser = userRepository.findByusername(request.getUsername()).orElse(null);
 
         if (existedUser != null) {
-            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
+            throw new AppException(ErrorCode.USER_ALREADY_EXIST);
         }
 
         User user = User.builder()
