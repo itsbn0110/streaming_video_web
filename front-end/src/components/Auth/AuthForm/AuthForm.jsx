@@ -8,12 +8,20 @@ import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { BsQrCode } from "react-icons/bs";
 
 const cx = classNames.bind(styles);
+
+const AuthState = {
+  IDLE: "IDLE",
+  LOADING: "LOADING",
+  SUCCESS: "SUCCESS",
+  ERROR: "ERROR",
+};
+
 function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [authState, setAuthState] = useState(AuthState.IDLE);
   const [error, setError] = useState("");
 
   const { hasRole } = useAuth();
@@ -21,12 +29,12 @@ function AuthForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setAuthState(AuthState.LOADING);
     setError("");
 
     if (!username || !password) {
       setError("Vui lòng nhập đầy đủ thông tin");
-      setLoading(false);
+      setAuthState(AuthState.IDLE);
       return;
     }
 
@@ -50,6 +58,7 @@ function AuthForm() {
         } else if (hasRole("USER")) {
           navigate("/");
         }
+        setAuthState(AuthState.SUCCESS);
       }
     } catch (err) {
       console.error("Auth error:", err);
@@ -57,8 +66,11 @@ function AuthForm() {
         ? "Đăng nhập thất bại. Vui lòng kiểm tra tài khoản và mật khẩu."
         : "Đăng ký thất bại. Tài khoản có thể đã tồn tại.";
       setError(err.response?.data?.message || errorMessage);
+      setAuthState(AuthState.ERROR);
     } finally {
-      setLoading(false);
+      if (authState !== AuthState.SUCCESS && authState !== AuthState.ERROR) {
+        setAuthState(AuthState.IDLE);
+      }
     }
   };
 
@@ -118,9 +130,13 @@ function AuthForm() {
           <button
             type="submit"
             className={cx("auth-button")}
-            disabled={loading}
+            disabled={authState === AuthState.LOADING}
           >
-            {loading ? "Đang xử lý..." : isLogin ? "Đăng nhập" : "Đăng ký"}
+            {authState === AuthState.LOADING
+              ? "Đang xử lý..."
+              : isLogin
+              ? "Đăng nhập"
+              : "Đăng ký"}
           </button>
         </form>
 
