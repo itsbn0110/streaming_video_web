@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
 import routes from '@/config/routes';
 import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
 import { logoutAPI } from '@/apis';
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
-import { useAuth } from '@/hooks/useAuth';
 import images from '@/assets/images';
+import Search from '../Search';
 const cx = classNames.bind(styles);
 
 function Header({ isHeaderHidden }) {
     const navigate = useNavigate();
-    const { hasRole } = useAuth();
     const user = JSON.parse(localStorage.getItem('user'));
     console.log('user', user);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -88,26 +86,24 @@ function Header({ isHeaderHidden }) {
             </div>
 
             <div className={cx('actions')}>
-                <FontAwesomeIcon icon={faSearch} className={cx('search')} />{' '}
-                {user ? (
-                    <div className="flex justify-center items-center gap-2">
-                        <span className="text-white"> Hi! {hasRole('ADMIN') ? 'Admin' : user?.fullName}</span>
+                <Search />
 
+                {user ? (
+                    <div className="flex justify-center items-center gap-3">
+                        <button onClick={handleSignout} className={cx('sign-in')}>
+                            Sign Out
+                        </button>
                         <img
                             style={{
                                 borderRadius: '50%',
-                                height: '30px',
-                                width: '30px',
+                                height: '36px',
+                                width: '36px',
                                 objectFit: 'cover',
                                 border: user?.avatar ? '1px solid #fff' : 'none',
                             }}
                             src={user?.avatar ? user.avatar : images.fallBackAvatar}
                             alt={user?.username}
                         />
-
-                        <button onClick={handleSignout} className={cx('sign-in')}>
-                            Sign Out
-                        </button>
                     </div>
                 ) : (
                     <Link to="/login">
