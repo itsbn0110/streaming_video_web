@@ -89,6 +89,8 @@ public class MovieController {
         return ApiResponse.<List<Movie>>builder().result(results).build();
     }
 
+    
+
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PutMapping("/update/{movieId}")
     public ApiResponse<MovieResponse> updateMovie(
