@@ -76,12 +76,18 @@ public class MovieService {
         return movieRepository.findByCategorySlug(slug);
     }
 
+    public Page<MovieResponse> getMovieByCategories(String slug, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findByCategorySlug(slug, pageable);
+        return moviePage.map(movieMapper::toMovieResponse);
+    }
+
     public List<MovieResponse> getNewlyUpdatedByCategory(String categorySlug) {
         List<Movie> movies = movieRepository.findByCategoriesSlugOrderByUpdatedAtDesc(categorySlug);
         return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
     }
 
-    public List<Movie> filterMovies(String categorySlug, Integer releaseYear, Long countryId, String duration) {
+    public List<MovieResponse> filterMovies(String categorySlug, Integer releaseYear, Long countryId, String duration) {
         List<Movie> movies = movieRepository.findAll();
 
         if (categorySlug != null) {
@@ -129,7 +135,7 @@ public class MovieService {
             }
         }
 
-        return movies;
+        return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
     }
 
     public Movie updateMovie(
@@ -219,5 +225,16 @@ public class MovieService {
                 log.error("Error deleting folder from Google Drive: " + e.getMessage(), e);
             }
         }
+    }
+
+    public List<MovieResponse> searchMovies(String keyword) {
+        List<Movie> movies = movieRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword);
+        return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
+    }
+
+    public Page<MovieResponse> searchMovies(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Movie> moviePage = movieRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword, pageable);
+        return moviePage.map(movieMapper::toMovieResponse);
     }
 }

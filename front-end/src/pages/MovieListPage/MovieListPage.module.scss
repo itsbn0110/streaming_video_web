@@ -1,9 +1,8 @@
 .movie-list-page {
   padding-top: var(--default-layout-header-height);
-  background-color: #111111;
+  background-color: var(--popular-background);
   color: #fff;
   min-height: 100vh;
-  
   
   .page-title {
     font-size: 28px;
@@ -14,47 +13,46 @@
     text-transform: uppercase;
   }
   
-
   .content {
-    padding:0 var(--default-layout-width);
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px
+    gap: 24px;
   }
 
   .filters {
-    
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    justify-content: center;
+    justify-content: space-between;
     background-color: #1e1e1e;
     padding: 20px;
-
-    margin: 10px 0;
     border-radius: 8px;
-    width:100%;
+    width: 100%;
     
     .filter-group {
-      display: flex;
-      flex-direction: column;
+      flex: 1 1 200px;
+      min-width: 130px;
+      margin-bottom: 5px;
       
       label {
         font-size: 0.85rem;
         margin-bottom: 8px;
+        display: block;
         color: #aaa;
       }
       
       select {
+        width: 100%;
         padding: 10px 15px;
         font-size: 14px;
         border: 1px solid #333;
         border-radius: 4px;
         background-color: #000;
         color: #fff;
-        min-width: 130px;
         cursor: pointer;
         
         &:focus {
@@ -69,83 +67,148 @@
       }
     }
   }
-  
+
   .error-message {
     background-color: rgba(255, 0, 0, 0.1);
     color: #ff6b6b;
     padding: 15px;
-    margin: 0 50px 20px;
     border-radius: 4px;
     text-align: center;
+    width: 100%;
   }
-  
+
   .loading {
     text-align: center;
     padding: 40px;
     font-size: 18px;
     color: #aaa;
+    width: 100%;
   }
-  
+
   .no-results {
     text-align: center;
     padding: 40px;
     font-size: 18px;
     color: #aaa;
-    grid-column: 1 / -1;
+    width: 100%;
   }
-  
+
   .movies {
     display: grid;
-   
-    grid-template-columns: repeat(5, minmax(270px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
-    padding: 0;
-    max-width: 100%; 
-    margin: 0 auto 60px; 
-    
+    width: 100%;
   }
-}
-
-@media (max-width: 1480px) {
-  .movie-list-page {
-    .movies {
-      grid-template-columns: repeat(4, minmax(270px, 1fr)); 
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 40px;
+    
+    button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: #333;
+      }
+      
+      &.active {
+        background-color: #e50914;
+        border-color: #e50914;
+      }
     }
   }
 }
 
+// Responsive adjustments
 @media (max-width: 1200px) {
   .movie-list-page {
     .movies {
-      grid-template-columns: repeat(3, minmax(270px, 1fr)); 
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
   }
 }
 
 @media (max-width: 992px) {
   .movie-list-page {
-    
-    
-    .filters {
-      margin: 0 20px 20px;
+    .movies {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
     
-    .movies {
-      padding: 0 20px 30px;
-      grid-template-columns: repeat(2, minmax(270px, 1fr)); 
+    .filters {
+      .filter-group {
+        flex: 1 1 180px;
+      }
     }
   }
 }
 
 @media (max-width: 768px) {
   .movie-list-page {
+    .page-title {
+      font-size: 24px;
+      margin: 30px 0 15px;
+    }
     
+    .filters {
+      flex-direction: row;
+      padding: 15px;
+      
+      .filter-group {
+        flex: 1 1 calc(50% - 15px);
+      }
+    }
     
     .movies {
-      grid-template-columns: repeat(1, 1fr); 
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .movie-list-page {
+    .filters {
+      .filter-group {
+        flex: 1 1 100%;
+      }
+    }
+    
+    .movies {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .pagination {
+      button {
+        width: 35px;
+        height: 35px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-list-page {
+    .page-title {
+      font-size: 20px;
+    }  
+    .movies {
+      grid-template-columns: 1fr;
       
-      .movie-card {
-        max-width: 320px; 
+      > div {
+        max-width: 280px;
         margin: 0 auto;
       }
     }

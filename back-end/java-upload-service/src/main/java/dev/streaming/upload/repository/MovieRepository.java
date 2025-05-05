@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import dev.streaming.upload.Entity.Movie;
 
@@ -13,6 +15,9 @@ import dev.streaming.upload.Entity.Movie;
 public interface MovieRepository extends JpaRepository<Movie, String> {
     @Query("SELECT m FROM Movie m JOIN m.categories c WHERE c.slug = :slug")
     List<Movie> findByCategorySlug(@Param("slug") String slug);
+
+    @Query("SELECT m FROM Movie m JOIN m.categories c WHERE c.slug = :slug")
+    Page<Movie> findByCategorySlug(@Param("slug") String slug, Pageable pageable);
 
     // Tìm phim theo năm phát hành
     @Query("SELECT m FROM Movie m WHERE (:releaseYear IS NULL OR m.releaseYear = :releaseYear)")
@@ -40,4 +45,8 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     List<Movie> findRelatedMovies(@Param("genreIds") List<Long> genreIds, @Param("movieId") String movieId);
 
     List<Movie> findByCategoriesSlugOrderByUpdatedAtDesc(String categorySlug);
+
+    List<Movie> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description);
+
+    Page<Movie> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description, Pageable pageable);
 }

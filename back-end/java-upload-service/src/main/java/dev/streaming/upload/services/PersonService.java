@@ -36,6 +36,7 @@ public class PersonService {
                 .role(request.getRole())
                 .birthDate(request.getBirthDate())
                 .avatar(avatar)
+                .biography(request.getBiography())
                 .build());
 
         PersonResponse personResponse = personMapper.toPersonResponse(person);
@@ -70,5 +71,10 @@ public class PersonService {
 
     public void delete(Long personId) {
         personRepository.deleteById(personId);
+    }
+
+    public dev.streaming.upload.Entity.Person getPersonById(Long personId) {
+        return personRepository.findById(personId)
+                .orElseThrow(() -> new dev.streaming.upload.exception.AppException(dev.streaming.upload.exception.ErrorCode.NOT_FOUND));
     }
 }

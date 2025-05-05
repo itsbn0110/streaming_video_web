@@ -1,0 +1,153 @@
+.actor-detail-page {
+  min-height: 100vh;
+  background: var( --popular-background);
+  color: #fff;
+  padding: calc(var(--default-layout-header-height) + 30px) 0 32px 0;
+}
+
+.actor-container {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.actor-left {
+  width: 270px;
+  min-width: 270px;
+}
+
+.actor-avatar {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.actor-info-box {
+  width: 100%;
+}
+
+.actor-info-title {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.actor-info-row {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.actor-info-row strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.actor-right {
+  flex: 1;
+  min-width: 0;
+}
+
+.actor-name {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.actor-bio-title {
+  font-size: 22px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.actor-bio {
+  margin-bottom: 32px;
+  line-height: 1.7;
+  font-size: 16px;
+  color: #6a6767;
+  font-style: italic;
+
+}
+
+.actor-movie-title {
+  font-size: 22px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.actor-movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.movie-item:hover {
+  transform: translateY(-5px);
+}
+
+.movie-poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.movie-title {
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  color: #e5e5e5;
+  margin-top: 4px;
+}
+
+.loading, .error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .actor-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  .actor-left {
+    width: 100%;
+    max-width: 320px;
+    margin: 0;
+  }
+  
+  .actor-avatar {
+    height: auto;
+    aspect-ratio: 3/4;
+  }
+  
+  .actor-movie-list {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 16px;
+  }
+}

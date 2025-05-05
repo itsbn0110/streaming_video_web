@@ -26,6 +26,11 @@ function MovieListPage() {
         // sort: searchParams.get("sort") || "latest",
     });
 
+    const pageSize = 12;
+    const [currentPage, setCurrentPage] = useState(Number(searchParams.get('page')) || 1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalItems, setTotalItems] = useState(0);
+
     const path = location.pathname.split('/');
     const categoryFromPath = path[path.length - 1];
 
@@ -51,12 +56,14 @@ function MovieListPage() {
         fetchFilterOptions();
     }, []);
 
-    const fetchMoviesByCategory = async (categorySlug) => {
+    const fetchMoviesByCategory = async (categorySlug, page = 1) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetchMoviesByCategoryAPI(categorySlug);
-            setMovies(response.result || []);
+            const response = await fetchMoviesByCategoryAPI(categorySlug, page - 1, pageSize);
+            setMovies(response.result?.content || []);
+            setTotalPages(response.result ? response.result.totalPages : 1);
+            setTotalItems(response.result ? response.result.totalElements : 0);
         } catch (err) {
             console.error('Failed to fetch movies by category:', err);
             setError('Failed to load movies. Please try again later.');
@@ -65,7 +72,7 @@ function MovieListPage() {
         }
     };
 
-    const fetchMoviesWithFilters = async (categorySlug, currentFilters) => {
+    const fetchMoviesWithFilters = async (categorySlug, currentFilters, page = 1) => {
         setLoading(true);
         setError(null);
         try {
@@ -75,9 +82,12 @@ function MovieListPage() {
                 }
                 return acc;
             }, {});
-
+            params.page = page - 1;
+            params.size = pageSize;
             const response = await fetchMoviesWithFiltersAPI(categorySlug, params);
-            setMovies(response.result || []);
+            setMovies(response.result?.content || []);
+            setTotalPages(response.result ? response.result.totalPages : 1);
+            setTotalItems(response.result ? response.result.totalElements : 0);
         } catch (err) {
             console.error('Failed to fetch movies with filters:', err);
             setError('Failed to apply filters. Please try again later.');
@@ -95,14 +105,16 @@ function MovieListPage() {
         };
 
         setFilters(newFilters);
+        const page = Number(searchParams.get('page')) || 1;
+        setCurrentPage(page);
 
         if (categoryFromPath) {
             const hasFilters = Object.values(newFilters).some((value) => value !== '');
 
             if (hasFilters) {
-                fetchMoviesWithFilters(categoryFromPath, newFilters);
+                fetchMoviesWithFilters(categoryFromPath, newFilters, page);
             } else {
-                fetchMoviesByCategory(categoryFromPath);
+                fetchMoviesByCategory(categoryFromPath, page);
             }
         }
     }, [location.pathname, location.search]);
@@ -124,6 +136,12 @@ function MovieListPage() {
         navigate(`/${currentCategory}${newSearchParams.toString() ? `?${newSearchParams.toString()}` : ''}`, {
             replace: true,
         });
+    };
+
+    const handlePageChange = (page) => {
+        const newSearchParams = new URLSearchParams(location.search);
+        newSearchParams.set('page', page);
+        navigate(`${location.pathname}?${newSearchParams.toString()}`);
     };
 
     const getCategoryTitle = () => {
@@ -207,11 +225,22 @@ function MovieListPage() {
                     <div className={cx('loading')}>Đang tải...</div>
                 ) : (
                     <div className={cx('movies')}>
-                        {movies.length > 0 ? (
-                            movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
-                        ) : (
-                            <div className={cx('no-results')}>Không tìm thấy phim phù hợp</div>
-                        )}
+                        {movies.length > 0 && movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
+                    </div>
+                )}
+
+                {movies.length === 0 && !loading && <div className={cx('no-results')}>Không tìm thấy phim phù hợp</div>}
+                {totalPages > 1 && (
+                    <div className={cx('pagination')}>
+                        {Array.from({ length: totalPages }, (_, i) => (
+                            <button
+                                key={i}
+                                className={cx({ active: currentPage === i + 1 })}
+                                onClick={() => handlePageChange(i + 1)}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
                     </div>
                 )}
             </div>

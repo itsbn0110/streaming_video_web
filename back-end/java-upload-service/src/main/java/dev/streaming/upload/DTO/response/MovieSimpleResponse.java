@@ -1,6 +1,5 @@
 package dev.streaming.upload.DTO.response;
 
-import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +12,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PersonResponse {
-    Long id;
-    String name;
-    String role;
-    String birthDate;
-    String avatar;
-    String biography;
-    Set<MovieSimpleResponse> directedMovies;
-    Set<MovieSimpleResponse> actedMovies;
+public class MovieSimpleResponse {
+    String id;
+    String title;
+    String originalTitle;
+    String thumbnail;
 }
