@@ -114,3 +114,20 @@
         display: none !important;
     }
 }
+
+
+@media (max-width: 1536px) {
+    .banner {
+        height: 660px !important;
+        .banner-content{
+            bottom: 30% !important;
+        }
+        .custom-arrow {
+            top:33%;
+        }
+    }
+    .banner-image {
+        height: 660px !important;
+    }
+}
+

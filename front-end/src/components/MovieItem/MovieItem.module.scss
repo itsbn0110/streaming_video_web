@@ -5,6 +5,8 @@
   padding: 5px 0;
   margin-bottom: 10px;
   cursor: pointer;
+  color:var(--white);
+  min-width: 400px;
 
   &:hover {
     background-color: rgba(255, 255, 255, .08);

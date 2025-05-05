@@ -67,7 +67,7 @@ export const fetchNewlyUpdatedMoviesAPI = async (categorySlug) => {
     return res.data;
 };
 
-// Genres
+// Genres Admin
 export const fetchAllGenresAPI = async () => {
     const res = await axios.get(`${API_BASE_URL}/genres`, { headers: getAuthHeaders() });
     return res.data;
@@ -93,7 +93,7 @@ export const deleteGenreDataAPI = async (genreId) => {
     return res.data;
 };
 
-// C
+// Category Admin
 export const fetchAllCategoriesAPI = async () => {
     const res = await axios.get(`${API_BASE_URL}/categories`, { headers: getAuthHeaders() });
     return res.data;
@@ -121,12 +121,12 @@ export const deleteCategoryDataAPI = async (categoryId) => {
 
 export const fetchAllPersonsAPI = async (type) => {
     const endpoint = type === 'actor' ? 'actors' : 'directors';
-    const res = await axios.get(`${API_BASE_URL}/person/${endpoint}`, { headers: getAuthHeaders() });
+    const res = await axios.get(`${API_BASE_URL}/person/${endpoint}`);
     return res.data;
 };
 
 export const fetchPersonDataAPI = async (personId) => {
-    const res = await axios.get(`${API_BASE_URL}/person/${personId}`, { headers: getAuthHeaders() });
+    const res = await axios.get(`${API_BASE_URL}/person/${personId}`);
     return res.data;
 };
 
@@ -155,7 +155,7 @@ export const deletePersonDataAPI = async (personId) => {
     return res.data;
 };
 
-// Country
+// Country Admin
 export const fetchCountryDataAPI = async (countryId) => {
     const res = await axios.get(`${API_BASE_URL}/countries/${countryId}`);
     return res.data;
@@ -181,7 +181,7 @@ export const fetchAllCountriesAPI = async () => {
     return res.data;
 };
 
-// User
+// User Admin
 export const fetchAllUsersAPI = async (page = 0, size = 15) => {
     const res = await axios.get(`${API_BASE_URL}/users?page=${page}&size=${size}`, { headers: getAuthHeaders() });
     return res.data;
@@ -218,8 +218,10 @@ export const deleteUserDataAPI = async (userId) => {
 };
 
 // MovieList Page
-export const fetchMoviesByCategoryAPI = async (categorySlug) => {
-    const res = await axios.get(`${API_BASE_URL}/movies/category/${categorySlug}`);
+export const fetchMoviesByCategoryAPI = async (categorySlug, page = 0, size = 12) => {
+    const res = await axios.get(`${API_BASE_URL}/movies/category/${categorySlug}`, {
+        params: { page, size },
+    });
     return res.data;
 };
 
@@ -255,11 +257,20 @@ export const logoutAPI = async (token) => {
 };
 
 export const fetchBannerMoviesAPI = async () => {
-    const res = await axios.get(`${API_BASE_URL}/movies/category/phim-hot`);
+    const res = await axios.get(`${API_BASE_URL}/movies/category/phim-hot`, {
+        params: { page: 0, size: 5 },
+    });
     return res.data;
 };
 
 export const fetchMovieByIdForCategoryAPI = async (movieId) => {
     const res = await axios.get(`${API_BASE_URL}/movies/${movieId}`);
+    return res.data;
+};
+
+export const fetchMoviesByKeywordAPI = async (keyword, page = 0, size = 12) => {
+    const res = await axios.get(`${API_BASE_URL}/movies/search`, {
+        params: { keyword, page, size },
+    });
     return res.data;
 };

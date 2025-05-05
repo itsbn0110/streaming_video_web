@@ -1,0 +1,36 @@
+
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active: dev
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: ${DBMS_CONNECTION}
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 1000000MB
+      max-request-size: 1000000MB
+
+jwt:
+  signerKey: ${SIGNER_KEY_DEV}
+  valid-duration: 3600000 #second
+  refreshable-duration: 12000000
+
+cloudinary:
+  cloud_name: ${CLOUD_NAME}
+  api_key: ${API_KEY_CLOUDINARY}
+  api_secret: ${API_SECRET_CLOUDINARY}
+  secure: true

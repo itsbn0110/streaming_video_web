@@ -224,6 +224,39 @@ $button-active-bg: #2e9c2e;
   }
 }
 
+@media (max-width: 1440px)  {
+  .movie-player {
+    height: 680px;
+  }
+}
+
+
+
+@media (max-width: 1200px)  {
+  .movie-player {
+    height: 660px;
+  }
+}
+
+
+@media (max-width: 992px)  {
+  .movie-player {
+    height: 600px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .movie-player {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .movie-player {
+    height: 260px;
+  }
+}
 
 
 

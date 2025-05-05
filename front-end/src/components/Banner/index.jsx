@@ -10,12 +10,12 @@ function Banner() {
     const sliderRef = useRef(null);
 
     const [movies, setMovies] = useState([]);
-
     const fetchBannerFilm = async () => {
         try {
             const response = await fetchBannerMoviesAPI();
             if (response && response.code === 1000) {
-                setMovies(response.result);
+                const data = response.result?.content || response.result || [];
+                setMovies(data);
             }
         } catch (e) {
             console.log('Error when fetch video banner: ', e);
@@ -51,17 +51,22 @@ function Banner() {
         centerPadding: '0',
         autoplay: true,
         autoplaySpeed: 5000,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
+        nextArrow: movies.length === 0 ? null : <NextArrow />,
+        prevArrow: movies.length === 0 ? null : <PrevArrow />,
     };
 
     return (
         <div className="banner">
             <Slider ref={sliderRef} {...settings}>
                 {movies &&
+                    movies.length > 0 &&
                     movies.map((movie, index) => (
-                        <div className="banner-slide" key={index}>
-                            <img src={movie?.backdrop} alt={`Banner ${index + 1}`} className="banner-image" />
+                        <div className="banner-slide" key={movie.id || index}>
+                            <img
+                                src={movie?.backdrop || movie?.thumbnail}
+                                alt={`Banner ${index + 1}`}
+                                className="banner-image"
+                            />
                             <div className="banner-content">
                                 <h2 className="banner-title">{movie?.title}</h2>
                                 <p className="banner-description">{movie?.originalTitle}</p>
