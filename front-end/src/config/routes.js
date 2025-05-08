@@ -9,6 +9,9 @@ const routes = {
     login: '/login',
     search: '/search',
     actorDetail: '/actor/:id',
+    profile: '/profile',
+    editProfile: '/profile/edit',
+    changePassword: '/profile/change-password',
 };
 
 export default routes;

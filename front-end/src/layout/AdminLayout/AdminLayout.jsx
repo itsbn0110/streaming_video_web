@@ -286,7 +286,7 @@ const AdminLayout = () => {
                         {expandedMenus.baiviet && (
                             <div className={cx('submenu')}>
                                 <Link
-                                    to="/admin/bai-viet/danh-sach"
+                                    to="/admin"
                                     className={cx('submenu-item', {
                                         active: isActive('/admin/bai-viet/danh-sach'),
                                     })}
@@ -294,7 +294,7 @@ const AdminLayout = () => {
                                     Danh sách bài viết
                                 </Link>
                                 <Link
-                                    to="/admin/bai-viet/tao-bai-viet"
+                                    to="/admin"
                                     className={cx('submenu-item', {
                                         active: isActive('/admin/bai-viet/tao-bai-viet'),
                                     })}
@@ -322,7 +322,7 @@ const AdminLayout = () => {
                         {expandedMenus.donhang && (
                             <div className={cx('submenu')}>
                                 <Link
-                                    to="/admin/don-hang/danh-sach"
+                                    to="/admin"
                                     className={cx('submenu-item', {
                                         active: isActive('/admin/don-hang/danh-sach'),
                                     })}
