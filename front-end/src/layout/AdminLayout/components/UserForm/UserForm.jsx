@@ -46,11 +46,10 @@ const UserForm = ({ editMode = false, userData = null }) => {
                     const response = await fetchUserDataAPI(id);
                     const user = response;
                     const formattedDob = user.dob ? user.dob.split('T')[0] : '';
-                    let roleArr =
-                        user.roles && Array.isArray(user.roles)
-                            ? user.roles.map((r) => r.name.replace('ROLE_', ''))
-                            : ['USER'];
-                    if (!roleArr.length) roleArr = ['USER'];
+                    let roleStr =
+                        user.roles && Array.isArray(user.roles) && user.roles.length > 0
+                            ? user.roles[0].name.replace('ROLE_', '')
+                            : 'USER';
                     setFormData({
                         username: user.username || '',
                         email: user.email || '',
@@ -60,7 +59,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                         fullName: user.fullName || '',
                         avatar: user.avatar || null,
                         avatarPreview: null,
-                        role: roleArr, // luôn là mảng
+                        role: roleStr,
                     });
                 } catch (err) {
                     setError('Error loading user data: ' + err.message);
@@ -113,16 +112,16 @@ const UserForm = ({ editMode = false, userData = null }) => {
     };
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
         if (name === 'role') {
             setFormData({
                 ...formData,
-                role: [value], // luôn là mảng
+                role: value,
             });
         } else {
             setFormData({
                 ...formData,
-                [name]: type === 'checkbox' ? checked : value,
+                [name]: value,
             });
         }
     };
@@ -149,7 +148,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
             password: formData.password || null,
             dob: formattedDob,
             fullName: formData.fullName || '',
-            role: formData.role || ['USER'], // gửi lên là mảng
+            role: formData.role || 'USER',
         };
 
         if (editMode && !requestData.fullName) {
@@ -338,7 +337,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                             <select
                                 name="role"
                                 className={cx('form-control')}
-                                value={formData.role ? formData.role[0] : 'USER'}
+                                value={formData.role || 'USER'}
                                 onChange={handleInputChange}
                             >
                                 <option value="USER">Người dùng</option>

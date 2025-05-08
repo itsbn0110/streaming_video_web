@@ -6,7 +6,7 @@ import MoviePlayerPage from '@/pages/MoviePlayerPage';
 import AuthForm from '@/components/Auth/AuthForm';
 import SearchResults from '@/pages/SearchResults';
 import ActorDetailPage from '@/pages/ActorDetailPage';
-
+import ProfilePage from '@/pages/ProfilePage';
 const publicRoutes = [
     { path: config.routes.home, component: HomePage },
     { path: config.routes.hot, component: MovieListPage, slug: 'phim-hot' },
@@ -18,6 +18,7 @@ const publicRoutes = [
     { path: config.routes.login, component: AuthForm },
     { path: config.routes.search, component: SearchResults },
     { path: config.routes.actorDetail, component: ActorDetailPage },
+    { path: config.routes.profile, component: ProfilePage },
 ];
 
 const privateRoutes = [];

@@ -40,13 +40,5 @@ public class Genre {
 
     String slug;
 
-    public Object orElseThrow(Object object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
-    }
 
-    public Object orElseThrow(Object object) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
-    }
 }

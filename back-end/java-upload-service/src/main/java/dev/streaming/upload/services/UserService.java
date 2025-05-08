@@ -120,6 +120,33 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(existedUser));
     }
 
+    public UserResponse updateProfile(UpdateRequest request, MultipartFile avatarFile, String userId) {
+        User existedUser = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        if (request.getEmail() != null) existedUser.setEmail(request.getEmail());
+        if (request.getFullName() != null) existedUser.setFullName(request.getFullName());
+        if (request.getDob() != null) existedUser.setDob(request.getDob());
+       
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            try {
+                var avatar = cloudinaryService.uploadImage(avatarFile);
+                existedUser.setAvatar(avatar);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload avatar", e);
+            }
+        }
+        return userMapper.toUserResponse(userRepository.save(existedUser));
+    }
+
+    public UserResponse changePassword(String userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
     public void deleteUser(String userId) {
         var existedUser =
                 userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

@@ -241,6 +241,21 @@ export const deleteUserDataAPI = async (userId) => {
     return res.data;
 };
 
+export const changePasswordAPI = async ({ userId, currentPassword, newPassword }) => {
+    const res = await api.put('/users/profile/change-password', null, {
+        params: { userId, currentPassword, newPassword },
+        headers: getAuthHeaders(),
+    });
+    return res.data;
+};
+
+export const updateProfileAPI = async (formData) => {
+    const res = await api.put('/users/profile', formData, {
+        headers: { 'Content-Type': 'multipart/form-data', ...getAuthHeaders() },
+    });
+    return res.data;
+};
+
 // MovieList Page
 export const fetchMoviesByCategoryAPI = async (categorySlug, page = 0, size = 12) => {
     const res = await api.get(`/movies/category/${categorySlug}`, {
