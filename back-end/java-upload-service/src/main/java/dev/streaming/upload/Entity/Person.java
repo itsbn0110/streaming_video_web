@@ -1,11 +1,12 @@
 package dev.streaming.upload.Entity;
 
 import java.util.List;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -35,6 +36,8 @@ public class Person {
 
     String birthDate;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String biography;
 
     String avatar;

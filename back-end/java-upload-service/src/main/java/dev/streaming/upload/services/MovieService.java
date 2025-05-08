@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
@@ -87,7 +88,7 @@ public class MovieService {
         return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
     }
 
-    public List<MovieResponse> filterMovies(String categorySlug, Integer releaseYear, Long countryId, String duration) {
+    public Page<MovieResponse> filterMovies(String categorySlug, Integer releaseYear, Long countryId, String duration, int page, int size) {
         List<Movie> movies = movieRepository.findAll();
 
         if (categorySlug != null) {
@@ -135,7 +136,11 @@ public class MovieService {
             }
         }
 
-        return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
+        List<MovieResponse> movieResponses = movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
+        int start = Math.min(page * size, movieResponses.size());
+        int end = Math.min(start + size, movieResponses.size());
+        List<MovieResponse> pageContent = movieResponses.subList(start, end);
+        return new PageImpl<>(pageContent, PageRequest.of(page, size), movieResponses.size());
     }
 
     public Movie updateMovie(

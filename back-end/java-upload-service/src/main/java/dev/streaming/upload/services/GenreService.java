@@ -1,7 +1,8 @@
 package dev.streaming.upload.services;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import dev.streaming.upload.DTO.response.GenreResponse;
@@ -38,6 +39,14 @@ public class GenreService {
     public List<Genre> getAll() {
         List<Genre> genres = genreRepository.findAll();
         return genres;
+    }
+
+    public GenreResponse getGenre (Long genreId) {
+        var genre = genreRepository.findById(genreId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        GenreResponse genreResponse = genreMapper.toGenreResponse(genre);
+
+        return genreResponse;
     }
 
     public GenreResponse update(Long genreId, String genreName) {

@@ -25,9 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GoogleDriveController {
-
+    
     GoogleDriveService googleDriveService;
-
+    
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping("/upload")
     public ApiResponse<MovieResponse> uploadMovie(
@@ -36,12 +36,15 @@ public class GoogleDriveController {
             @RequestPart("movieFile") MultipartFile movieFile,
             @RequestPart("movieBackDrop") MultipartFile movieBackDrop)
             throws Exception {
-
+        
         ObjectMapper mapper = new ObjectMapper();
         MovieUploadRequest request = mapper.readValue(requestJson, MovieUploadRequest.class);
-
+        
+        log.info("title: {}", request.getTitle());
+        MovieResponse response = googleDriveService.uploadMovie(request, thumbnailFile, movieFile, movieBackDrop);
+        
         return ApiResponse.<MovieResponse>builder()
-                .result(googleDriveService.uploadMovie(request, thumbnailFile, movieFile, movieBackDrop))
+                .result(response)
                 .build();
     }
 }

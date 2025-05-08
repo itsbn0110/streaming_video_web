@@ -49,6 +49,13 @@ public class CountryController {
                 .build();
     }
 
+    @GetMapping("/{countryId}")
+    ApiResponse<CountryResponse> getCountry(@PathVariable Long countryId) {
+        return ApiResponse.<CountryResponse>builder()
+        .result(countryService.getCountry(countryId))
+        .build();
+    }
+
     @PutMapping("/{countryId}")
     ApiResponse<CountryResponse> update(@PathVariable Long countryId, @RequestBody CountryRequest request) {
         return ApiResponse.<CountryResponse>builder()

@@ -82,13 +82,15 @@ public class MovieController {
     }
 
     @GetMapping("/filter")
-    public ApiResponse<List<MovieResponse>> filterMovies(
+    public ApiResponse<Page<MovieResponse>> filterMovies(
             @RequestParam(required = false) String categorySlug,
             @RequestParam(required = false) Integer releaseYear,
             @RequestParam(required = false) Long countryId,
-            @RequestParam(required = false) String duration) {
-        var results = movieService.filterMovies(categorySlug, releaseYear, countryId, duration);
-        return ApiResponse.<List<MovieResponse>>builder().result(results).build();
+            @RequestParam(required = false) String duration,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        var results = movieService.filterMovies(categorySlug, releaseYear, countryId, duration, page, size);
+        return ApiResponse.<Page<MovieResponse>>builder().result(results).build();
     }
 
     @GetMapping("/search")
