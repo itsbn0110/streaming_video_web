@@ -11,7 +11,7 @@ spring:
     import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: ${DBMS_CONNECTION}
+    url: ${DBMS_CONNECTION:jdbc:mysql://mysql:3306/streaming_web}
     username: ${DBMS_USERNAME}
     password: ${DBMS_PASSWORD}
   jpa:
@@ -34,3 +34,8 @@ cloudinary:
   api_key: ${API_KEY_CLOUDINARY}
   api_secret: ${API_SECRET_CLOUDINARY}
   secure: true
+
+# Added Google Service Account Configuration
+google:
+  service-account:
+    key-file: classpath:service-account-key.json

@@ -44,3 +44,7 @@ back-end/java-upload-service/tokens/StoredCredential
 
 #env
 .env
+
+
+#key app: 
+src/main/resources/service-account-key.json

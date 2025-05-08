@@ -32,6 +32,10 @@
 		<spotless.version>2.43.0</spotless.version>
 	</properties>
 	<dependencies>
+
+
+
+
 		<dependency>
 				<groupId>me.paulschwarz</groupId>
 				<artifactId>spring-dotenv</artifactId>
@@ -123,6 +127,13 @@
 			<artifactId>google-api-services-drive</artifactId>
 			<version>v3-rev20230822-2.0.0</version>
 		</dependency>
+
+
+		<dependency>
+    <groupId>com.google.auth</groupId>
+    <artifactId>google-auth-library-oauth2-http</artifactId>
+    <version>1.20.0</version>
+</dependency>
 
 
 		<dependency>

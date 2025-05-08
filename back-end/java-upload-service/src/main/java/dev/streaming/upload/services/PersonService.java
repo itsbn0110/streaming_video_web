@@ -30,7 +30,7 @@ public class PersonService {
 
     public PersonResponse create(PersonRequest request, MultipartFile personAvatar) throws IOException {
         String avatar = cloudinaryService.uploadImage(personAvatar);
-
+        log.info("avatar: ", avatar);
         Person person = personRepository.save(Person.builder()
                 .name(request.getName())
                 .role(request.getRole())
@@ -52,6 +52,9 @@ public class PersonService {
         List<Person> actors = personRepository.findByRole(role);
         return actors;
     }
+
+    
+
 
     public PersonResponse updatePerson(PersonRequest request, MultipartFile personAvatar, Long personId)
             throws IOException {

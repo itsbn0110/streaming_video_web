@@ -40,28 +40,36 @@ const UserForm = ({ editMode = false, userData = null }) => {
     }, [formData.avatarPreview]);
 
     useEffect(() => {
-        if (editMode && id && !userData) {
+        if (editMode && id) {
             const fetchUserData = async () => {
                 try {
                     const response = await fetchUserDataAPI(id);
-                    if (response && response.result) {
-                        const user = response.result;
-                        const formattedDob = user.dob ? user.dob.split('T')[0] : '';
-                        setFormData({
-                            ...user,
-                            dob: formattedDob,
-                            password: '',
-                            confirmPassword: '',
-                            role: user.roles && user.roles.some((r) => r.name === 'ROLE_ADMIN') ? 'ADMIN' : 'USER',
-                        });
-                    }
+                    const user = response;
+                    const formattedDob = user.dob ? user.dob.split('T')[0] : '';
+                    let roleArr =
+                        user.roles && Array.isArray(user.roles)
+                            ? user.roles.map((r) => r.name.replace('ROLE_', ''))
+                            : ['USER'];
+                    if (!roleArr.length) roleArr = ['USER'];
+                    setFormData({
+                        username: user.username || '',
+                        email: user.email || '',
+                        password: '',
+                        confirmPassword: '',
+                        dob: formattedDob,
+                        fullName: user.fullName || '',
+                        avatar: user.avatar || null,
+                        avatarPreview: null,
+                        role: roleArr, // luôn là mảng
+                    });
                 } catch (err) {
                     setError('Error loading user data: ' + err.message);
                 }
             };
             fetchUserData();
         }
-    }, [editMode, id, userData]);
+        // eslint-disable-next-line
+    }, [editMode, id]);
 
     const validateForm = () => {
         const errors = {};
@@ -106,10 +114,17 @@ const UserForm = ({ editMode = false, userData = null }) => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-        });
+        if (name === 'role') {
+            setFormData({
+                ...formData,
+                role: [value], // luôn là mảng
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: type === 'checkbox' ? checked : value,
+            });
+        }
     };
 
     const handleFileChange = (e) => {
@@ -134,7 +149,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
             password: formData.password || null,
             dob: formattedDob,
             fullName: formData.fullName || '',
-            role: formData.role || 'USER',
+            role: formData.role || ['USER'], // gửi lên là mảng
         };
 
         if (editMode && !requestData.fullName) {
@@ -232,7 +247,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="text"
                                 name="username"
                                 className={cx('form-control')}
-                                value={formData.username}
+                                value={formData.username || ''}
                                 onChange={handleInputChange}
                                 required
                                 disabled={editMode}
@@ -247,7 +262,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="email"
                                 name="email"
                                 className={cx('form-control')}
-                                value={formData.email}
+                                value={formData.email || ''}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -266,7 +281,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="password"
                                 name="password"
                                 className={cx('form-control')}
-                                value={formData.password}
+                                value={formData.password || ''}
                                 onChange={handleInputChange}
                                 required={!editMode}
                             />
@@ -282,7 +297,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="password"
                                 name="confirmPassword"
                                 className={cx('form-control')}
-                                value={formData.confirmPassword}
+                                value={formData.confirmPassword || ''}
                                 onChange={handleInputChange}
                                 required={!editMode}
                             />
@@ -299,7 +314,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="text"
                                 name="fullName"
                                 className={cx('form-control')}
-                                value={formData.fullName}
+                                value={formData.fullName || ''}
                                 onChange={handleInputChange}
                             />
                         </div>
@@ -309,7 +324,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 type="date"
                                 name="dob"
                                 className={cx('form-control')}
-                                value={formData.dob}
+                                value={formData.dob || ''}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -323,7 +338,7 @@ const UserForm = ({ editMode = false, userData = null }) => {
                             <select
                                 name="role"
                                 className={cx('form-control')}
-                                value={formData.role}
+                                value={formData.role ? formData.role[0] : 'USER'}
                                 onChange={handleInputChange}
                             >
                                 <option value="USER">Người dùng</option>
@@ -345,9 +360,9 @@ const UserForm = ({ editMode = false, userData = null }) => {
                                 </div>
                             </label>
                         </div>
-                        {formData.avatarPreview && (
+                        {(formData.avatarPreview || (editMode && formData.avatar)) && (
                             <img
-                                src={formData.avatarPreview}
+                                src={formData.avatarPreview || formData.avatar}
                                 alt="Avatar preview"
                                 className={cx('preview-image')}
                                 style={{ maxHeight: '200px', marginTop: '10px' }}
