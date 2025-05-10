@@ -42,7 +42,7 @@ const CountryForm = () => {
 
         try {
             const payload = {
-                countryName: countryName,
+                countryName: countryName.trim(),
             };
 
             let response;

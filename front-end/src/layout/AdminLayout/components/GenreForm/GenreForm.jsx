@@ -49,7 +49,7 @@ const GenreForm = () => {
         setSubmitSuccess(false);
 
         try {
-            const payload = { genreName };
+            const payload = { genreName: genreName.trim() };
             let response;
             if (isEditMode) {
                 response = await updateGenreDataAPI(id, payload);

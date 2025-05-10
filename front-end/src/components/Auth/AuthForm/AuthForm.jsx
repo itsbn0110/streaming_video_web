@@ -27,7 +27,11 @@ function AuthForm() {
             setLoading(false);
             return;
         }
-
+        if (!isLogin && password !== confirmPassword) {
+            setError('Mật khẩu xác nhận không khớp');
+            setLoading(false);
+            return;
+        }
         try {
             const response = isLogin
                 ? await loginAPI({ username, password })
