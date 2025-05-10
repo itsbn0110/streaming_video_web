@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mariadb:10.6
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: streaming_web
+    ports:
+      - "3306:3306"
+    networks:
+      - movie-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  spring-boot-service:
+    build:
+      context: ./back-end/java-upload-service
+    environment:
+      DBMS_CONNECTION: ${DBMS_CONNECTION}
+      DBMS_USERNAME: ${DBMS_USERNAME}
+      DBMS_PASSWORD: ${DBMS_PASSWORD}
+      CLOUD_NAME: ${CLOUD_NAME}
+      API_KEY_CLOUDINARY: ${API_KEY_CLOUDINARY}
+      API_SECRET_CLOUDINARY: ${API_SECRET_CLOUDINARY}
+      SIGNER_KEY_DEV: ${SIGNER_KEY_DEV}
+      SIGNER_KEY_PROD: ${SIGNER_KEY_PROD}
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - movie-network
+
+  golang-stream-service:
+    build:
+      context: ./back-end/golang-streaming-service
+    environment:
+      SPRING_BOOT_API_URL: ${SPRING_BOOT_API_URL}
+      GOOGLE_DRIVE_API_KEY: ${GOOGLE_DRIVE_API_KEY}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - spring-boot-service
+    networks:
+      - movie-network
+
+networks:
+  movie-network:

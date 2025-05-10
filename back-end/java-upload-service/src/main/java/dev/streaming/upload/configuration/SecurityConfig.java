@@ -111,8 +111,16 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        // Cấu hình CORS
-        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+        String activeProfile = System.getProperty("spring.profiles.active", System.getenv("SPRING_PROFILES_ACTIVE"));
+        if (activeProfile == null) activeProfile = "dev";
+
+        if (activeProfile.equals("dev")) {
+            // Chỉ cho phép localhost:5173 khi ở môi trường dev
+            corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173","http://*.localhost:5173"));
+        } else {
+            // Chỉ cho phép domain production khi ở môi trường prod
+            corsConfiguration.setAllowedOrigins(List.of("https://streaming-video-web.vercel.app","https://*.streaming-video-web.vercel.app"));
+        }
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);

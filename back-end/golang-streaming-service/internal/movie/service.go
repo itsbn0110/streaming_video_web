@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 type Movie struct {
@@ -15,7 +16,11 @@ type Movie struct {
 }
 
 func getMoviesFromSpringBoot(title string, categoryIDs []int, fromYear, toYear int) ([]Movie, error) {
-	apiURL := "http://localhost:8082/api/movies/filter"
+	apiBase := os.Getenv("SPRING_BOOT_API_URL")
+	if apiBase == "" {
+		apiBase = "http://spring-boot-service:8082/api" // fallback
+	}
+	apiURL := apiBase + "/movies/filter"
 	params := url.Values{}
 	if title != "" {
 		params.Add("title", title)
