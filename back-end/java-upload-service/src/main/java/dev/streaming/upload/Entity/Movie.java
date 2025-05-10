@@ -126,6 +126,9 @@ public class Movie {
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Episode> episodes;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     List<Comment> comments;
 

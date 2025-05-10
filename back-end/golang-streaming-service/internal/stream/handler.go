@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
-
-const googleDriveAPIKey = "AIzaSyAQINhuGU9lFotdZBKLbV0F8jHuy8JGsGc"
 
 func StreamVideo(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -21,6 +20,11 @@ func StreamVideo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	googleDriveAPIKey := os.Getenv("GOOGLE_DRIVE_API_KEY")
+	if googleDriveAPIKey == "" {
+		http.Error(w, "GOOGLE_DRIVE_API_KEY is not set", http.StatusInternalServerError)
+		return
+	}
 
 	fmt.Println("Video ID -----------------------------:", videoID)
 	if err != nil {
