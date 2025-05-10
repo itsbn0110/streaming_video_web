@@ -1,8 +1,15 @@
 {
-  "rewrites": [
-    { 
-      "source": "/api/:path*", 
-      "destination": "http://ec2-54-252-214-91.ap-southeast-2.compute.amazonaws.com:8082/api/:path*" 
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
