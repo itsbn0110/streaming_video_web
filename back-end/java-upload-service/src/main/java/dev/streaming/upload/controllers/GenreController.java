@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.cloudinary.Api;
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.GenreRequest;
 import dev.streaming.upload.DTO.response.GenreResponse;
@@ -47,6 +47,14 @@ public class GenreController {
     ApiResponse<List<Genre>> getAllGenres() {
         return ApiResponse.<List<Genre>>builder().result(genreService.getAll()).build();
     }
+
+    @GetMapping("/{genreId}")
+    ApiResponse<GenreResponse> getGenre(@PathVariable Long genreId) {
+        return ApiResponse.<GenreResponse>builder()
+        .result(genreService.getGenre(genreId))
+        .build();
+    }
+
 
     @PutMapping("/{genreId}")
     @PreAuthorize(value = "hasRole('ADMIN')")

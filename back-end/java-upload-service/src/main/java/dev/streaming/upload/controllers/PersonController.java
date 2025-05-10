@@ -45,7 +45,6 @@ public class PersonController {
             @RequestParam("request") String requestJson, @RequestPart("personAvatar") MultipartFile personAvatar)
             throws IOException {
 
-        // Chuyển đổi JSON string thành MovieUploadRequest object
         ObjectMapper mapper = new ObjectMapper();
         PersonRequest request = mapper.readValue(requestJson, PersonRequest.class);
 
@@ -71,6 +70,12 @@ public class PersonController {
                         .map(director -> personMapper.toPersonResponse(director))
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    @GetMapping("/{personId}")
+    public ApiResponse<PersonResponse> getPersonById(@PathVariable Long personId) {
+        var result = personService.getPersonById(personId);
+        return ApiResponse.<PersonResponse>builder().result(personMapper.toPersonResponse(result)).build();
     }
 
     @PutMapping("/{personId}")

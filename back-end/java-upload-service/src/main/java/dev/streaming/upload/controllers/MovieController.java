@@ -35,12 +35,10 @@ public class MovieController {
     MovieMapper movieMapper;
 
     @GetMapping("/get-all")
-    public ApiResponse<Page<Movie>> getAllMovies(
+    public ApiResponse<Page<MovieResponse>> getAllMovies(
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
-
-        var results = movieService.getAllMovies(page, size);
-
-        return ApiResponse.<Page<Movie>>builder().result(results).build();
+        var results = movieService.getAllMovies(page, size).map(movieMapper::toMovieResponse);
+        return ApiResponse.<Page<MovieResponse>>builder().result(results).build();
     }
 
     @GetMapping("/{movieId}")
@@ -67,26 +65,41 @@ public class MovieController {
     }
 
     @GetMapping("/category/{slug}")
-    public ApiResponse<List<Movie>> getMovieByCategories(@PathVariable String slug) {
-        var results = movieService.getMovieByCategories(slug);
-        return ApiResponse.<List<Movie>>builder().result(results).build();
+    public ApiResponse<Page<MovieResponse>> getMovieByCategories(
+            @PathVariable String slug,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        var results = movieService.getMovieByCategories(slug, page, size);
+        return ApiResponse.<Page<MovieResponse>>builder().result(results).build();
     }
 
     @GetMapping("/newly-updated/{categorySlug}")
     public ApiResponse<List<MovieResponse>> getNewlyUpdatedByCategory(@PathVariable String categorySlug) {
+        log.info("tôi đã ở đây");
         var results = movieService.getNewlyUpdatedByCategory(categorySlug);
+        log.info("results : {}",results);
         return ApiResponse.<List<MovieResponse>>builder().result(results).build();
     }
 
     @GetMapping("/filter")
-    public ApiResponse<List<Movie>> filterMovies(
+    public ApiResponse<Page<MovieResponse>> filterMovies(
             @RequestParam(required = false) String categorySlug,
             @RequestParam(required = false) Integer releaseYear,
             @RequestParam(required = false) Long countryId,
-            @RequestParam(required = false) String duration) {
+            @RequestParam(required = false) String duration,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        var results = movieService.filterMovies(categorySlug, releaseYear, countryId, duration, page, size);
+        return ApiResponse.<Page<MovieResponse>>builder().result(results).build();
+    }
 
-        var results = movieService.filterMovies(categorySlug, releaseYear, countryId, duration);
-        return ApiResponse.<List<Movie>>builder().result(results).build();
+    @GetMapping("/search")
+    public ApiResponse<Page<MovieResponse>> searchMovies(
+            @RequestParam("keyword") String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        var results = movieService.searchMovies(keyword, page, size);
+        return ApiResponse.<Page<MovieResponse>>builder().result(results).build();
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")

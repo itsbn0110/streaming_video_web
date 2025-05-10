@@ -1,0 +1,12 @@
+
+.user-item {
+  padding: 6px;
+}
+
+.user-item-link {
+  color: var(--white);
+  font-size: 14px;
+  &:hover {
+      color: var(--primary);
+  }
+}

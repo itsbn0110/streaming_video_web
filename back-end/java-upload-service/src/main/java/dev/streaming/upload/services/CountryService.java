@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import dev.streaming.upload.DTO.response.CountryResponse;
+import dev.streaming.upload.DTO.response.GenreResponse;
 import dev.streaming.upload.Entity.Country;
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.exception.AppException;
@@ -38,6 +39,14 @@ public class CountryService {
     public List<Country> getAll() {
         List<Country> countries = countryRepository.findAll();
         return countries;
+    }
+
+     public CountryResponse getCountry (Long countryId) {
+        var genre = countryRepository.findById(countryId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        CountryResponse genreResponse = countryMapper.toCountryResponse(genre);
+
+        return genreResponse;
     }
 
     public CountryResponse update(Long countryId, String countryName) {

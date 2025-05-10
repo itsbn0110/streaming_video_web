@@ -1,3 +1,4 @@
+
 server:
   port: 8082
   servlet:
@@ -34,7 +35,7 @@ cloudinary:
   api_key: ${API_KEY_CLOUDINARY}
   api_secret: ${API_SECRET_CLOUDINARY}
   secure: true
-
+# Added Google Service Account Configuration
 google:
   service-account:
     key-file: classpath:service-account-key.json

@@ -3,7 +3,7 @@ package dev.streaming.upload.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -101,6 +101,7 @@ public class Movie {
             name = "movie_director",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
+            
     Set<Person> directors;
 
     @ManyToMany

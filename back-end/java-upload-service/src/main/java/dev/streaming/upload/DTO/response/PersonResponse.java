@@ -1,5 +1,6 @@
 package dev.streaming.upload.DTO.response;
 
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,6 @@ public class PersonResponse {
     String birthDate;
     String avatar;
     String biography;
+    Set<MovieSimpleResponse> directedMovies;
+    Set<MovieSimpleResponse> actedMovies;
 }
