@@ -46,9 +46,9 @@ public class MovieResponse {
 
     Set<CountryResponse> countries;
 
-    Set<PersonResponse> directors;
+    Set<PersonSimpleResponse> directors;
 
-    Set<PersonResponse> actors;
+    Set<PersonSimpleResponse> actors;
 
     LocalDateTime createdAt;
 }

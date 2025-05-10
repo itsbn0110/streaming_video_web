@@ -13,7 +13,6 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import dev.streaming.upload.Entity.Movie;
-import dev.streaming.upload.configuration.GoogleDriveConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class GoogleDriveManager {
-    private final GoogleDriveConfig googleDriveConfig;
-
+    
     private final Drive driveService;
 
-    public void setPublicPermission(Drive driveService, String fileId) throws IOException {
+    public void setPublicPermission(String fileId) throws IOException {
         Permission permission = new Permission();
         permission.setType("anyone");
         permission.setRole("reader");
@@ -43,8 +41,7 @@ public class GoogleDriveManager {
             query = parentId == null ? query + " and 'root' in parents" : query + " and '" + parentId + "' in parents";
 
             try {
-                FileList result = googleDriveConfig
-                        .getDrive()
+                FileList result = driveService
                         .files()
                         .list()
                         .setQ(query)
@@ -59,10 +56,11 @@ public class GoogleDriveManager {
                 }
                 pageToken = result.getNextPageToken();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error("Error finding folder: {}", e.getMessage(), e);
+                throw new RuntimeException("Failed to find folder", e);
             }
 
-        } while (pageToken != null && folderName == null);
+        } while (pageToken != null && folderId == null);
 
         return folderId;
     }
@@ -83,50 +81,48 @@ public class GoogleDriveManager {
         }
 
         try {
-            return googleDriveConfig
-                    .getDrive()
+            return driveService
                     .files()
                     .create(folder)
                     .setFields("id")
                     .execute()
                     .getId();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Error creating folder: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to create folder", e);
         }
     }
 
     public String getFolderId(String movieName) {
-        String parentFolderId = findOrCreateFolder(null, "ALL-Movie"); // Tạo thư mục ALL Movie
-        return findOrCreateFolder(parentFolderId, movieName); // Tạo thư mục con theo tên phim
+        String parentFolderId = findOrCreateFolder("1VVBoGCJHJ6MUi5Mujz5cVfN3i2DkJ6dW", "ALL-Movie"); // Create ALL-Movie folder
+        return findOrCreateFolder(parentFolderId, movieName); // Create subfolder with movie name
     }
 
     public void deleteFileOrFolderById(String id) {
         try {
-            googleDriveConfig.getDrive().files().delete(id).execute();
+            driveService.files().delete(id).execute();
+            log.info("Successfully deleted file/folder with ID: {}", id);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Error deleting file/folder: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to delete file or folder", e);
         }
     }
 
     public Movie uploadMovie(MultipartFile movieFile, String movieName, Movie movie) {
-
         if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
             throw new IllegalArgumentException("Movie file must be a video");
         }
 
-        // Tạo hoặc tìm thư mục của phim trong "ALL Movie"
-
+        // Create or find movie folder in "ALL Movie"
         String folderId = getFolderId(movieName);
-
-        log.info("folderId : {}", folderId);
+        log.info("Uploading movie to folder with ID: {}", folderId);
 
         try {
             File videoMetadata = new File();
             videoMetadata.setParents(Collections.singletonList(folderId));
             videoMetadata.setName(movieName + ".mp4");
 
-            File uploadedMovie = googleDriveConfig
-                    .getDrive()
+            File uploadedMovie = driveService
                     .files()
                     .create(
                             videoMetadata,
@@ -135,16 +131,18 @@ public class GoogleDriveManager {
                     .execute();
 
             String videoId = uploadedMovie.getId();
-
             String streamUrl = uploadedMovie.getWebViewLink();
 
-            setPublicPermission(driveService, uploadedMovie.getId());
+            setPublicPermission(uploadedMovie.getId());
+            
             movie.setFolderId(folderId);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
 
+            log.info("Successfully uploaded movie: {}, videoId: {}", movieName, videoId);
             return movie;
         } catch (IOException e) {
+            log.error("Upload failed: {}", e.getMessage(), e);
             throw new RuntimeException("Upload failed: " + e.getMessage(), e);
         }
     }
