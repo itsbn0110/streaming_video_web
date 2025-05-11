@@ -74,7 +74,7 @@ function AuthForm() {
         <div className={cx('auth-container')}>
             <div className={cx('auth-form')}>
                 <h2 className={cx('auth-title')}>{isLogin ? 'Đăng nhập' : 'Đăng ký'}</h2>
-
+                <h3 className="text-center">TK: admin. MK: admin123</h3>
                 <form onSubmit={handleSubmit}>
                     <div className={cx('form-group')}>
                         <label htmlFor="username">Tài khoản</label>

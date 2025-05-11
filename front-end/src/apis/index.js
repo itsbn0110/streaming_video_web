@@ -5,6 +5,19 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
+api.interceptors.request.use(
+    (config) => {
+        config.headers = {
+            ...config.headers,
+            'ngrok-skip-browser-warning': 'true',
+        };
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    },
+);
+
 api.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -19,7 +32,7 @@ api.interceptors.response.use(
 
 function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
-    return token ? { Authorization: `Bearer ${token}`, 'ngrok-skip-browser-warning': 'true' } : {};
+    return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 // Movies
