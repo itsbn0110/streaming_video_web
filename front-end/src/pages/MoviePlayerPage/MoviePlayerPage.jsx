@@ -15,9 +15,9 @@ const MoviePlayerPage = () => {
     const [videoError, setVideoError] = useState(null);
     const videoRef = useRef(null);
     const { movieId } = useParams();
-
     const navigate = useNavigate();
 
+    const API_STREAMING_GO_URL = import.meta.env.VITE_GOLANG_STREAMING_API_URL;
     useEffect(() => {
         if (movie) {
             setLoading(false);
@@ -93,7 +93,7 @@ const MoviePlayerPage = () => {
                     </div>
                 ) : (
                     <video ref={videoRef} className={cx('video-element')} controls onError={handleVideoError} autoPlay>
-                        <source src={`http://localhost:3000/stream/${movieId}`} type="video/mp4" />
+                        <source src={`${API_STREAMING_GO_URL}/stream/${movieId}`} type="video/mp4" />
                         Trình duyệt của bạn không hỗ trợ video.
                     </video>
                 )}
