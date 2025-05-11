@@ -19,7 +19,7 @@ api.interceptors.response.use(
 
 function getAuthHeaders() {
     const token = localStorage.getItem('accessToken');
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    return token ? { Authorization: `Bearer ${token}`, 'ngrok-skip-browser-warning': 'true' } : {};
 }
 
 // Movies
