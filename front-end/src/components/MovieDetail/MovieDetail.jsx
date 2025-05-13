@@ -17,7 +17,6 @@ const MovieDetail = () => {
     const navigate = useNavigate();
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
 
-    // Check for window resize to detect small screens
     useEffect(() => {
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth <= 450);

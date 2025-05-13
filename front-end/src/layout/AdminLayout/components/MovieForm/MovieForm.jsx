@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import { X, Upload, Save, ArrowLeft } from 'lucide-react';
 import adminRouteConfig from '@/config/adminRoutes';
-import TagInput from '../TagInput';
 import {
     createMovieDataAPI,
     updateMovieDataAPI,
@@ -14,6 +13,7 @@ import {
     fetchAllPersonsAPI,
     fetchMovieDataAPI,
 } from '@/apis';
+import Select from 'react-select';
 
 import styles from '../../AdminLayout.module.scss';
 const cx = classNames.bind(styles);
@@ -94,7 +94,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         // eslint-disable-next-line
     }, [editMode, id]);
 
-    // Fetch genres, countries, directors, actors from API
     useEffect(() => {
         const fetchOptions = async () => {
             try {
@@ -131,6 +130,13 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         fetchOptions();
     }, []);
 
+    // Tạo  các optiosn cho react-select
+    const actorSelectOptions = actorOptions.map((actor) => ({ value: actor, label: actor.name }));
+    const directorSelectOptions = directorOptions.map((director) => ({ value: director, label: director.name }));
+    const genreSelectOptions = genreOptions.map((genre) => ({ value: genre, label: genre.name }));
+    const countrySelectOptions = countryOptions.map((country) => ({ value: country, label: country.name }));
+    const categorySelectOptions = categoryOptions.map((category) => ({ value: category, label: category.name }));
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -163,38 +169,39 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         }
     };
 
-    const handleGenresChange = (newGenres) => {
+    const handleGenresChange = (selected) => {
         setFormData({
             ...formData,
-            genres: newGenres,
+            genres: selected ? selected.map((option) => option.value) : [],
         });
     };
 
-    const handleCountriesChange = (newCountries) => {
+    const handleCountriesChange = (selected) => {
         setFormData({
             ...formData,
-            countries: newCountries,
+            countries: selected ? selected.map((option) => option.value) : [],
         });
     };
 
-    const handleDirectorsChange = (newDirectors) => {
+    // Cập nhật hàm xử lý thay đổi cho Select
+    const handleDirectorsChange = (selected) => {
         setFormData({
             ...formData,
-            directors: newDirectors,
+            directors: selected ? selected.map((option) => option.value) : [],
         });
     };
 
-    const handleActorsChange = (newActors) => {
+    const handleActorsChange = (selected) => {
         setFormData({
             ...formData,
-            actors: newActors,
+            actors: selected ? selected.map((option) => option.value) : [],
         });
     };
 
-    const handleCategoriesChange = (newCategories) => {
+    const handleCategoriesChange = (selected) => {
         setFormData({
             ...formData,
-            categories: newCategories,
+            categories: selected ? selected.map((option) => option.value) : [],
         });
     };
 
@@ -358,15 +365,18 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Loại phim</label>
-                            <div className={cx('dropdown-with-tags')}>
-                                <TagInput
-                                    options={categoryOptions}
-                                    selectedTags={formData.categories}
-                                    onTagsChange={handleCategoriesChange}
-                                    placeholder="Thêm loại phim mới..."
-                                    className={cx('dropdown-with-tags')}
-                                />
-                            </div>
+                            <Select
+                                isMulti
+                                options={categorySelectOptions}
+                                value={formData.categories.map((c) => ({ value: c, label: c.name }))}
+                                onChange={handleCategoriesChange}
+                                placeholder="Tìm và chọn loại phim..."
+                                classNamePrefix="react-select"
+                                menuPlacement="auto"
+                                maxMenuHeight={180}
+                                menuShouldScrollIntoView={false}
+                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
+                            />
                         </div>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Thời lượng (phút)</label>
@@ -417,56 +427,68 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Đạo diễn</label>
-                            <div className={cx('dropdown-with-tags')}>
-                                <TagInput
-                                    options={directorOptions}
-                                    selectedTags={formData.directors}
-                                    onTagsChange={handleDirectorsChange}
-                                    placeholder="Thêm đạo diễn mới..."
-                                    className={cx('dropdown-with-tags')}
-                                />
-                            </div>
+                            <Select
+                                isMulti
+                                options={directorSelectOptions}
+                                value={formData.directors.map((d) => ({ value: d, label: d.name }))}
+                                onChange={handleDirectorsChange}
+                                placeholder="Tìm và chọn đạo diễn..."
+                                classNamePrefix="react-select"
+                                menuPlacement="auto"
+                                maxMenuHeight={180}
+                                menuShouldScrollIntoView={false}
+                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
+                            />
                         </div>
 
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Diễn viên</label>
-                            <div className={cx('dropdown-with-tags')}>
-                                <TagInput
-                                    options={actorOptions}
-                                    selectedTags={formData.actors}
-                                    onTagsChange={handleActorsChange}
-                                    placeholder="Thêm diễn viên mới..."
-                                    className={cx('dropdown-with-tags')}
-                                />
-                            </div>
+                            <Select
+                                isMulti
+                                options={actorSelectOptions}
+                                value={formData.actors.map((a) => ({ value: a, label: a.name }))}
+                                onChange={handleActorsChange}
+                                placeholder="Tìm và chọn diễn viên..."
+                                classNamePrefix="react-select"
+                                menuPlacement="auto"
+                                maxMenuHeight={180}
+                                menuShouldScrollIntoView={false}
+                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
+                            />
                         </div>
                     </div>
 
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Thể loại</label>
-                            <div className={cx('dropdown-with-tags')}>
-                                <TagInput
-                                    options={genreOptions}
-                                    selectedTags={formData.genres}
-                                    onTagsChange={handleGenresChange}
-                                    placeholder="Thêm thể loại mới..."
-                                    className={cx('dropdown-with-tags')}
-                                />
-                            </div>
+                            <Select
+                                isMulti
+                                options={genreSelectOptions}
+                                value={formData.genres.map((g) => ({ value: g, label: g.name }))}
+                                onChange={handleGenresChange}
+                                placeholder="Tìm và chọn thể loại..."
+                                classNamePrefix="react-select"
+                                menuPlacement="auto"
+                                maxMenuHeight={180}
+                                menuShouldScrollIntoView={false}
+                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
+                            />
                         </div>
 
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Quốc gia</label>
-                            <div className={cx('dropdown-with-tags')}>
-                                <TagInput
-                                    options={countryOptions}
-                                    selectedTags={formData.countries}
-                                    onTagsChange={handleCountriesChange}
-                                    placeholder="Thêm quốc gia mới..."
-                                    className={cx('dropdown-with-tags')}
-                                />
-                            </div>
+                            <Select
+                                isMulti
+                                options={countrySelectOptions}
+                                value={formData.countries.map((c) => ({ value: c, label: c.name }))}
+                                onChange={handleCountriesChange}
+                                placeholder="Tìm và chọn quốc gia..."
+                                classNamePrefix="react-select"
+                                menuPlacement="auto"
+                                maxMenuHeight={180}
+                                menuShouldScrollIntoView={false}
+                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
+                            />
                         </div>
                     </div>
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const springBootAPI = "http://spring-boot-service:8082/api/movies/golang/%s"
+const springBootAPI = "http://localhost:8082/api/movies/golang/%s"
 
 func getVideoID(movieID string) (string, error) {
 	url := fmt.Sprintf(springBootAPI, movieID)
@@ -27,6 +27,6 @@ func getVideoID(movieID string) (string, error) {
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return "", err
 	}
-
+	
 	return response.Result.VideoID, nil
 }

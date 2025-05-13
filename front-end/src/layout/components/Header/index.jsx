@@ -35,10 +35,8 @@ function Header({ isHeaderHidden }) {
     }, [isHeaderHidden]);
 
     useEffect(() => {
-        // Close sidebar when clicking outside
         const handleClickOutside = (event) => {
             if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isMobileMenuOpen) {
-                // Check that we're not clicking the menu toggle button
                 const isToggleButton = event.target.closest(`.${cx('nav-list-mobile')}`);
                 if (!isToggleButton) {
                     setIsMobileMenuOpen(false);
@@ -52,7 +50,6 @@ function Header({ isHeaderHidden }) {
         };
     }, [isMobileMenuOpen]);
 
-    // Prevent body scrolling when mobile menu is open
     useEffect(() => {
         if (isMobileMenuOpen) {
             document.body.style.overflow = 'hidden';
