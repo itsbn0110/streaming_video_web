@@ -6,6 +6,7 @@ import styles from './Account.module.scss';
 import classNames from 'classnames/bind';
 import images from '@/assets/images';
 import routes from '@/config/routes';
+import { User, HandCoins, LogOut, BookHeart } from 'lucide-react';
 const cx = classNames.bind(styles);
 
 function Account() {
@@ -44,19 +45,25 @@ function Account() {
                     <ul className={cx('user-menu')} tabIndex={-1} {...attrs}>
                         <li className={cx('user-item')}>
                             <Link to={`/profile`} className={cx('user-item-link')}>
-                                Thông tin tài khoản
+                                <User size={16} /> Thông tin tài khoản
                             </Link>
                         </li>
 
                         <li className={cx('user-item')}>
                             <Link to={routes.donate} className={cx('user-item-link')}>
-                                Donate
+                                <HandCoins size={16} /> Donate
+                            </Link>
+                        </li>
+
+                        <li className={cx('user-item')}>
+                            <Link to={routes.home} className={cx('user-item-link')}>
+                                <BookHeart size={16} /> Mục yêu thích
                             </Link>
                         </li>
 
                         <li className={cx('user-item')}>
                             <Link to={routes.login} onClick={handleSignout} className={cx('user-item-link')}>
-                                Đăng xuất
+                                <LogOut size={16} /> Đăng xuất
                             </Link>
                         </li>
                     </ul>

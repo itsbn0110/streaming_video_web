@@ -1,9 +1,13 @@
 
 .user-item {
-  padding: 6px;
+  padding: 8px;
+  
 }
 
 .user-item-link {
+  display: flex;
+  gap :6px;
+  align-items: center;
   color: var(--white);
   font-size: 14px;
   &:hover {
