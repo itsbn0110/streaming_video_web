@@ -38,7 +38,7 @@ app.get('/stream/:movieId', async (req, res) => {
 
     try {
         // Lấy thông tin về file từ Google Drive API
-        const googleDriveURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=AIzaSyACCAxVDycTZW5kg5MEe-EMmC0ZTyxMcok`;
+        const googleDriveURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=`;
         console.log('hello');
         // Gửi request đến Google Drive với range từ trình duyệt
         const response = await axios({

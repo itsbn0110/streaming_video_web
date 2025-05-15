@@ -74,14 +74,12 @@ function Search() {
         setShowResult(false);
     };
 
-    // Toggle search bar expansion
     const handleSearchToggle = () => {
         setIsExpanded(!isExpanded);
         if (!isExpanded) {
-            // Focus input when expanding
             setTimeout(() => {
                 inputRef.current?.focus();
-            }, 300); // Delay to allow animation to start
+            }, 300);
         }
     };
 
@@ -116,6 +114,15 @@ function Search() {
         setSearchValue('');
         setSearchResult([]);
         inputRef.current?.focus();
+    };
+
+    const handleMovieClick = (movieId) => {
+        navigate(`/movies/${movieId}`);
+        setShowResult(false);
+        setActiveIndex(-1);
+        if (isMobileOrTablet.current) {
+            setIsExpanded(false);
+        }
     };
 
     const handleKeyDown = useCallback(
@@ -219,8 +226,12 @@ function Search() {
                                             className={cx('result-item-wrapper', { active: index === activeIndex })}
                                             key={movie.id || index}
                                             onMouseEnter={() => setActiveIndex(index)}
+                                            onClick={() => handleMovieClick(movie.id)}
                                         >
-                                            <MovieItem data={movie} handleCloseSearch={handleSearchSubmit} />
+                                            <MovieItem
+                                                data={movie}
+                                                handleCloseSearch={() => handleMovieClick(movie.id)}
+                                            />
                                         </div>
                                     ))}
                                 </div>
