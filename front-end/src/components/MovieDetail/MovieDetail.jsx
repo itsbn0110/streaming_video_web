@@ -143,7 +143,7 @@ const MovieDetail = () => {
                                     <div className={cx('actions')}>
                                         <Button
                                             full
-                                            leftIcon={'hello'}
+                                            leftIcon={<PlayCircle size={18} />}
                                             success
                                             to={`/watch/${movie.id}`}
                                             onClick={handleClickWatchButton}

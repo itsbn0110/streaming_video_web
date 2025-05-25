@@ -71,7 +71,7 @@ function Banner() {
                             <div className="banner-content">
                                 <h2 className="banner-title">{movie?.title}</h2>
                                 <p className="banner-description">{movie?.originalTitle}</p>
-                                <Button to={`watch/${movie.id}`} disabled="hehe" secondary>
+                                <Button to={`watch/${movie.id}`} secondary>
                                     Xem phim
                                 </Button>
                             </div>
