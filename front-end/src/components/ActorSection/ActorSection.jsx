@@ -6,6 +6,7 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import styles from './ActorSection.module.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 const cx = classNames.bind(styles);
 
 function ActorSection({ movie }) {
@@ -95,5 +96,9 @@ function ActorSection({ movie }) {
         </div>
     );
 }
+
+ActorSection.PropTypes = {
+    movie: PropTypes.object,
+};
 
 export default ActorSection;

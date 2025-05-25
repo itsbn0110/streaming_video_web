@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import routes from '@/config/routes';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,11 +8,12 @@ import styles from './Header.module.scss';
 import images from '@/assets/images';
 import Search from '../Search';
 import Account from '@/components/Account';
+import Button from '@/components/Button';
 import { List, X, Home, TrendingUp, Film, User, DollarSign, LogOut, Bell, Settings } from 'lucide-react';
 
 const cx = classNames.bind(styles);
 
-function Header({ isHeaderHidden }) {
+function Header({ isHeaderHidden = 'hello' }) {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user'));
     const [isScrolled, setIsScrolled] = useState(false);
@@ -128,9 +130,9 @@ function Header({ isHeaderHidden }) {
                 {user ? (
                     <Account />
                 ) : (
-                    <Link to="/login">
-                        <button className={cx('sign-in')}>Sign In</button>
-                    </Link>
+                    <Button outline sizeType="small" to="/login">
+                        Sign In
+                    </Button>
                 )}
             </div>
 
@@ -228,9 +230,9 @@ function Header({ isHeaderHidden }) {
                     <>
                         <div className={cx('sidebar-divider')}></div>
                         <div className={cx('sidebar-footer')}>
-                            <Link to="/login" className={cx('login-btn')} onClick={closeMobileMenu}>
+                            <Button to="/login" full primary sizeType="medium" onClick={closeMobileMenu}>
                                 Đăng nhập
-                            </Link>
+                            </Button>
                         </div>
                     </>
                 )}
@@ -241,5 +243,9 @@ function Header({ isHeaderHidden }) {
         </header>
     );
 }
+
+Header.PropTypes = {
+    isHeaderHidden: PropTypes.bool,
+};
 
 export default Header;

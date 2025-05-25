@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MovieDetail.module.scss';
 import classNames from 'classnames/bind';
 import { PlayCircle, Heart, Share2, Star } from 'lucide-react';
 import { fetchMovieDetailsAPI, fetchRelatedMoviesAPI } from '@/apis';
 import RelatedMovies from '../RelatedMovies';
 import ActorSection from '../ActorSection';
+import Button from '../Button';
 
 const cx = classNames.bind(styles);
 
@@ -140,46 +141,57 @@ const MovieDetail = () => {
 
                                 {isSmallScreen ? (
                                     <div className={cx('actions')}>
-                                        <Link to={`/watch/${movie.id}`} onClick={handleClickWatchButton}>
-                                            <button className={cx('watchButton')}>
-                                                <PlayCircle size={18} />
-                                                <span>Xem Phim</span>
-                                            </button>
-                                        </Link>
+                                        <Button
+                                            full
+                                            leftIcon={'hello'}
+                                            success
+                                            to={`/watch/${movie.id}`}
+                                            onClick={handleClickWatchButton}
+                                        >
+                                            <span>Xem Phim</span>
+                                        </Button>
 
-                                        <button className={cx('trailerButton')} onClick={handleTrailerButtonClick}>
-                                            <PlayCircle size={18} />
+                                        <Button
+                                            full
+                                            sky
+                                            leftIcon={<PlayCircle size={18} />}
+                                            onClick={handleTrailerButtonClick}
+                                        >
                                             <span>Trailer</span>
-                                        </button>
-
-                                        <div className={cx('iconButtonsWrapper')}>
-                                            <button className={cx('iconButton')}>
-                                                <Heart size={18} />
-                                            </button>
-                                            <button className={cx('iconButton')}>
-                                                <Share2 size={18} />
-                                            </button>
+                                        </Button>
+                                        <div className={cx('wrapperIcon')}>
+                                            <Button rounded>
+                                                <Heart size={20} />
+                                            </Button>
+                                            <Button rounded>
+                                                <Share2 size={20} />
+                                            </Button>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className={cx('actions')}>
-                                        <Link to={`/watch/${movie.id}`} onClick={handleClickWatchButton}>
-                                            <button className={cx('watchButton')}>
-                                                <PlayCircle size={20} />
-                                                <span>Xem Phim</span>
-                                            </button>
-                                        </Link>
+                                        <Button
+                                            leftIcon={<PlayCircle size={18} />}
+                                            success
+                                            to={`/watch/${movie.id}`}
+                                            onClick={handleClickWatchButton}
+                                        >
+                                            <span>Xem Phim</span>
+                                        </Button>
 
-                                        <button className={cx('trailerButton')} onClick={handleTrailerButtonClick}>
-                                            <PlayCircle size={20} />
+                                        <Button
+                                            sky
+                                            leftIcon={<PlayCircle size={18} />}
+                                            onClick={handleTrailerButtonClick}
+                                        >
                                             <span>Trailer</span>
-                                        </button>
-                                        <button className={cx('iconButton')}>
+                                        </Button>
+                                        <Button rounded>
                                             <Heart size={20} />
-                                        </button>
-                                        <button className={cx('iconButton')}>
+                                        </Button>
+                                        <Button rounded>
                                             <Share2 size={20} />
-                                        </button>
+                                        </Button>
                                     </div>
                                 )}
                             </div>

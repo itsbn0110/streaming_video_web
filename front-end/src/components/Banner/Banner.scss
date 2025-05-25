@@ -33,29 +33,39 @@
             .banner-description {
                 font-family: var(--font-family);
                 color:#ffffff8c;
-
                 position: relative;
                 font-size: 1.2rem;
                 font-weight: 600;
                 margin: 30px 0;
             }
-
             .banner-button {
                 position: relative;
                 top: -2px;
-                background-color: var(--primary);
+                background-color: rgb(199, 52, 79);
                 color: var(--white);
                 padding: 10px 20px;
                 font-size: 1rem;
-                border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                transition: background-color 0.3s;
-
-                &:hover {
+                overflow: hidden;
+                z-index: 1;
+                transition: color 0.3s ease; 
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
                     background-color: var(--primary);
+                    transition: left 0.3s ease;
+                    z-index: -1;
+                }
+                &:hover::before {
+                    left: 0;
                 }
             }
+
         }
 
         &::after {

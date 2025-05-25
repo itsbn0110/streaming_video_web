@@ -1,6 +1,6 @@
 import config from '@/config';
 import HomePage from '@/pages/HomePage';
-import MovieListPage from '@/pages/MovieListPage/MovieListPage';
+import MovieListPage from '@/pages/MovieListPage';
 import MovieDetail from '@/components/MovieDetail';
 import MoviePlayerPage from '@/pages/MoviePlayerPage';
 import AuthForm from '@/components/Auth/AuthForm';
