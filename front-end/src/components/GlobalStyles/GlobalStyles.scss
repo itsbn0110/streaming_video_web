@@ -16,7 +16,7 @@
 //   font-style: normal;
 // }
 :root {
-    --primary: #d0264a;
+    --primary: rgb(220, 38, 38);
     --black: #000;
     --white: #fff;
     --text-color: #161823;
@@ -52,8 +52,10 @@ button,
     outline: none;
 }
 
+
 a {
     color: var(--text-color);
     font-weight: 600;
     text-decoration: none;
+    display: inline-block;
 }

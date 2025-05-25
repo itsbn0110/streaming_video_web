@@ -5,6 +5,7 @@ import styles from './AuthForm.module.scss';
 import classNames from 'classnames/bind';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { BsQrCode } from 'react-icons/bs';
+import Button from '@/components/Button';
 
 const cx = classNames.bind(styles);
 function AuthForm() {
@@ -116,9 +117,9 @@ function AuthForm() {
 
                     {error && <div className={cx('error-message')}>{error}</div>}
 
-                    <button type="submit" className={cx('auth-button')} disabled={loading}>
+                    <Button full primary sizeType="large" type="submit" disabled={loading}>
                         {loading ? 'Đang xử lý...' : isLogin ? 'Đăng nhập' : 'Đăng ký'}
-                    </button>
+                    </Button>
                 </form>
 
                 <div className={cx('toggle-mode')}>

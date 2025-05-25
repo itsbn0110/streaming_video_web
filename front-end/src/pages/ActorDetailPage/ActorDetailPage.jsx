@@ -65,7 +65,9 @@ function ActorDetailPage() {
                     <div className={cx('actor-movie-list')}>
                         {actor.actedMovies &&
                             actor.actedMovies.length > 0 &&
-                            actor.actedMovies.map((movie) => <MovieCard key={movie.id} movie={movie} isPerson />)}
+                            actor.actedMovies.map((movie) => (
+                                <MovieCard key={movie.id} movie={movie} isMovieCardPersonInfoPage />
+                            ))}
                     </div>
                 </div>
             </div>

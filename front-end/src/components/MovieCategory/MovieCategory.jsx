@@ -2,10 +2,11 @@ import React, { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchMovieByIdForCategoryAPI } from '@/apis';
 import styles from './MovieCategory.module.scss';
 import classNames from 'classnames/bind';
+import PropTypes from 'prop-types';
 const cx = classNames.bind(styles);
 
 function MovieCategory({ title, movies, sectionTitle }) {
@@ -69,5 +70,11 @@ function MovieCategory({ title, movies, sectionTitle }) {
         </div>
     );
 }
+
+MovieCategory.PropTypes = {
+    title: PropTypes.string,
+    movies: PropTypes.array,
+    sectionTitle: PropTypes.bool,
+};
 
 export default MovieCategory;

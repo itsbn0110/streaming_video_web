@@ -112,59 +112,9 @@
 
 .actions {
   display: flex;
-  gap: 15px;
   margin-top: 20px;
-}
-
-.watchButton, .trailerButton {
-  display: flex;
-  align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
-
-.watchButton {
-  background-color: #238636;
-  color: white;
-  
-  &:hover {
-    background-color: #2ea043;
-  }
-}
-
-.trailerButton {
-  background-color: #1f6feb;
-  color: white;
-  
-  &:hover {
-    background-color: #388bfd;
-  }
-}
-
-.iconButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: none;
-  cursor: pointer;
-  color: #e1e4e8;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-}
-
 .contentSection {
   padding: 40px 0;
 }
@@ -442,21 +392,14 @@
   @media (max-width: 450px) {
     .actions {
       flex-direction: column;
+      align-items: center;
       width: 100%;
     }
-    
-    .watchButton, .trailerButton {
-      width: 100%;
-      max-width: none;
-    }
-    
-    .iconButtonsWrapper {
+    .wrapperIcon {
       display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
+      align-items: center;
+      gap: 6px;
     }
-    
     .movieGrid {
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
       gap: 12px;

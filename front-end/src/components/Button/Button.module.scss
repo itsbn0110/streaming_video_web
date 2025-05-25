@@ -1,0 +1,146 @@
+.wrapper {
+  --border-radius : 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  position: relative;
+  min-width: 100px;
+  padding: 4px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  background-color: var(--white);
+  border: 1px solid transparent;
+  z-index: 1;
+  user-select: none;
+  overflow: hidden;
+ 
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--border-radius);
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+  
+  &:hover::before {
+    left: 0;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+.icon + .title, .title + .icon {
+  margin-left: 6px;
+}
+
+.rounded {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e1e4e8;
+  min-width: 40px !important; 
+  padding: 0 !important; 
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Button colors
+.primary {
+  color: var(--white);
+  background-color:var(--primary);
+  &::before {
+    background-color: rgb(200, 11, 11);
+  }
+
+  &:hover {
+    border: 1px solid rgb(200, 11, 11);
+  }
+  
+}
+
+.success {
+  color: var(--white);
+  background-color:rgb(44, 157, 64);
+  &::before {
+    background-color: rgb(21, 128, 40);
+  }
+
+  &:hover {
+    border: 1px solid rgb(21, 128, 40);
+  }
+  
+}
+
+.sky {
+  color: var(--white);
+  background-color: rgb(56, 139, 253);
+  &::before {
+    background-color: rgb(24, 115, 243);
+  }
+  &:hover {
+    border: 1px solid rgb(24, 115, 243);
+  }
+}
+
+.secondary {
+  color: var(--white);
+  background-color: rgb(194, 16, 52);
+  &::before {
+    background-color: rgb(182, 7, 42);
+  }
+
+  &:hover {
+    border: 1px solid rgb(182, 7, 42);
+  }
+  
+}
+// Button types
+.outline {
+  color: var(--primary);
+  background-color: transparent;
+  border-color: var(--primary);
+  &:hover::before {
+    background-color:rgb(200, 11, 11);
+  }
+  &:hover {
+    color: #fff;
+    border: 1px solid rgb(200, 11, 11);
+  }
+}
+
+
+
+// Button size
+.small {
+  min-width: 60px;
+  padding: 5px 10px;
+}
+
+.medium {
+  min-width: 110px;
+  padding: 8px 18px;
+}
+
+.large {
+  min-width: 136px;
+  padding: 12px 18px;
+}
+
+.full {
+  width: 100%;
+  text-align: center;
+}
+
+// Button dissabled

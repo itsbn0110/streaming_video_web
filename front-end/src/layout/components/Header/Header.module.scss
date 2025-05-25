@@ -46,7 +46,7 @@
                 transition: color 0.3s;
                 font-weight:700;
                 &:hover {
-                    color: #dc2626;
+                    color: var(--primary);
                 }
             }
         }
@@ -56,20 +56,6 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        .sign-in {
-            border: 1px solid #dc2626;
-            padding: 5px 10px;
-            color: #dc2626;
-            font-size: 1rem;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            &:hover {
-                background-color: #dc2626;
-                color: #fff;
-                cursor: pointer;
-            }
-          }
-          
     }
 }
 
@@ -86,7 +72,6 @@
     cursor: pointer;
 }
 
-/* Mobile Sidebar Styles */
 .mobile-sidebar {
     position: fixed;
     top: 0;
@@ -269,7 +254,6 @@
     z-index: 999;
 }
 
-/* Media Queries */
 
 @media (max-width: 1600px) {
     .wrapper {
@@ -282,8 +266,6 @@
         .nav-container .nav-list {
             display: none;
         }
-
-        
         .user-settings {
             display: none;
         }

@@ -3,10 +3,11 @@ import classNames from 'classnames/bind';
 import images from '@/assets/images';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchMovieByIdAPI } from '@/apis';
+import PropTypes from 'prop-types';
 
 const cx = classNames.bind(styles);
 
-function MovieCard({ movie, isPerson }) {
+function MovieCard({ movie, isMovieCardPersonInfoPage }) {
     const navigate = useNavigate();
 
     const handleClickMovieCard = async (e) => {
@@ -29,7 +30,7 @@ function MovieCard({ movie, isPerson }) {
                 <img
                     src={movie.thumbnail || images.user_avatar || '/placeholder-movie.jpg'}
                     alt={movie.title}
-                    className={!isPerson ? cx('movie-poster') : cx('joined-movie-poster')}
+                    className={!isMovieCardPersonInfoPage ? cx('movie-poster') : cx('joined-movie-poster')}
                 />
                 <div className={cx('movie-info')}>
                     <h3 className={cx('movie-title')}>{movie.title}</h3>
@@ -39,5 +40,10 @@ function MovieCard({ movie, isPerson }) {
         </div>
     );
 }
+
+MovieCard.PropTypes = {
+    isMovieCardPersonInfoPage: PropTypes.bool,
+    movie: PropTypes.object,
+};
 
 export default MovieCard;

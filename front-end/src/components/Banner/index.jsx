@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Banner.scss';
 import { fetchBannerMoviesAPI } from '@/apis';
+import Button from '../Button';
 
 function Banner() {
     const sliderRef = useRef(null);
@@ -70,9 +71,9 @@ function Banner() {
                             <div className="banner-content">
                                 <h2 className="banner-title">{movie?.title}</h2>
                                 <p className="banner-description">{movie?.originalTitle}</p>
-                                <Link to={`watch/${movie.id}`}>
-                                    <button className="banner-button">Xem Phim</button>
-                                </Link>
+                                <Button to={`watch/${movie.id}`} disabled="hehe" secondary>
+                                    Xem phim
+                                </Button>
                             </div>
                         </div>
                     ))}
