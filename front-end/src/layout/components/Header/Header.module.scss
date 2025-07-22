@@ -13,11 +13,11 @@
     transition: background-color 0.3s ease;
 
     &.scrolled {
-        background-color: #000;
+        background-color: #0b0b0b;
     }
 
     &.default {
-        background-color: #000;
+        background-color: #0c0c0c;
     }
 
     display: flex;

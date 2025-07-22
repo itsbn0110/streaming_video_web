@@ -42,4 +42,5 @@ public class Comment {
     LocalDateTime createdAt;
 
     LocalDateTime updatedAt;
+
 }

@@ -32,10 +32,6 @@
 		<spotless.version>2.43.0</spotless.version>
 	</properties>
 	<dependencies>
-
-
-
-
 		<dependency>
 				<groupId>me.paulschwarz</groupId>
 				<artifactId>spring-dotenv</artifactId>
