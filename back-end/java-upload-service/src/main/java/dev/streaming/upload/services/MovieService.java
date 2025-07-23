@@ -158,12 +158,12 @@ public class MovieService {
                 Movie movie =  movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
                 if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-                    String thumbnail = cloudinaryService.uploadImage(thumbnailFile);
+                    String thumbnail = cloudinaryService.uploadImage(thumbnailFile,255,375);
                     movie.setThumbnail(thumbnail);
                 }
 
                 if (movieBackDrop != null && !movieBackDrop.isEmpty()) {
-                    String backdrop = cloudinaryService.uploadImage(movieBackDrop);
+                    String backdrop = cloudinaryService.uploadImage(movieBackDrop,1920,1080);
                     movie.setBackdrop(backdrop);
                 }
 

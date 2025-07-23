@@ -21,14 +21,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-// check commit github
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GoogleDriveService {
     CloudinaryService cloudinaryService;
-
     MovieRepository movieRepository;
     GoogleDriveManager googleDriveManager;
     CategoryRepository categoryRepository;
@@ -49,9 +47,9 @@ public class GoogleDriveService {
             throw new IllegalArgumentException("Avatar file must be an image");
         }
 
-        String thumbnail = cloudinaryService.uploadImage(avatarFile);
+        String thumbnail = cloudinaryService.uploadImage(avatarFile,255,375);
 
-        String backDrop = cloudinaryService.uploadImage(movieBackDrop);
+        String backDrop = cloudinaryService.uploadImage(movieBackDrop,1920,1080);
 
         var categories = categoryRepository.findByNameIn(request.getCategories());
         var genres = genreRepository.findByNameIn(request.getGenres());

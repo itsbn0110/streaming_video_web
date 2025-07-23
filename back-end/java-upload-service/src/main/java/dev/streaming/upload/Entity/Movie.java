@@ -134,4 +134,10 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     List<Rating> ratings;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    List<Favorite> favorites;
+
+    @ManyToMany(mappedBy = "movies")
+    Set<Playlist> playlists;
 }

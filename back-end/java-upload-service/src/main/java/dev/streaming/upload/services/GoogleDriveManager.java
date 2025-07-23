@@ -94,7 +94,7 @@ public class GoogleDriveManager {
     }
 
     public String getFolderId(String movieName) {
-        String parentFolderId = findOrCreateFolder("1VVBoGCJHJ6MUi5Mujz5cVfN3i2DkJ6dW", "ALL-Movie"); // Create ALL-Movie folder
+        String parentFolderId = findOrCreateFolder("1knL-gypj9A6dNLdLHotWevESTEVEsLQk", "ALL-Movie"); // Create ALL-Movie folder
         return findOrCreateFolder(parentFolderId, movieName); // Create subfolder with movie name
     }
 

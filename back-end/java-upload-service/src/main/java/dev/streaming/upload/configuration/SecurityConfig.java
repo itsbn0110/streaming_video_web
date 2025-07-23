@@ -47,7 +47,8 @@ public class SecurityConfig {
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-        "/movies/**","/movies","genres/**", "/countries/**", "/categories/**", "/person/**", "/users/**"
+        "/movies/**","/movies","/genres/**", "/countries/**", "/categories/**", "/person/**", "/users/**",
+        "/v1/favorites/check/**" // Cho phép endpoint check favorite mà không cần xác thực
     };
 
     // @Value("${jwt.signerKey}")

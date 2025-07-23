@@ -52,6 +52,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Rating> ratings;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Favorite> favorites;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Playlist> playlists;
+
     @ManyToMany
     Set<Role> roles;
 }

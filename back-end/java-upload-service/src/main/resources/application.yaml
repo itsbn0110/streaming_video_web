@@ -11,8 +11,6 @@ spring:
     import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    initialization-mode: always
-
     url: ${DBMS_CONNECTION:jdbc:mysql://mysql:3306/streaming_web}
     username: ${DBMS_USERNAME}
     password: ${DBMS_PASSWORD}
@@ -25,6 +23,9 @@ spring:
     multipart:
       max-file-size: 1000000MB
       max-request-size: 1000000MB
+  sql:
+    init:
+      mode: always
 
 jwt:
   signerKey: ${SIGNER_KEY_DEV}

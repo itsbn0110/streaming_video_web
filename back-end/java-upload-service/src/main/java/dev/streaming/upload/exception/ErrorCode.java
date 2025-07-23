@@ -26,6 +26,10 @@ public enum ErrorCode {
     DELETE_FAILED(1014, "Cannot delete this field", HttpStatus.BAD_REQUEST),
     NOT_FOUND(1014, "Cannot find this Entity!", HttpStatus.NOT_FOUND),
     PASSWORD_OR_USERNAME_FAILED(1017, "Password or Username failed", HttpStatus.UNAUTHORIZED),
+    MOVIE_ALREADY_IN_FAVORITES(1018, "Movie is already in your favorites!", HttpStatus.BAD_REQUEST),
+    FAVORITE_NOT_FOUND(1019, "Favorite not found ", HttpStatus.NOT_FOUND),
+    INVALID_RATING_VALUE(1020, "Invalid rating value", HttpStatus.BAD_REQUEST),
+    RATING_NOT_FOUND(1021, "Rating not found ", HttpStatus.NOT_FOUND),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
