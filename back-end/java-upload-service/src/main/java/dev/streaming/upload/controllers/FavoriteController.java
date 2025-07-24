@@ -3,6 +3,7 @@ package dev.streaming.upload.controllers;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,23 +34,12 @@ public class FavoriteController {
 
     FavoriteService favoriteService;
 
-    private String getUserId(JWTClaimsSet principal) {
-        if (principal == null) {
-            log.error("JWT principal is null");
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
-        String userId = principal.getSubject();
-        if (userId == null || userId.isEmpty()) {
-            log.error("User ID from JWT is null or empty");
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
-        return userId;
-    }
 
     @GetMapping
     public ApiResponse<List<FavoriteResponse>> getUserFavorites(
-            @AuthenticationPrincipal JWTClaimsSet principal) {
-        String userId = getUserId(principal);
+            @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        log.info("jwt: {}",jwt);
         List<FavoriteResponse> favorites = favoriteService.getUserFavorites(userId);
         return ApiResponse.<List<FavoriteResponse>>builder()
                 .result(favorites)
@@ -58,9 +48,9 @@ public class FavoriteController {
 
     @PostMapping
     public ApiResponse<FavoriteResponse> addFavorite(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody FavoriteRequest request) {
-        String userId = getUserId(principal);
+        String userId = jwt.getSubject();
         FavoriteResponse favorite = favoriteService.addFavorite(userId, request);
         return ApiResponse.<FavoriteResponse>builder()
                 .result(favorite)
@@ -69,20 +59,20 @@ public class FavoriteController {
 
     @DeleteMapping("/{movieId}")
     public ApiResponse<Void> removeFavorite(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String movieId) {
-        String userId = getUserId(principal);
+        String userId = jwt.getSubject();
         favoriteService.removeFavorite(userId, movieId);
         return ApiResponse.<Void>builder().build();
     }
 
     @GetMapping("/check/{movieId}")
     public ApiResponse<Boolean> checkIsFavorite(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String movieId) {
 
         try {
-            if (principal == null) {
+            if (jwt == null) {
                 // Người dùng chưa đăng nhập, trả về false
                 log.debug("Checking favorite status for anonymous user");
                 return ApiResponse.<Boolean>builder()
@@ -90,7 +80,7 @@ public class FavoriteController {
                         .build();
             }
 
-            String userId = getUserId(principal);
+            String userId = jwt.getSubject();
             boolean isFavorite = favoriteService.checkIsFavorite(userId, movieId);
             return ApiResponse.<Boolean>builder()
                     .result(isFavorite)

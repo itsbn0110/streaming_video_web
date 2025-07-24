@@ -3,6 +3,7 @@ package dev.streaming.upload.controllers;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,9 +43,9 @@ public class RatingController {
 
     @GetMapping("/movies/{movieId}/user")
     public ApiResponse<RatingResponse> getUserRatingForMovie(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String movieId) {
-        String userId = principal.getSubject();
+        String userId = jwt.getSubject();
         RatingResponse rating = ratingService.getUserRatingForMovie(userId, movieId);
         return ApiResponse.<RatingResponse>builder()
                 .result(rating)
@@ -53,9 +54,9 @@ public class RatingController {
 
     @PostMapping
     public ApiResponse<RatingResponse> rateMovie(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody RatingRequest request) {
-        String userId = principal.getSubject();
+        String userId = jwt.getSubject();
         RatingResponse rating = ratingService.rateMovie(userId, request);
         return ApiResponse.<RatingResponse>builder()
                 .result(rating)
@@ -64,9 +65,9 @@ public class RatingController {
 
     @DeleteMapping("/movies/{movieId}")
     public ApiResponse<Void> deleteRating(
-            @AuthenticationPrincipal JWTClaimsSet principal,
+            @AuthenticationPrincipal Jwt jwt,
             @PathVariable String movieId) {
-        String userId = principal.getSubject();
+        String userId = jwt.getSubject();
         ratingService.deleteRating(userId, movieId);
         return ApiResponse.<Void>builder().build();
     }

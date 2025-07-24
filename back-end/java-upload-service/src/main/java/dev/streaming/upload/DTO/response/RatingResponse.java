@@ -15,5 +15,7 @@ public class RatingResponse {
     private Long id;
     private Integer starValue;
     private UserResponse user;
+    private Integer reviewCount;
+    private String comment;
     private LocalDateTime createdAt;
 }

@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class RatingRequest {
     private String movieId;
     private Integer starValue;
+    private String comment;
 }

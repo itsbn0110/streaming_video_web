@@ -75,11 +75,15 @@ public class RatingService {
             rating.setUser(user);
             rating.setMovie(movie);
             rating.setCreatedAt(LocalDateTime.now());
+            rating.setReviewCount(0);
         }
 
         rating.setStarValue(request.getStarValue());
-        ratingRepository.save(rating);
+        rating.setComment((request.getComment()));
 
+        Integer currentCount = rating.getReviewCount();
+        rating.setReviewCount((currentCount == null ? 0 : currentCount) + 1);
+        ratingRepository.save(rating);
         // Update movie's average rating
         updateMovieRating(movie);
 
