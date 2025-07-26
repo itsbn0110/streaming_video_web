@@ -1,5 +1,4 @@
 package dev.streaming.upload.DTO.request;
-
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +13,5 @@ import lombok.NoArgsConstructor;
 public class PlaylistRequest {
     private String name;
     private String description;
-    private boolean isPublic;
-    private List<String> movieIds;
+    private String movieId;
 }

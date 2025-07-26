@@ -16,13 +16,16 @@ public interface RatingMapper {
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "movie", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "starValue", source = "starValue") // Mapping starValue
+    @Mapping(target = "starValue", source = "starValue")
+    @Mapping(target = "comment", source = "comment")
     Rating toRating(RatingRequest request);
 
     @Mapping(target = "user", source = "user")
-    @Mapping(target = "starValue", source = "starValue") // Mapping starValue
+    @Mapping(target = "starValue", source = "starValue")
     @Mapping(target = "id", source = "id")
     @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "reviewCount", source = "reviewCount")
+    @Mapping(target = "comment", source = "comment")
     RatingResponse toRatingResponse(Rating rating);
 
     List<RatingResponse> toRatingResponseList(List<Rating> ratings);

@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,9 +40,6 @@ public class Playlist {
 
     @Column(columnDefinition = "TEXT")
     String description;
-
-    @Column(nullable = false)
-    boolean isPublic;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

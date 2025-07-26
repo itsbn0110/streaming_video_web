@@ -56,44 +56,39 @@ public class RatingService {
 
     @Transactional
     public RatingResponse rateMovie(String userId, RatingRequest request) {
+        // 1. Validate input
         if (request.getStarValue() < 1 || request.getStarValue() > 5) {
             throw new AppException(ErrorCode.INVALID_RATING_VALUE);
         }
 
+        // 2. Find user and movie
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         Movie movie = movieRepository.findById(request.getMovieId())
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
-        // Check if a user has already rated this movie
-        Rating rating = ratingRepository.findByUserAndMovie(user, movie).orElse(null);
-        boolean isNewRating = rating == null;
+        // 3. Check if a rating already exists for this user and movie
+        ratingRepository.findByUserAndMovie(user, movie).ifPresent(rating -> {
+            // If a rating is found, throw an exception
+            throw new AppException(ErrorCode.RATING_ALREADY_EXISTED);
+        });
 
-        if (isNewRating) {
-            rating = new Rating();
-            rating.setUser(user);
-            rating.setMovie(movie);
-            rating.setCreatedAt(LocalDateTime.now());
-            rating.setReviewCount(0);
-        }
+        // 4. If no rating exists, create a new one
+        Rating newRating = new Rating();
+        newRating.setUser(user);
+        newRating.setMovie(movie);
+        newRating.setStarValue(request.getStarValue());
+        newRating.setComment(request.getComment());
+        newRating.setCreatedAt(LocalDateTime.now());
 
-        rating.setStarValue(request.getStarValue());
-        rating.setComment((request.getComment()));
+        Rating savedRating = ratingRepository.save(newRating);
 
-        Integer currentCount = rating.getReviewCount();
-        rating.setReviewCount((currentCount == null ? 0 : currentCount) + 1);
-        ratingRepository.save(rating);
-        // Update movie's average rating
+        // 5. Update the movie's average rating
         updateMovieRating(movie);
 
-        log.info("User {} {} movie {} with {} stars", 
-                user.getUsername(), 
-                isNewRating ? "rated" : "updated rating for", 
-                movie.getTitle(), 
-                request.getStarValue());
-
-        return ratingMapper.toRatingResponse(rating);
+        // 6. Return the response
+        return ratingMapper.toRatingResponse(savedRating);
     }
 
     @Transactional
