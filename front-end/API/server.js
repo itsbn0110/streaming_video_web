@@ -19,6 +19,7 @@ app.use(
     }),
 );
 
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const getVideoResponse = async (movieId) => {
     const res = await axios.get(`http://localhost:8082/api/movies/golang/${movieId}`);
 
@@ -38,7 +39,7 @@ app.get('/stream/:movieId', async (req, res) => {
 
     try {
         // Lấy thông tin về file từ Google Drive API
-        const googleDriveURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=AIzaSyBo40wCMaUjn-sHrt2RFtz8hugKHuObQDU`;
+        const googleDriveURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${GOOGLE_API_KEY}`;
         console.log('hello');
         console.log('googleDriveURL: ', googleDriveURL);
         // Gửi request đến Google Drive với range từ trình duyệt
