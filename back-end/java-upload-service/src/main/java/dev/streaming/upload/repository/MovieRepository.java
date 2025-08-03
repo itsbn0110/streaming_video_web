@@ -2,7 +2,9 @@ package dev.streaming.upload.repository;
 
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,25 +21,19 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     @Query("SELECT m FROM Movie m JOIN m.categories c WHERE c.slug = :slug")
     Page<Movie> findByCategorySlug(@Param("slug") String slug, Pageable pageable);
 
-    // Tìm phim theo năm phát hành
     @Query("SELECT m FROM Movie m WHERE (:releaseYear IS NULL OR m.releaseYear = :releaseYear)")
     List<Movie> findByYear(@Param("releaseYear") Integer releaseYear);
 
-    // Tìm phim theo thể loại
     @Query("SELECT m FROM Movie m JOIN m.genres g WHERE g.name = ?1")
     List<Movie> findByGenre(String genreName);
 
-    // Lọc phim theo số lượt xem lớn hơn một giá trị nhất định
     List<Movie> findByViewsGreaterThan(int minViews);
 
-    // Tìm phim có rating cao nhất
     @Query("SELECT m FROM Movie m ORDER BY m.averageRating DESC")
     List<Movie> findTopRatedMovies();
 
-    // Tìm phim có thời lượng nằm trong khoảng nhất định
     List<Movie> findByDurationBetween(double minDuration, double maxDuration);
 
-    // Tìm phim theo quốc gia
     @Query("SELECT DISTINCT m FROM Movie m JOIN m.countries c WHERE (:countryId IS NULL OR c.id = :countryId)")
     List<Movie> findByCountry(@Param("countryId") String countryId);
 
@@ -46,7 +42,66 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
 
     List<Movie> findByCategoriesSlugOrderByUpdatedAtDesc(String categorySlug);
 
+    @Query("SELECT m FROM Movie m " +
+            "JOIN m.categories c " +
+            "WHERE c.slug = :categorySlug " +
+            "ORDER BY m.updatedAt DESC")
+    List<Movie> findByCategoriesSlugBasicOrderByUpdatedAtDesc(@Param("categorySlug") String categorySlug);
+
     List<Movie> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description);
 
     Page<Movie> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description, Pageable pageable);
+
+    @Query("SELECT DISTINCT m FROM Movie m " +
+            "LEFT JOIN FETCH m.categories c " +
+            "WHERE c.slug = :categorySlug " +
+            "ORDER BY m.updatedAt DESC")
+    List<Movie> findByCategoriesSlugWithDetailsOrderByUpdatedAtDesc(@Param("categorySlug") String categorySlug);
+
+    /**
+     * [MỚI] Truy vấn để lọc phim hiệu quả trên DB.
+     * Chỉ tải các phim khớp với các tiêu chí đã cho.
+     */
+    @Query("SELECT DISTINCT m FROM Movie m " +
+            "LEFT JOIN m.categories c " +
+            "LEFT JOIN m.countries co " +
+            "WHERE (:categorySlug IS NULL OR c.slug = :categorySlug) " +
+            "AND (:releaseYear IS NULL OR m.releaseYear = :releaseYear) " +
+            "AND (:countryId IS NULL OR co.id = :countryId)")
+    Page<Movie> filterMovies(
+            @Param("categorySlug") String categorySlug,
+            @Param("releaseYear") Integer releaseYear,
+            @Param("countryId") Long countryId,
+            Pageable pageable);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM playlist_movie WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromPlaylists(@Param("movieId") String movieId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM movie_actor WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromActors(@Param("movieId") String movieId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM movie_director WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromDirectors(@Param("movieId") String movieId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM movie_genre WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromGenres(@Param("movieId") String movieId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM movie_category WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromCategories(@Param("movieId") String movieId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM movie_country WHERE movie_id = :movieId", nativeQuery = true)
+    void deleteFromCountries(@Param("movieId") String movieId);
 }

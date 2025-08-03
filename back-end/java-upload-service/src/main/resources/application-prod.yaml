@@ -2,5 +2,26 @@ jwt:
   signerKey : ${SIGNER_KEY_PROD}
   valid-duration: 3600 #second
   refreshable-duration: 36000
+# Configuration for production environment
 
+spring:
+  profiles:
+    active: prod
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    clean-disabled: true  # Không cho phép clean trong môi trường production
+    locations: classpath:db/migration
+    validate-on-migrate: true
+
+  jpa:
+    show-sql: false  # Tắt SQL logging trong production
+
+  # Cấu hình connection pool
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 120000
+      connection-timeout: 30000
 

@@ -3,18 +3,11 @@ package dev.streaming.upload.Entity;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,9 +48,6 @@ public class Movie {
     @Column(nullable = false)
     String backdrop;
 
-    //     @Column(nullable = false)
-    //     String thumbnailPreview;
-
     @Column(nullable = false)
     String status;
 
@@ -75,41 +65,40 @@ public class Movie {
     @Column(name = "video_id", nullable = false)
     String videoId;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    Set<Genre> genres;
+    Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_category",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    Set<Category> categories;
+    Set<Category> categories = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_country",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "country_id"))
-    Set<Country> countries;
+    Set<Country> countries = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_director",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-            
-    Set<Person> directors;
+    Set<Person> directors = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-    Set<Person> actors;
+    Set<Person> actors = new HashSet<>();
 
     @Column
     Integer views = 0;
@@ -126,18 +115,26 @@ public class Movie {
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<Episode> episodes;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    Set<Episode> episodes = new HashSet<>();
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    List<Comment> comments;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    List<Rating> ratings;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Rating> ratings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-    List<Favorite> favorites;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    List<Favorite> favorites = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "movies")
-    Set<Playlist> playlists;
+    @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
+    @JsonIgnore
+    Set<Playlist> playlists = new HashSet<>();
+
+    public void removePlaylist(Playlist playlist) {
+        // Xóa playlist khỏi danh sách của movie này
+        this.playlists.remove(playlist);
+        // Đồng thời, xóa movie này khỏi danh sách của playlist đó
+        playlist.getMovies().remove(this);
+    }
 }

@@ -1,21 +1,10 @@
 package dev.streaming.upload.Entity;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,14 +34,96 @@ public class Playlist {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // Thay đổi 1: Sử dụng LAZY loading thay vì EAGER
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "playlist_movie",
-        joinColumns = @JoinColumn(name = "playlist_id"),
-        inverseJoinColumns = @JoinColumn(name = "movie_id")
+            name = "playlist_movie",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
     )
-    Set<Movie> movies;
+    @Builder.Default
+    Set<Movie> movies = ConcurrentHashMap.newKeySet(); // Thread-safe Set
 
+    // Thay đổi 2: Phương thức an toàn với synchronized
+    public synchronized List<Movie> getMoviesSafe() {
+        if (movies == null) {
+            return new ArrayList<>();
+        }
+
+        try {
+            // Tạo defensive copy để tránh ConcurrentModificationException
+            return new ArrayList<>(movies);
+        } catch (Exception e) {
+            // Nếu vẫn có lỗi, trả về empty list
+            return new ArrayList<>();
+        }
+    }
+
+    // Thay đổi 3: Phương thức để lấy size an toàn
+    public synchronized int getMoviesCount() {
+        if (movies == null) {
+            return 0;
+        }
+
+        try {
+            return movies.size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    // Thay đổi 4: Phương thức để check movie có trong playlist không
+    public synchronized boolean containsMovie(Movie movie) {
+        if (movies == null || movie == null) {
+            return false;
+        }
+
+        try {
+            return movies.contains(movie);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Thay đổi 5: Phương thức để thêm movie an toàn
+    public synchronized boolean addMovieSafe(Movie movie) {
+        if (movies == null) {
+            movies = ConcurrentHashMap.newKeySet();
+        }
+
+        if (movie == null) {
+            return false;
+        }
+
+        try {
+            return movies.add(movie);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Thay đổi 6: Phương thức để xóa movie an toàn
+    public synchronized boolean removeMovieSafe(Movie movie) {
+        if (movies == null || movie == null) {
+            return false;
+        }
+
+        try {
+            return movies.remove(movie);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+
+
+    public void removeMovie(Movie movie) {
+        // Xóa movie khỏi danh sách của playlist này
+        this.movies.remove(movie);
+        // Đồng thời, xóa playlist này khỏi danh sách của movie đó
+        movie.getPlaylists().remove(this);
+    }
     @Column(name = "created_at")
     LocalDateTime createdAt;
 

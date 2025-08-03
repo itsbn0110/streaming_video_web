@@ -19,7 +19,7 @@ import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.PlaylistRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.DTO.response.PlaylistResponse;
-import dev.streaming.upload.Entity.Movie;
+
 import dev.streaming.upload.mapper.MovieMapper;
 import dev.streaming.upload.services.PlaylistService;
 import lombok.AccessLevel;
@@ -115,6 +115,7 @@ public class PlaylistController {
             @PathVariable Long playlistId,
             @PathVariable String movieId) {
         String userId = jwt.getSubject();
+        log.info("playlistId: {}, movieId: {}", playlistId, movieId);
         PlaylistResponse playlist = playlistService.removeMovieFromPlaylist(userId, playlistId, movieId);
         return ApiResponse.<PlaylistResponse>builder()
                 .result(playlist)
@@ -139,10 +140,7 @@ public class PlaylistController {
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable Long playlistId) {
         String userId = jwt.getSubject();
-        List<Movie> movies = playlistService.getPlaylistMovies(userId, playlistId);
-        List<MovieResponse> movieResponses = movies.stream()
-                .map(movieMapper::toMovieResponse)
-                .toList();
+        List<MovieResponse> movieResponses = playlistService.getPlaylistMovies(userId, playlistId);
         return ApiResponse.<List<MovieResponse>>builder()
                 .result(movieResponses)
                 .build();

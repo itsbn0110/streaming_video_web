@@ -108,6 +108,23 @@ public class GoogleDriveManager {
         }
     }
 
+    public Movie replaceMovieFile(MultipartFile movieFile, String movieName, Movie movie) {
+        String oldFolderId = movie.getFolderId();
+
+        // Upload phim mới
+        Movie updatedMovie = uploadMovie(movieFile, movieName, movie);
+
+        // Xóa folder cũ nếu upload OK
+        if (oldFolderId != null && !oldFolderId.equals(updatedMovie.getFolderId())) {
+            try {
+                deleteFileOrFolderById(oldFolderId);
+            } catch (Exception e) {
+                log.error("Không thể xóa folder cũ: {}", e.getMessage());
+            }
+        }
+        return updatedMovie;
+    }
+
     public Movie uploadMovie(MultipartFile movieFile, String movieName, Movie movie) {
         if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
             throw new IllegalArgumentException("Movie file must be a video");

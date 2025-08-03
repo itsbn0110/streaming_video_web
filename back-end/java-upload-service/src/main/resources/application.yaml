@@ -18,10 +18,12 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: true
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
         format_sql: true
+  flyway:
+    enabled: false
   servlet:
     multipart:
       max-file-size: 1000000MB
@@ -31,6 +33,11 @@ spring:
       mode: always
 
 
+logging:
+  level:
+    org:
+      flywaydb:
+        core: DEBUG
 
 jwt:
   signerKey: ${SIGNER_KEY_DEV}

@@ -1,10 +1,12 @@
 package dev.streaming.upload.exception;
 
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.Objects;
 
 import jakarta.validation.ConstraintViolation;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     private static final String MIN_ATTRIBUTE = "min";
+
+    @ExceptionHandler(value = ConcurrentModificationException.class)
+    ResponseEntity<ApiResponse> handleConcurrentModificationException(ConcurrentModificationException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.builder()
+                        .code(4009) // Sử dụng số trực tiếp thay vì parse string
+                        .message("Không thể thực hiện thao tác do dữ liệu đang được truy cập bởi quá trình khác. Vui lòng thử lại sau.")
+                        .build());
+    }
 
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(Exception exception) {

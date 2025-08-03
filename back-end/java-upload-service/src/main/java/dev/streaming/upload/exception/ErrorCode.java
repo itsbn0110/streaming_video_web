@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
     UNCATEGORIZED_USER(9999, "UNCATEGORIZED", HttpStatus.INTERNAL_SERVER_ERROR),
+    UNCATEGORIZED_EXCEPTION(9999, "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR),
     USER_ALREADY_EXIST(1001, "User is already existed!", HttpStatus.BAD_REQUEST),
     INVALID_EMAIL(1002, "This is Invalid Email!!!!", HttpStatus.BAD_REQUEST),
     INVALID_USERNAME(1003, "This is Invalid UserName!!!!", HttpStatus.BAD_REQUEST),
@@ -19,6 +20,7 @@ public enum ErrorCode {
     INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN),
     MISSING_FILE(1010, "Missing field: ", HttpStatus.BAD_REQUEST),
     MOVIE_NOT_FOUND(1011, "Movie not found {movieId}: ", HttpStatus.NOT_FOUND),
+    MOVIE_NOT_EXISTED(1011, "Movie not found", HttpStatus.NOT_FOUND), // Alias for MOVIE_NOT_FOUND,
     UPLOAD_FAILED(1012, "Error while uploading movie", HttpStatus.BAD_REQUEST),
     FILE_OR_FOLDER_NOT_EXSIST(1013, "Can not find you file or folder", HttpStatus.NOT_FOUND),
     PERSON_NOT_EXISTED(1014, "This person is not existed!", HttpStatus.NOT_FOUND),
@@ -33,9 +35,12 @@ public enum ErrorCode {
 
     // Playlist error codes
     PLAYLIST_NOT_FOUND(1023, "Playlist not found", HttpStatus.NOT_FOUND),
+    PLAYLIST_NOT_EXISTED(1023, "Playlist not found", HttpStatus.NOT_FOUND), // Alias for PLAYLIST_NOT_FOUND
     MOVIE_NOT_IN_PLAYLIST(1024, "Movie is not in the playlist", HttpStatus.BAD_REQUEST),
-    MOVIE_ALREADY_IN_PLAYLIST(1025, "Movie is already in the playlist", HttpStatus.BAD_REQUEST);
-
+    MOVIE_ALREADY_IN_PLAYLIST(1025, "Movie is already in the playlist", HttpStatus.BAD_REQUEST),
+    CONCURRENT_MODIFICATION(1026, "Concurrent modification", HttpStatus.CONFLICT),
+    PLAYLIST_ALREADY_EXISTED(1027, "Playlist with this name already exists", HttpStatus.BAD_REQUEST),
+    DATABASE_ERROR( 1028, "Database error", HttpStatus.INTERNAL_SERVER_ERROR);
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

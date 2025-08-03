@@ -1,5 +1,4 @@
 package dev.streaming.upload.DTO.request;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
