@@ -17,34 +17,14 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class MovieUploadRequest {
+    public class EpisodeUploadRequest {
         @NotBlank(message = "NOT_BLANK_TITLE")
         String title;
 
-        String originalTitle;
-
-        String trailerLink;
-
-        int releaseYear;
-
-        String status;
-
-        Boolean premium;
-
         @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
         String description;
-
-        List<String> categories;
-
-        List<String> genres;
-
-        List<String> countries;
-
-        List<String> actors;
-
-        List<String> directors;
-
-        MovieType type;
+        
+        private Integer episodeNumber; 
 
         double duration;
     }

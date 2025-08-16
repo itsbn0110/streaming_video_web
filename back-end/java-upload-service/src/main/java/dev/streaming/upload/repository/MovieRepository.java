@@ -1,5 +1,6 @@
 package dev.streaming.upload.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
@@ -42,6 +43,8 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
 
     List<Movie> findByCategoriesSlugOrderByUpdatedAtDesc(String categorySlug);
 
+    List<Movie> findTop10ByOrderByUpdatedAtDesc();
+
     @Query("SELECT m FROM Movie m " +
             "JOIN m.categories c " +
             "WHERE c.slug = :categorySlug " +
@@ -74,6 +77,12 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
             @Param("countryId") Long countryId,
             Pageable pageable);
 
+    
+    Long countByCreatedAtAfter(LocalDateTime dateTime);
+
+//    Long countByViewsAfter(LocalDateTime dateTime);
+    @Query(value = "Select count(views) from movies m where m.created_at > :dateTime", nativeQuery = true)
+    Long countViews(@Param("dateTime") LocalDateTime dateTime);
 
     @Modifying
     @Transactional

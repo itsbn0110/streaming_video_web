@@ -13,6 +13,7 @@ import CountryForm from '@/layout/AdminLayout/components/CountryForm';
 import UserList from '@/layout/AdminLayout/components/UserList';
 import UserForm from '@/layout/AdminLayout/components/UserForm';
 import MovieList from '@/layout/AdminLayout/components/MovieList';
+import { MovieSeriesForm } from '@/layout/AdminLayout/components/MovieForm';
 const adminRoutes = [
     {
         path: adminRouteConfig.adminRoute,
@@ -21,8 +22,12 @@ const adminRoutes = [
             { path: '', element: <AdminDashboard /> },
             { path: adminRouteConfig.list, element: <MovieList /> },
             {
-                path: adminRouteConfig.createFilm,
+                path: adminRouteConfig.createSingleFilm,
                 element: <MovieForm editMode={false} />,
+            },
+            {
+                path: adminRouteConfig.createSeriesFilm,
+                element: <MovieSeriesForm editMode={false} />,
             },
             {
                 path: `${adminRouteConfig.editFilm}/:id`,

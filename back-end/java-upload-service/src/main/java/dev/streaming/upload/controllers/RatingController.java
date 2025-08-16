@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-
 import dev.streaming.upload.DTO.ApiResponse;
 import dev.streaming.upload.DTO.request.RatingRequest;
 import dev.streaming.upload.DTO.response.RatingResponse;

@@ -1,9 +1,9 @@
+import { fetchMovieDetailsAPI, fetchRelatedMoviesAPI } from '@/apis';
 import React, { useEffect, useState, useCallback } from 'react';
+import { PlayCircle, Heart, Share2, Star } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MovieDetail.module.scss';
 import classNames from 'classnames/bind';
-import { PlayCircle, Heart, Share2, Star } from 'lucide-react';
-import { fetchMovieDetailsAPI, fetchRelatedMoviesAPI } from '@/apis';
 import RelatedMovies from '../RelatedMovies';
 import ActorSection from '../ActorSection';
 import Button from '../Button';

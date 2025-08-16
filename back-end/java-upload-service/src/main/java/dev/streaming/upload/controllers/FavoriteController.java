@@ -12,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nimbusds.jwt.JWTClaimsSet;
 
 import dev.streaming.upload.DTO.ApiResponse;
-import dev.streaming.upload.DTO.request.FavoriteRequest;
 import dev.streaming.upload.DTO.response.FavoriteResponse;
-import dev.streaming.upload.exception.AppException;
-import dev.streaming.upload.exception.ErrorCode;
+import dev.streaming.upload.DTO.request.FavoriteRequest;
+
 import dev.streaming.upload.services.FavoriteService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FavoriteController {
 
-    FavoriteService favoriteService;
+    private FavoriteService favoriteService;
 
 
     @GetMapping
     public ApiResponse<List<FavoriteResponse>> getUserFavorites(
             @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        log.info("jwt: {}",jwt);
+        log.info("jwt: {}",jwt.getSubject());
         List<FavoriteResponse> favorites = favoriteService.getUserFavorites(userId);
         return ApiResponse.<List<FavoriteResponse>>builder()
                 .result(favorites)

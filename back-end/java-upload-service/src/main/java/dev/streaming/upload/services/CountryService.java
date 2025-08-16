@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import dev.streaming.upload.DTO.response.CountryResponse;
-import dev.streaming.upload.DTO.response.GenreResponse;
 import dev.streaming.upload.Entity.Country;
 import dev.streaming.upload.Entity.Movie;
 import dev.streaming.upload.exception.AppException;

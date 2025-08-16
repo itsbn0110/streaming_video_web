@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.streaming.upload.DTO.ApiResponse;
+import dev.streaming.upload.DTO.request.EpisodeUploadRequest;
 import dev.streaming.upload.DTO.request.MovieUploadRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.services.GoogleDriveService;
@@ -47,4 +48,26 @@ public class GoogleDriveController {
                 .result(response)
                 .build();
     }
+
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    @PostMapping("/upload-episode")
+    public ApiResponse<MovieResponse> uploadEpisodeMovie(
+            @RequestParam("request") String requestJson,
+            @RequestParam("movieId") String movieId,
+            @RequestPart("movieFile") MultipartFile movieFile)
+            throws Exception {
+        
+        ObjectMapper mapper = new ObjectMapper();
+        EpisodeUploadRequest request = mapper.readValue(requestJson, EpisodeUploadRequest.class);
+        
+        log.info("title: {}", request.getTitle());
+        MovieResponse response = googleDriveService.uploadEpisodeMovie(request, movieFile,movieId);
+        
+        return ApiResponse.<MovieResponse>builder()
+                .result(response)
+                .build();
+    }
+
+
+    
 }

@@ -1,20 +1,20 @@
-package dev.streaming.upload.Entity;
+package dev.streaming.upload.DTO.response;
 
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
-import lombok.*;
+import com.google.auto.value.AutoValue.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
 
-@Entity
-@Getter
-@Setter
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Episode {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EpisodeResponse {
     private String title; 
     private String description; 
     private Integer episodeNumber; 
@@ -24,8 +24,4 @@ public class Episode {
     private String folderId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-        
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
 }

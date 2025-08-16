@@ -1,5 +1,6 @@
 package dev.streaming.upload.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,9 +38,9 @@ public class MovieService {
     CountryRepository countryRepository;
     PersonRepository personRepository;
     MovieRepository movieRepository;
+    DailyMovieViewsRepository dailyMovieViewsRepository;
     MovieMapper movieMapper;
     CloudinaryService cloudinaryService;
-    PlaylistRepository playlistRepository;
 
     public Page<Movie> getAllMovies(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -51,7 +52,10 @@ public class MovieService {
     }
 
     public Movie getVideoId(String movieId) {
-        return movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        log.info("Incrementing view count for movie ID: {}", movieId);
+        incrementView(movieId);
+        return movie;
     }
 
     public List<MovieResponse> getMovieRelated(String movieId) {
@@ -74,6 +78,11 @@ public class MovieService {
         return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
     }
 
+
+    public List<MovieResponse> getNewlyUpdatedMovies( ) {
+        List<Movie> movies = movieRepository.findTop10ByOrderByUpdatedAtDesc();
+        return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
+    }
     /**
      * [ĐÃ TỐI ƯU HÓA] Lọc phim hiệu quả bằng cách đẩy logic xuống DB.
      */
@@ -188,5 +197,22 @@ public class MovieService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Movie> moviePage = movieRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword, pageable);
         return moviePage.map(movieMapper::toMovieResponse);
+    }
+
+
+    @Transactional
+    public void incrementView(String movieId) {
+        LocalDate today = LocalDate.now();
+        DailyMovieViewsId id = new DailyMovieViewsId(movieId, today);
+        log.info("check DailyMovieViewsId: {}", id);
+        DailyMovieViews record = dailyMovieViewsRepository.findById(id)
+                .orElse(DailyMovieViews.builder()
+                        .id(id)
+                        .movie(movieRepository.getReferenceById(movieId))
+                        .viewCount(0L)
+                        .build());
+
+        record.setViewCount(record.getViewCount() + 1);
+        dailyMovieViewsRepository.save(record);
     }
 }

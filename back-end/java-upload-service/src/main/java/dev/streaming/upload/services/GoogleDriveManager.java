@@ -11,7 +11,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
-
+import dev.streaming.upload.Entity.Episode;
 import dev.streaming.upload.Entity.Movie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -158,6 +158,44 @@ public class GoogleDriveManager {
 
             log.info("Successfully uploaded movie: {}, videoId: {}", movieName, videoId);
             return movie;
+        } catch (IOException e) {
+            log.error("Upload failed: {}", e.getMessage(), e);
+            throw new RuntimeException("Upload failed: " + e.getMessage(), e);
+        }
+    }
+
+    public Episode uploadEpisodeMovie(MultipartFile movieFile, String movieName, Episode episode) {
+        if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
+            throw new IllegalArgumentException("Movie file must be a video");
+        }
+
+        // Create or find movie folder in "ALL Movie"
+        String folderId = getFolderId(movieName);
+
+        try {
+            File videoMetadata = new File();
+            videoMetadata.setParents(Collections.singletonList(folderId));
+            videoMetadata.setName(movieName + ".mp4");
+
+            File uploadedEpisode = driveService
+                    .files()
+                    .create(
+                            videoMetadata,
+                            new InputStreamContent(movieFile.getContentType(), movieFile.getInputStream()))
+                    .setFields("id, name, webViewLink")
+                    .execute();
+
+            String episodeId = uploadedEpisode.getId();
+            String streamUrl = uploadedEpisode.getWebViewLink();
+
+            setPublicPermission(uploadedEpisode.getId());
+
+            episode.setFolderId(folderId);
+            episode.setVideoId(episodeId);
+            episode.setStreamUrl(streamUrl);
+
+            log.info("Successfully uploaded episode: {}, episodeId: {}", movieName, episodeId);
+            return episode;
         } catch (IOException e) {
             log.error("Upload failed: {}", e.getMessage(), e);
             throw new RuntimeException("Upload failed: " + e.getMessage(), e);

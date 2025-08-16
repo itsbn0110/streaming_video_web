@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
-
 import { X, Upload, Save, ArrowLeft } from 'lucide-react';
 import adminRouteConfig from '@/config/adminRoutes';
 import {
@@ -14,37 +13,34 @@ import {
     fetchMovieDataAPI,
 } from '@/apis';
 import Select from 'react-select';
-
 import styles from '../../AdminLayout.module.scss';
+
 const cx = classNames.bind(styles);
 
-const MovieForm = ({ editMode = false, movieData = null }) => {
+const MovieForm = ({ editMode = false }) => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [formData, setFormData] = useState(
-        editMode && movieData
-            ? movieData
-            : {
-                  title: '',
-                  originalTitle: '',
-                  description: '',
-                  releaseYear: new Date().getFullYear(),
-                  status: 'PUBLIC',
-                  categories: [],
-                  genres: [],
-                  countries: [],
-                  directors: [],
-                  actors: [],
-                  thumbnail: null,
-                  movieBackDrop: null,
-                  thumbnailPreview: null,
-                  backDropPreview: null,
-                  movieFile: null,
-                  trailerLink: '',
-                  duration: 0,
-                  premium: false,
-              },
-    );
+
+    const [formData, setFormData] = useState({
+        title: '',
+        originalTitle: '',
+        description: '',
+        releaseYear: new Date().getFullYear(),
+        status: 'PUBLIC',
+        categories: [],
+        genres: [],
+        countries: [],
+        directors: [],
+        actors: [],
+        thumbnail: null,
+        movieBackDrop: null,
+        thumbnailPreview: null,
+        backDropPreview: null,
+        movieFile: null,
+        trailerLink: '',
+        duration: 0,
+        premium: false,
+    });
 
     const [genreOptions, setGenreOptions] = useState([]);
     const [categoryOptions, setCategoryOptions] = useState([]);
@@ -91,36 +87,24 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
             };
             fetchMovie();
         }
-        // eslint-disable-next-line
     }, [editMode, id]);
 
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const categoriesRes = await fetchAllCategoriesAPI();
-                if (categoriesRes && categoriesRes.result) {
-                    setCategoryOptions(categoriesRes.result || []);
-                }
+                const [categoriesRes, genresRes, countriesRes, directorsRes, actorsRes] = await Promise.all([
+                    fetchAllCategoriesAPI(),
+                    fetchAllGenresAPI(),
+                    fetchAllCountriesAPI(),
+                    fetchAllPersonsAPI('director'),
+                    fetchAllPersonsAPI('actor'),
+                ]);
 
-                const genresRes = await fetchAllGenresAPI();
-                if (genresRes && genresRes.result) {
-                    setGenreOptions(genresRes.result || []);
-                }
-
-                const countriesRes = await fetchAllCountriesAPI();
-                if (countriesRes && countriesRes.result) {
-                    setCountryOptions(countriesRes.result || []);
-                }
-
-                const directorsRes = await fetchAllPersonsAPI('director');
-                if (directorsRes && directorsRes.result) {
-                    setDirectorOptions(directorsRes.result || []);
-                }
-
-                const actorsRes = await fetchAllPersonsAPI('actor');
-                if (actorsRes && actorsRes.result) {
-                    setActorOptions(actorsRes.result || []);
-                }
+                setCategoryOptions(categoriesRes?.result || []);
+                setGenreOptions(genresRes?.result || []);
+                setCountryOptions(countriesRes?.result || []);
+                setDirectorOptions(directorsRes?.result || []);
+                setActorOptions(actorsRes?.result || []);
             } catch (err) {
                 console.error('Fetch lỗi :', err);
                 setError('Lỗi lấy dữ liệu');
@@ -130,7 +114,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         fetchOptions();
     }, []);
 
-    // Tạo  các optiosn cho react-select
     const actorSelectOptions = actorOptions.map((actor) => ({ value: actor, label: actor.name }));
     const directorSelectOptions = directorOptions.map((director) => ({ value: director, label: director.name }));
     const genreSelectOptions = genreOptions.map((genre) => ({ value: genre, label: genre.name }));
@@ -154,7 +137,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                     thumbnail: files[0],
                     thumbnailPreview: URL.createObjectURL(files[0]),
                 });
-            } else if (name == 'backDrop') {
+            } else if (name === 'backDrop') {
                 setFormData({
                     ...formData,
                     movieBackDrop: files[0],
@@ -169,44 +152,17 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         }
     };
 
-    const handleGenresChange = (selected) => {
+    const handleSelectChange = (selected, actionMeta) => {
+        const { name } = actionMeta;
         setFormData({
             ...formData,
-            genres: selected ? selected.map((option) => option.value) : [],
-        });
-    };
-
-    const handleCountriesChange = (selected) => {
-        setFormData({
-            ...formData,
-            countries: selected ? selected.map((option) => option.value) : [],
-        });
-    };
-
-    // Cập nhật hàm xử lý thay đổi cho Select
-    const handleDirectorsChange = (selected) => {
-        setFormData({
-            ...formData,
-            directors: selected ? selected.map((option) => option.value) : [],
-        });
-    };
-
-    const handleActorsChange = (selected) => {
-        setFormData({
-            ...formData,
-            actors: selected ? selected.map((option) => option.value) : [],
-        });
-    };
-
-    const handleCategoriesChange = (selected) => {
-        setFormData({
-            ...formData,
-            categories: selected ? selected.map((option) => option.value) : [],
+            [name]: selected ? selected.map((option) => option.value) : [],
         });
     };
 
     const prepareRequestData = () => {
         const requestData = {
+            movieType: 'SINGLE',
             title: formData.title,
             originalTitle: formData.originalTitle || '',
             description: formData.description,
@@ -216,7 +172,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
             trailerLink: formData.trailerLink || '',
             duration: formData.duration || 0,
             premium: formData.premium,
-            genres: formData.genres.map((cat) => cat.name || cat),
+            genres: formData.genres.map((genre) => genre.name || genre),
             countries: formData.countries.map((country) => country.name || country),
             directors: formData.directors.map((director) => director.name || director),
             actors: formData.actors.map((actor) => actor.name || actor),
@@ -225,7 +181,6 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
         return JSON.stringify(requestData);
     };
 
-    console.log('formDAta:', formData);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -240,12 +195,24 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                 throw new Error('Vui lòng chọn file phim');
             }
 
-            let response;
+            if (!formData.duration || formData.duration <= 0) {
+                throw new Error('Vui lòng nhập thời lượng phim hợp lệ');
+            }
+
             const formDataToSend = new FormData();
             formDataToSend.append('request', prepareRequestData());
-            formDataToSend.append('thumbnailFile', formData.thumbnail);
-            formDataToSend.append('movieFile', formData.movieFile);
-            formDataToSend.append('movieBackDrop', formData.movieBackDrop);
+
+            if (formData.thumbnail) {
+                formDataToSend.append('thumbnailFile', formData.thumbnail);
+            }
+            if (formData.movieFile) {
+                formDataToSend.append('movieFile', formData.movieFile);
+            }
+            if (formData.movieBackDrop) {
+                formDataToSend.append('movieBackDrop', formData.movieBackDrop);
+            }
+
+            let response;
             if (editMode) {
                 response = await updateMovieDataAPI(id, formDataToSend);
             } else {
@@ -253,7 +220,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
             }
 
             if (response && response.result) {
-                alert(editMode ? 'Phim đã được cập nhật!' : 'Phim đã được tạo thành công!');
+                alert(editMode ? 'Phim lẻ đã được cập nhật!' : 'Phim lẻ đã được tạo thành công!');
                 navigate(`${adminRouteConfig.list}`);
             } else {
                 throw new Error(response.message || 'Có lỗi xảy ra');
@@ -265,12 +232,13 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
             setLoading(false);
         }
     };
+
     return (
         <div>
             <div className={cx('page-header')}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <button
-                        onClick={() => navigate(`${adminRouteConfig.list}`)}
+                        onClick={() => navigate(-1)}
                         style={{
                             background: 'none',
                             border: 'none',
@@ -283,7 +251,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                     >
                         <ArrowLeft size={20} />
                     </button>
-                    <h2>{editMode ? 'Chỉnh sửa phim' : 'Tạo phim mới'}</h2>
+                    <h2>{editMode ? 'Chỉnh sửa phim lẻ' : 'Tạo phim lẻ mới'}</h2>
                 </div>
                 <button className={cx('button-primary')} onClick={handleSubmit} disabled={loading}>
                     <Save size={16} />
@@ -299,9 +267,12 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
 
             <div className={cx('card')}>
                 <form className={cx('form-container')} onSubmit={handleSubmit}>
+                    {/* Basic Info */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Tên phim</label>
+                            <label className={cx('form-label')}>
+                                Tên phim <span style={{ color: 'red' }}>*</span>
+                            </label>
                             <input
                                 type="text"
                                 name="title"
@@ -324,19 +295,25 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                     </div>
 
                     <div className={cx('form-group')}>
-                        <label className={cx('form-label')}>Mô tả ngắn</label>
+                        <label className={cx('form-label')}>
+                            Mô tả ngắn <span style={{ color: 'red' }}>*</span>
+                        </label>
                         <textarea
                             name="description"
                             className={cx('form-control')}
                             value={formData.description}
                             onChange={handleInputChange}
                             rows="5"
+                            required
                         ></textarea>
                     </div>
 
+                    {/* Movie Details */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Năm phát hành</label>
+                            <label className={cx('form-label')}>
+                                Năm phát hành <span style={{ color: 'red' }}>*</span>
+                            </label>
                             <input
                                 type="number"
                                 name="releaseYear"
@@ -350,9 +327,24 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                         </div>
 
                         <div className={cx('form-group')}>
+                            <label className={cx('form-label')}>
+                                Thời lượng (phút) <span style={{ color: 'red' }}>*</span>
+                            </label>
+                            <input
+                                type="number"
+                                name="duration"
+                                className={cx('form-control')}
+                                value={formData.duration}
+                                onChange={handleInputChange}
+                                min="1"
+                                required
+                            />
+                        </div>
+
+                        <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Link trailer</label>
                             <input
-                                type="text"
+                                type="url"
                                 name="trailerLink"
                                 className={cx('form-control')}
                                 value={formData.trailerLink}
@@ -362,55 +354,39 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                         </div>
                     </div>
 
+                    {/* Categories and Settings */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Loại phim</label>
                             <Select
                                 isMulti
+                                name="categories"
                                 options={categorySelectOptions}
                                 value={formData.categories.map((c) => ({ value: c, label: c.name }))}
-                                onChange={handleCategoriesChange}
-                                placeholder="Tìm và chọn loại phim..."
+                                onChange={handleSelectChange}
+                                placeholder="Chọn loại phim..."
                                 classNamePrefix="react-select"
-                                menuPlacement="auto"
-                                maxMenuHeight={180}
-                                menuShouldScrollIntoView={false}
-                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
-                            />
-                        </div>
-                        <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Thời lượng (phút)</label>
-                            <input
-                                type="number"
-                                name="duration"
-                                className={cx('form-control')}
-                                value={formData.duration}
-                                onChange={handleInputChange}
-                                min="0"
                             />
                         </div>
 
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Status</label>
-                            <input
-                                type="text"
+                            <select
                                 name="status"
                                 className={cx('form-control')}
                                 value={formData.status}
                                 onChange={handleInputChange}
-                                placeholder="inception-movie"
-                            />
+                            >
+                                <option value="PUBLIC">Công khai</option>
+                                <option value="PRIVATE">Riêng tư</option>
+                                <option value="DRAFT">Nháp</option>
+                            </select>
                         </div>
+
                         <div className={cx('form-group')} style={{ flex: '0.5' }}>
                             <label className={cx('form-label')}>Premium</label>
                             <div style={{ marginTop: '10px' }}>
-                                <label
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        cursor: 'pointer',
-                                    }}
-                                >
+                                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                                     <input
                                         type="checkbox"
                                         name="premium"
@@ -424,20 +400,18 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                         </div>
                     </div>
 
+                    {/* People */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Đạo diễn</label>
                             <Select
                                 isMulti
+                                name="directors"
                                 options={directorSelectOptions}
                                 value={formData.directors.map((d) => ({ value: d, label: d.name }))}
-                                onChange={handleDirectorsChange}
-                                placeholder="Tìm và chọn đạo diễn..."
+                                onChange={handleSelectChange}
+                                placeholder="Chọn đạo diễn..."
                                 classNamePrefix="react-select"
-                                menuPlacement="auto"
-                                maxMenuHeight={180}
-                                menuShouldScrollIntoView={false}
-                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
                             />
                         </div>
 
@@ -445,33 +419,28 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                             <label className={cx('form-label')}>Diễn viên</label>
                             <Select
                                 isMulti
+                                name="actors"
                                 options={actorSelectOptions}
                                 value={formData.actors.map((a) => ({ value: a, label: a.name }))}
-                                onChange={handleActorsChange}
-                                placeholder="Tìm và chọn diễn viên..."
+                                onChange={handleSelectChange}
+                                placeholder="Chọn diễn viên..."
                                 classNamePrefix="react-select"
-                                menuPlacement="auto"
-                                maxMenuHeight={180}
-                                menuShouldScrollIntoView={false}
-                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
                             />
                         </div>
                     </div>
 
+                    {/* Genres and Countries */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Thể loại</label>
                             <Select
                                 isMulti
+                                name="genres"
                                 options={genreSelectOptions}
                                 value={formData.genres.map((g) => ({ value: g, label: g.name }))}
-                                onChange={handleGenresChange}
-                                placeholder="Tìm và chọn thể loại..."
+                                onChange={handleSelectChange}
+                                placeholder="Chọn thể loại..."
                                 classNamePrefix="react-select"
-                                menuPlacement="auto"
-                                maxMenuHeight={180}
-                                menuShouldScrollIntoView={false}
-                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
                             />
                         </div>
 
@@ -479,22 +448,22 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                             <label className={cx('form-label')}>Quốc gia</label>
                             <Select
                                 isMulti
+                                name="countries"
                                 options={countrySelectOptions}
                                 value={formData.countries.map((c) => ({ value: c, label: c.name }))}
-                                onChange={handleCountriesChange}
-                                placeholder="Tìm và chọn quốc gia..."
+                                onChange={handleSelectChange}
+                                placeholder="Chọn quốc gia..."
                                 classNamePrefix="react-select"
-                                menuPlacement="auto"
-                                maxMenuHeight={180}
-                                menuShouldScrollIntoView={false}
-                                styles={{ menu: (base) => ({ ...base, maxHeight: 180, zIndex: 9999 }) }}
                             />
                         </div>
                     </div>
 
+                    {/* File Uploads */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Thumbnail</label>
+                            <label className={cx('form-label')}>
+                                Thumbnail <span style={{ color: 'red' }}>*</span>
+                            </label>
                             <div className={cx('image-upload')}>
                                 <input
                                     type="file"
@@ -508,7 +477,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                                         <Upload size={36} />
                                     </div>
                                     <div className={cx('upload-text')}>
-                                        Kéo thả hình ảnh vào đây hoặc click để chọn file
+                                        Kéo thả hình ảnh thumbnail vào đây hoặc click để chọn
                                     </div>
                                 </label>
                             </div>
@@ -523,7 +492,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                         </div>
 
                         <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Back Drop</label>
+                            <label className={cx('form-label')}>Backdrop</label>
                             <div className={cx('image-upload')}>
                                 <input
                                     type="file"
@@ -537,7 +506,7 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                                         <Upload size={36} />
                                     </div>
                                     <div className={cx('upload-text')}>
-                                        Kéo thả hình ảnh vào đây hoặc click để chọn file
+                                        Kéo thả hình ảnh backdrop vào đây hoặc click để chọn
                                     </div>
                                 </label>
                             </div>
@@ -550,32 +519,38 @@ const MovieForm = ({ editMode = false, movieData = null }) => {
                                 />
                             )}
                         </div>
+                    </div>
 
-                        <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>File phim</label>
-                            <div className={cx('image-upload')}>
-                                <input
-                                    type="file"
-                                    name="movieFile"
-                                    id="movieFile"
-                                    accept="video/*"
-                                    onChange={handleFileChange}
-                                />
-                                <label htmlFor="movieFile">
-                                    <div className={cx('upload-icon')}>
-                                        <Upload size={36} />
-                                    </div>
-                                    <div className={cx('upload-text')}>
-                                        Kéo thả file phim vào đây hoặc click để chọn file
-                                    </div>
-                                </label>
-                            </div>
-                            {formData.movieFile && (
-                                <div style={{ marginTop: '12px' }}>
-                                    <span style={{ fontWeight: '500' }}>File đã chọn:</span> {formData.movieFile.name}
+                    {/* Movie File */}
+                    <div className={cx('form-group')}>
+                        <label className={cx('form-label')}>
+                            File phim <span style={{ color: 'red' }}>*</span>
+                        </label>
+                        <div className={cx('image-upload')}>
+                            <input
+                                type="file"
+                                name="movieFile"
+                                id="movieFile"
+                                accept="video/*"
+                                onChange={handleFileChange}
+                            />
+                            <label htmlFor="movieFile">
+                                <div className={cx('upload-icon')}>
+                                    <Upload size={36} />
                                 </div>
-                            )}
+                                <div className={cx('upload-text')}>
+                                    Kéo thả file phim vào đây hoặc click để chọn file
+                                </div>
+                            </label>
                         </div>
+                        {formData.movieFile && (
+                            <div style={{ marginTop: '12px' }}>
+                                <span style={{ fontWeight: '500' }}>File đã chọn:</span> {formData.movieFile.name}
+                                <div style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>
+                                    Kích thước: {(formData.movieFile.size / (1024 * 1024)).toFixed(2)} MB
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </form>
             </div>

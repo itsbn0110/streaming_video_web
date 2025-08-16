@@ -40,8 +40,13 @@ public enum ErrorCode {
     MOVIE_ALREADY_IN_PLAYLIST(1025, "Movie is already in the playlist", HttpStatus.BAD_REQUEST),
     CONCURRENT_MODIFICATION(1026, "Concurrent modification", HttpStatus.CONFLICT),
     PLAYLIST_ALREADY_EXISTED(1027, "Playlist with this name already exists", HttpStatus.BAD_REQUEST),
-    DATABASE_ERROR( 1028, "Database error", HttpStatus.INTERNAL_SERVER_ERROR);
+    DATABASE_ERROR( 1028, "Database error", HttpStatus.INTERNAL_SERVER_ERROR),
 
+
+    // Comment
+    COMMENT_NOT_FOUND(1029, "Comment not found", HttpStatus.NOT_FOUND),
+    COMMENT_ALREADY_EXISTED(1030, "Comment already existed", HttpStatus.BAD_REQUEST),
+    ;
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;

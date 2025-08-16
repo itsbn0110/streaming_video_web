@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.streaming.upload.enums.MovieType;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -115,6 +116,7 @@ public class Movie {
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
 
+    
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<Episode> episodes = new HashSet<>();
 
@@ -130,6 +132,9 @@ public class Movie {
     @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
     @JsonIgnore
     Set<Playlist> playlists = new HashSet<>();
+    
+    @Enumerated(EnumType.STRING)
+    private MovieType movieType;
 
     public void removePlaylist(Playlist playlist) {
         // Xóa playlist khỏi danh sách của movie này
@@ -138,3 +143,4 @@ public class Movie {
         playlist.getMovies().remove(this);
     }
 }
+

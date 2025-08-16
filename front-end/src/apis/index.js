@@ -326,3 +326,24 @@ export const fetchMoviesByKeywordAPI = async (keyword, page = 0, size = 12) => {
     });
     return res.data;
 };
+
+// Episode
+export const fetchMovieEpisodesAPI = async (movieId) => {
+    const res = await api.get(`/movies/${movieId}/episodes`, { headers: getAuthHeaders() });
+    return res.data;
+};
+
+export const createEpisodeAPI = async (movieId, payload) => {
+    const res = await api.post(`/movies/${movieId}/episodes`, payload, { headers: getAuthHeaders() });
+    return res.data;
+};
+
+export const updateEpisodeAPI = async (episodeId, payload) => {
+    const res = await api.put(`/episodes/${episodeId}`, payload, { headers: getAuthHeaders() });
+    return res.data;
+};
+
+export const deleteEpisodeAPI = async (episodeId) => {
+    const res = await api.delete(`/episodes/${episodeId}`, { headers: getAuthHeaders() });
+    return res.data;
+};

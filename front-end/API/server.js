@@ -19,7 +19,7 @@ app.use(
     }),
 );
 
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
 const getVideoResponse = async (movieId) => {
     const res = await axios.get(`http://localhost:8082/api/movies/golang/${movieId}`);
 
