@@ -1,11 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Footer.module.scss';
-import images from '@/assets/images';
 import { FaFacebook, FaLinkedin, FaYoutube } from 'react-icons/fa';
 import { useLocation, matchPath } from 'react-router-dom';
 import routes from '@/config/routes';
-
 const cx = classNames.bind(styles);
 
 function Footer() {
@@ -23,7 +22,11 @@ function Footer() {
         >
             <div className={cx('footer-top')}>
                 <div className={cx('footer-logo')}>
-                    <img src={images.logoWeb} alt="Logo" />
+                    <div>
+                        <Link to={routes.home}>
+                            <h1 className={cx('logo')}>ITLU</h1>
+                        </Link>
+                    </div>
                 </div>
                 <div className={cx('footer-content')}>
                     <div className={cx('footer-links')}>

@@ -34,7 +34,7 @@ public interface MovieMapper {
     @Mapping(target = "views", ignore = true)
     Movie toMovie(MovieUploadRequest request);
 
-    @Mapping(source = "type", target = "type")
+    @Mapping(source = "movieType", target = "movieType")
     MovieResponse toMovieResponse(Movie movie);
 
     VideoIdResponse toVideoIdResponse(Movie movie);

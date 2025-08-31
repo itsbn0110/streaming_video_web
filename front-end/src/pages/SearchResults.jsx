@@ -24,10 +24,10 @@ function SearchResults() {
         setError(null);
         fetchMoviesByKeywordAPI(keyword, page - 1, pageSize)
             .then((res) => {
-                const data = res.result?.content || res.result || [];
-                setMovies(data);
-                setTotalPages(res.result?.totalPages || 1);
-                setTotalItems(res.result?.totalElements || data.length);
+                const data = res?.result?.content || res?.result || [];
+                setMovies(Array.isArray(data) ? data : []);
+                setTotalPages(res?.result?.totalPages || 1);
+                setTotalItems(res?.result?.totalElements || data.length);
             })
             .catch(() => setError('Không thể tải dữ liệu phim.'))
             .finally(() => setLoading(false));
@@ -43,7 +43,13 @@ function SearchResults() {
                 ) : (
                     <div className={cx('movies')}>
                         {movies.length > 0 ? (
-                            movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+                            movies.map((movie) => {
+                                if (!movie || typeof movie !== 'object' || !movie.id) {
+                                    console.error('Invalid movie object:', movie);
+                                    return null;
+                                }
+                                return <MovieCard key={movie.id} movie={movie} />;
+                            })
                         ) : (
                             <div className={cx('no-results')}>Không tìm thấy phim phù hợp</div>
                         )}

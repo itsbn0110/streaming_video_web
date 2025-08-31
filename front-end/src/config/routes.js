@@ -12,6 +12,8 @@ const routes = {
     profile: '/profile',
     editProfile: '/profile/edit',
     changePassword: '/profile/change-password',
+    episodeManagement: '/admin/episode-management/:movieId',
+    aiSuggestions: '/ai-suggestions',
 };
 
 export default routes;

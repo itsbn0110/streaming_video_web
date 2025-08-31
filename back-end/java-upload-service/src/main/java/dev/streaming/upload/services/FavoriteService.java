@@ -35,21 +35,18 @@ public class FavoriteService {
     FavoriteMapper favoriteMapper;
 
     public List<FavoriteResponse> getUserFavorites(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         List<Favorite> favorites = favoriteRepository.findByUser(user);
-        return favorites.stream()
-                .map(favoriteMapper::toFavoriteResponse)
-                .collect(Collectors.toList());
+        return favorites.stream().map(favoriteMapper::toFavoriteResponse).collect(Collectors.toList());
     }
 
     @Transactional
     public FavoriteResponse addFavorite(String userId, FavoriteRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(request.getMovieId())
+        Movie movie = movieRepository
+                .findById(request.getMovieId())
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         if (favoriteRepository.existsByUserAndMovie(user, movie)) {
@@ -70,13 +67,12 @@ public class FavoriteService {
 
     @Transactional
     public void removeFavorite(String userId, String movieId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
-        Favorite favorite = favoriteRepository.findByUserAndMovie(user, movie)
+        Favorite favorite = favoriteRepository
+                .findByUserAndMovie(user, movie)
                 .orElseThrow(() -> new AppException(ErrorCode.FAVORITE_NOT_FOUND));
 
         favoriteRepository.delete(favorite);
@@ -84,11 +80,9 @@ public class FavoriteService {
     }
 
     public boolean checkIsFavorite(String userId, String movieId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         return favoriteRepository.existsByUserAndMovie(user, movie);
     }

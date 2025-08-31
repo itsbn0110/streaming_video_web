@@ -10,7 +10,11 @@ function MovieItem({ data, handleCloseSearch }) {
             <div className={cx('movie-info')}>
                 <h3 className={cx('movie-title')}>{data?.title || 'No title'}</h3>
                 <p className={cx('movie-original-title')}>{data?.originalTitle || ''}</p>
-                {data?.episodes && <p className={cx('movie-episodes')}>{data?.episodes}</p>}
+                {data?.episodes && data?.episodes.length > 0 && (
+                    <p className={cx('movie-episodes')}>
+                        {Array.isArray(data.episodes) ? data.episodes.length : '0'} Tập
+                    </p>
+                )}
             </div>
         </div>
     );

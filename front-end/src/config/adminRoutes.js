@@ -2,8 +2,8 @@ const adminRouteConfig = {
     adminRoute: '/admin',
 
     list: '/admin/phim/danh-sach',
-    createSingleFilm: '/admin/phim/tao-phim-le',
-    createSeriesFilm: '/admin/phim/tao-phim-tap',
+    createFilm: '/admin/phim/tao-phim-le',
+    createEpisode: '/admin/phim/tao-tap-phim',
     editFilm: '/admin/phim/sua-phim',
 
     listActors: '/admin/dien-vien/danh-sach',
@@ -29,6 +29,8 @@ const adminRouteConfig = {
     listUsers: '/admin/user/danh-sach',
     createUsers: '/admin/users/create',
     editUsers: '/admin/users/edit',
+
+    episodeManagement: '/admin/episode-management',
 };
 
 export default adminRouteConfig;

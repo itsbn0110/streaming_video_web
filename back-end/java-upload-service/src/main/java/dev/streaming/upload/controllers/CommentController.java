@@ -1,20 +1,21 @@
 package dev.streaming.upload.controllers;
 
-
-import dev.streaming.upload.DTO.request.CreateCommentRequest;
-import dev.streaming.upload.DTO.response.CommentResponse;
-import dev.streaming.upload.DTO.response.PagedResponse;
-import dev.streaming.upload.services.CommentService;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import dev.streaming.upload.DTO.request.CreateCommentRequest;
+import dev.streaming.upload.DTO.response.CommentResponse;
+import dev.streaming.upload.DTO.response.PagedResponse;
+import dev.streaming.upload.services.CommentService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -24,11 +25,9 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private CommentService commentService;
 
-
     @PostMapping
     public ResponseEntity<CommentResponse> createComment(
-            @Valid @RequestBody CreateCommentRequest request,
-            @AuthenticationPrincipal Jwt jwt) {
+            @Valid @RequestBody CreateCommentRequest request, @AuthenticationPrincipal Jwt jwt) {
 
         String userId = jwt.getSubject(); // Assuming JWT contains user ID
         log.info("User ID: {}", userId);
@@ -50,22 +49,20 @@ public class CommentController {
     }
 
     @GetMapping("/movie/{movieId}/episode/{episodeNumber}/count")
-    public ResponseEntity<Long> countComments(
-            @PathVariable String movieId,
-            @PathVariable Integer episodeNumber) {
+    public ResponseEntity<Long> countComments(@PathVariable String movieId, @PathVariable Integer episodeNumber) {
 
         Long count = commentService.countCommentsByMovieAndEpisode(movieId, episodeNumber);
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/get-all-comments/{movieId}/{episodeNumber}")
-    public ResponseEntity<PagedResponse<CommentResponse>> getUserComments(
+    @GetMapping("/get-all-comments/{movieId}")
+    public ResponseEntity<PagedResponse<CommentResponse>> getMovieComments(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable String movieId,
-            @PathVariable Integer episodeNumber,
+            @RequestParam(required = false) Integer episodeNumber,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PagedResponse<CommentResponse> comments = commentService.getMovieComments(movieId,episodeNumber, page, size);
+        PagedResponse<CommentResponse> comments = commentService.getMovieComments(movieId, episodeNumber, page, size);
         return ResponseEntity.ok(comments);
     }
 }

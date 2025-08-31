@@ -1,7 +1,9 @@
 package dev.streaming.upload.DTO.request;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data
@@ -13,7 +15,6 @@ public class CreateCommentRequest {
     @NotNull(message = "Movie ID is required")
     private String movieId;
 
-    @NotNull(message = "Episode number is required")
     private Integer episodeNumber;
 
     private Long parentCommentId; // Optional for replies (only 2 levels supported)

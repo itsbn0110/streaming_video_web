@@ -43,12 +43,26 @@ public class SecurityConfig {
         "/auth/logout",
         "/auth/refresh",
         "/v1/google-drive/upload",
-       
+        "/v1/google-drive/upload-episode",
+        "/v1/playlists/movies/add",
+        "/v1/ratings",
+        "/v1/ratings/movies/*/user",
+        "/api/ai/generate-movie-suggestions" // Added public access for AI movie suggestions
     };
 
     private final String[] PUBLIC_ENDPOINTS_GET = {
-        "/movies/**","/movies","/genres/**", "/countries/**", "/categories/**", "/person/**", "/users/**",
-        "/v1/favorites/check/**" // Cho phép endpoint check favorite mà không cần xác thực
+        "/movies/**",
+        "/movies",
+        "/genres/**",
+        "/countries/**",
+        "/categories/**",
+        "/person/**",
+        "/users/**",
+        "/v1/favorites/check/**",
+        "/v1/playlists",
+        "/v1/ratings/movies/**",
+        "/v1/ratings/movies/*/user",
+        "/comments/get-all-comments/**" // Allow unauthenticated users to view comments
     };
 
     // @Value("${jwt.signerKey}")
@@ -95,6 +109,7 @@ public class SecurityConfig {
                 }));
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
         return httpSecurity.build();
     }
 
@@ -117,10 +132,11 @@ public class SecurityConfig {
 
         if (activeProfile.equals("dev")) {
             // Chỉ cho phép localhost:5173 khi ở môi trường dev
-            corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173","http://*.localhost:5173"));
+            corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173", "http://*.localhost:5173"));
         } else {
             // Chỉ cho phép domain production khi ở môi trường prod
-            corsConfiguration.setAllowedOrigins(List.of("https://streaming-video-web.vercel.app","https://*.streaming-video-web.vercel.app"));
+            corsConfiguration.setAllowedOrigins(
+                    List.of("https://streaming-video-web.vercel.app", "https://*.streaming-video-web.vercel.app"));
         }
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfiguration.setAllowedHeaders(List.of("*"));

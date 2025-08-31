@@ -1,9 +1,11 @@
 package dev.streaming.upload.Entity;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Embeddable
 @Getter

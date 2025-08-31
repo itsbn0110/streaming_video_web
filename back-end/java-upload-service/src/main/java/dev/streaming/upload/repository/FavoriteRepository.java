@@ -13,8 +13,12 @@ import dev.streaming.upload.Entity.User;
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     List<Favorite> findByUser(User user);
+
     List<Favorite> findByMovie(Movie movie);
+
     Optional<Favorite> findByUserAndMovie(User user, Movie movie);
+
     boolean existsByUserAndMovie(User user, Movie movie);
+
     void deleteByUserAndMovie(User user, Movie movie);
 }

@@ -35,7 +35,5 @@ public class Rating {
     @JoinColumn(name = "movie_id")
     Movie movie;
 
-
-
     LocalDateTime createdAt;
 }

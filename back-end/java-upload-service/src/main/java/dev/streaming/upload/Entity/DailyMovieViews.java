@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,11 +22,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "daily_movie_views", 
-       indexes = {
-           @Index(name = "idx_movie_id", columnList = "movie_id"),
-           @Index(name = "idx_view_date", columnList = "view_date")
-       })
+@Table(
+        name = "daily_movie_views",
+        indexes = {
+            @Index(name = "idx_movie_id", columnList = "movie_id"),
+            @Index(name = "idx_view_date", columnList = "view_date")
+        })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DailyMovieViews {
     @EmbeddedId

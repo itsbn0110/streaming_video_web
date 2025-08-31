@@ -7,6 +7,7 @@ import logoTitle from '@/assets/images/logoTitle.svg';
 import mickey17 from '@/assets/images/mickey17.jpg';
 import fallBackAvatar from '@/assets/images/fallback-img-profile.png';
 import qrCode from '@/assets/images/qrCode.jpg';
+import image from '@/assets/images/image.png';
 const images = {
     logo,
     noImage,
@@ -17,6 +18,7 @@ const images = {
     logoTitle,
     fallBackAvatar,
     qrCode,
+    image,
 };
 
 export default images;

@@ -28,7 +28,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ApiResponse.builder()
                         .code(4009) // Sử dụng số trực tiếp thay vì parse string
-                        .message("Không thể thực hiện thao tác do dữ liệu đang được truy cập bởi quá trình khác. Vui lòng thử lại sau.")
+                        .message(
+                                "Không thể thực hiện thao tác do dữ liệu đang được truy cập bởi quá trình khác. Vui lòng thử lại sau.")
                         .build());
     }
 

@@ -93,8 +93,8 @@ public class UserController {
     public ApiResponse<UserResponse> updateProfile(
             @RequestParam("userId") String userId,
             @RequestParam("request") String requestJson,
-            @RequestPart(value = "avatarFile", required = false) MultipartFile avatarFile
-    ) throws IOException {
+            @RequestPart(value = "avatarFile", required = false) MultipartFile avatarFile)
+            throws IOException {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         UpdateRequest request = mapper.readValue(requestJson, UpdateRequest.class);
         UserResponse updated = userService.updateProfile(request, avatarFile, userId);
@@ -105,8 +105,7 @@ public class UserController {
     public ApiResponse<UserResponse> changePassword(
             @RequestParam("userId") String userId,
             @RequestParam("currentPassword") String currentPassword,
-            @RequestParam("newPassword") String newPassword
-    ) {
+            @RequestParam("newPassword") String newPassword) {
         UserResponse updated = userService.changePassword(userId, currentPassword, newPassword);
         return ApiResponse.<UserResponse>builder().result(updated).build();
     }

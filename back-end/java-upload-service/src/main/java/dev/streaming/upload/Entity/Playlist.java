@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +40,7 @@ public class Playlist {
     @JoinTable(
             name = "playlist_movie",
             joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "movie_id"))
     @Builder.Default
     Set<Movie> movies = ConcurrentHashMap.newKeySet(); // Thread-safe Set
 
@@ -115,15 +115,13 @@ public class Playlist {
         }
     }
 
-
-
-
     public void removeMovie(Movie movie) {
         // Xóa movie khỏi danh sách của playlist này
         this.movies.remove(movie);
         // Đồng thời, xóa playlist này khỏi danh sách của movie đó
         movie.getPlaylists().remove(this);
     }
+
     @Column(name = "created_at")
     LocalDateTime createdAt;
 

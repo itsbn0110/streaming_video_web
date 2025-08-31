@@ -1,6 +1,7 @@
 package dev.streaming.upload.services;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
+
 import dev.streaming.upload.Entity.Episode;
 import dev.streaming.upload.Entity.Movie;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class GoogleDriveManager {
-    
+
     private final Drive driveService;
 
     public void setPublicPermission(String fileId) throws IOException {
@@ -81,12 +83,7 @@ public class GoogleDriveManager {
         }
 
         try {
-            return driveService
-                    .files()
-                    .create(folder)
-                    .setFields("id")
-                    .execute()
-                    .getId();
+            return driveService.files().create(folder).setFields("id").execute().getId();
         } catch (IOException e) {
             log.error("Error creating folder: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to create folder", e);
@@ -94,7 +91,8 @@ public class GoogleDriveManager {
     }
 
     public String getFolderId(String movieName) {
-        String parentFolderId = findOrCreateFolder("1knL-gypj9A6dNLdLHotWevESTEVEsLQk", "ALL-Movie"); // Create ALL-Movie folder
+        String parentFolderId =
+                findOrCreateFolder("1knL-gypj9A6dNLdLHotWevESTEVEsLQk", "ALL-Movie"); // Create ALL-Movie folder
         return findOrCreateFolder(parentFolderId, movieName); // Create subfolder with movie name
     }
 
@@ -105,6 +103,48 @@ public class GoogleDriveManager {
         } catch (IOException e) {
             log.error("Error deleting file/folder: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete file or folder", e);
+        }
+    }
+
+    // **METHOD MỚI: Cleanup tất cả files cũ**
+    public void cleanupOldFiles() {
+        try {
+            log.info("Starting cleanup ALL old files...");
+
+            String pageToken = null;
+            int totalDeleted = 0;
+
+            do {
+                // Lấy tất cả files (không phải folder)
+                FileList result = driveService
+                        .files()
+                        .list()
+                        .setOrderBy("createdTime")
+                        .setQ("not mimeType = 'application/vnd.google-apps.folder'")
+                        .setFields("nextPageToken, files(id, name)")
+                        .setPageSize(100)
+                        .setPageToken(pageToken)
+                        .execute();
+
+                // Xóa từng file
+                for (File file : result.getFiles()) {
+                    try {
+                        driveService.files().delete(file.getId()).execute();
+                        totalDeleted++;
+                        log.info("Deleted: {}", file.getName());
+                    } catch (Exception e) {
+                        log.warn("Cannot delete {}: {}", file.getName(), e.getMessage());
+                    }
+                }
+
+                pageToken = result.getNextPageToken();
+
+            } while (pageToken != null);
+
+            log.info("Cleanup completed: {} files deleted total", totalDeleted);
+
+        } catch (IOException e) {
+            log.error("Cleanup failed: {}", e.getMessage());
         }
     }
 
@@ -151,7 +191,7 @@ public class GoogleDriveManager {
             String streamUrl = uploadedMovie.getWebViewLink();
 
             setPublicPermission(uploadedMovie.getId());
-            
+
             movie.setFolderId(folderId);
             movie.setVideoId(videoId);
             movie.setStreamUrl(streamUrl);
@@ -160,11 +200,47 @@ public class GoogleDriveManager {
             return movie;
         } catch (IOException e) {
             log.error("Upload failed: {}", e.getMessage(), e);
+
+            // **TỰ ĐỘNG CLEANUP KHI BỊ LỖI STORAGE**
+            if (e.getMessage().contains("storageQuotaExceeded")
+                    || e.getMessage().contains("403")) {
+                log.warn("Storage full! Auto cleanup...");
+                cleanupOldFiles();
+
+                // Thử lại 1 lần
+                try {
+                    File videoMetadata = new File();
+                    videoMetadata.setParents(Collections.singletonList(folderId));
+                    videoMetadata.setName(movieName + ".mp4");
+
+                    File uploadedMovie = driveService
+                            .files()
+                            .create(
+                                    videoMetadata,
+                                    new InputStreamContent(movieFile.getContentType(), movieFile.getInputStream()))
+                            .setFields("id, name, webViewLink")
+                            .execute();
+
+                    String videoId = uploadedMovie.getId();
+                    String streamUrl = uploadedMovie.getWebViewLink();
+                    setPublicPermission(uploadedMovie.getId());
+
+                    movie.setFolderId(folderId);
+                    movie.setVideoId(videoId);
+                    movie.setStreamUrl(streamUrl);
+
+                    log.info("Successfully uploaded after cleanup: {}", movieName);
+                    return movie;
+                } catch (IOException retryEx) {
+                    throw new RuntimeException("Upload failed even after cleanup: " + retryEx.getMessage(), retryEx);
+                }
+            }
+
             throw new RuntimeException("Upload failed: " + e.getMessage(), e);
         }
     }
 
-    public Episode uploadEpisodeMovie(MultipartFile movieFile, String movieName, Episode episode) {
+    public Episode uploadEpisodeMovie(MultipartFile movieFile, String movieName, Episode episode, String movieId) {
         if (movieFile.getContentType() == null || !movieFile.getContentType().startsWith("video/")) {
             throw new IllegalArgumentException("Movie file must be a video");
         }
@@ -193,11 +269,50 @@ public class GoogleDriveManager {
             episode.setFolderId(folderId);
             episode.setVideoId(episodeId);
             episode.setStreamUrl(streamUrl);
-
+            episode.setCreatedAt(LocalDateTime.now());
+            episode.setUpdatedAt(LocalDateTime.now());
             log.info("Successfully uploaded episode: {}, episodeId: {}", movieName, episodeId);
             return episode;
         } catch (IOException e) {
             log.error("Upload failed: {}", e.getMessage(), e);
+
+            // **TỰ ĐỘNG CLEANUP KHI BỊ LỖI STORAGE**
+            if (e.getMessage().contains("storageQuotaExceeded")
+                    || e.getMessage().contains("403")) {
+                log.warn("Storage full! Auto cleanup...");
+                cleanupOldFiles();
+
+                // Thử lại 1 lần
+                try {
+                    File videoMetadata = new File();
+                    videoMetadata.setParents(Collections.singletonList(folderId));
+                    videoMetadata.setName(movieName + ".mp4");
+
+                    File uploadedEpisode = driveService
+                            .files()
+                            .create(
+                                    videoMetadata,
+                                    new InputStreamContent(movieFile.getContentType(), movieFile.getInputStream()))
+                            .setFields("id, name, webViewLink")
+                            .execute();
+
+                    String episodeId = uploadedEpisode.getId();
+                    String streamUrl = uploadedEpisode.getWebViewLink();
+                    setPublicPermission(uploadedEpisode.getId());
+
+                    episode.setFolderId(folderId);
+                    episode.setVideoId(episodeId);
+                    episode.setStreamUrl(streamUrl);
+                    episode.setCreatedAt(LocalDateTime.now());
+                    episode.setUpdatedAt(LocalDateTime.now());
+
+                    log.info("Successfully uploaded episode after cleanup: {}", movieName);
+                    return episode;
+                } catch (IOException retryEx) {
+                    throw new RuntimeException("Upload failed even after cleanup: " + retryEx.getMessage(), retryEx);
+                }
+            }
+
             throw new RuntimeException("Upload failed: " + e.getMessage(), e);
         }
     }

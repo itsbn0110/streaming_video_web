@@ -26,48 +26,39 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GoogleDriveController {
-    
+
     GoogleDriveService googleDriveService;
-    
+
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping("/upload")
     public ApiResponse<MovieResponse> uploadMovie(
             @RequestParam("request") String requestJson,
             @RequestPart("thumbnailFile") MultipartFile thumbnailFile,
-            @RequestPart("movieFile") MultipartFile movieFile,
+            @RequestPart(value = "movieFile", required = false) MultipartFile movieFile,
             @RequestPart("movieBackDrop") MultipartFile movieBackDrop)
             throws Exception {
-        
+
         ObjectMapper mapper = new ObjectMapper();
         MovieUploadRequest request = mapper.readValue(requestJson, MovieUploadRequest.class);
-        
+
         log.info("title: {}", request.getTitle());
         MovieResponse response = googleDriveService.uploadMovie(request, thumbnailFile, movieFile, movieBackDrop);
-        
-        return ApiResponse.<MovieResponse>builder()
-                .result(response)
-                .build();
+
+        return ApiResponse.<MovieResponse>builder().result(response).build();
     }
 
     @PreAuthorize(value = "hasRole('ADMIN')")
     @PostMapping("/upload-episode")
     public ApiResponse<MovieResponse> uploadEpisodeMovie(
             @RequestParam("request") String requestJson,
-            @RequestParam("movieId") String movieId,
-            @RequestPart("movieFile") MultipartFile movieFile)
+            @RequestPart(value = "movieFile", required = false) MultipartFile movieFile)
             throws Exception {
-        
+
         ObjectMapper mapper = new ObjectMapper();
         EpisodeUploadRequest request = mapper.readValue(requestJson, EpisodeUploadRequest.class);
-        
-        log.info("title: {}", request.getTitle());
-        MovieResponse response = googleDriveService.uploadEpisodeMovie(request, movieFile,movieId);
-        
-        return ApiResponse.<MovieResponse>builder()
-                .result(response)
-                .build();
+
+        MovieResponse response = googleDriveService.uploadEpisodeMovie(request, movieFile, request.getMovieId());
+
+        return ApiResponse.<MovieResponse>builder().result(response).build();
     }
-
-
-    
 }

@@ -75,7 +75,9 @@ public class PersonController {
     @GetMapping("/{personId}")
     public ApiResponse<PersonResponse> getPersonById(@PathVariable Long personId) {
         var result = personService.getPersonById(personId);
-        return ApiResponse.<PersonResponse>builder().result(personMapper.toPersonResponse(result)).build();
+        return ApiResponse.<PersonResponse>builder()
+                .result(personMapper.toPersonResponse(result))
+                .build();
     }
 
     @PutMapping("/{personId}")

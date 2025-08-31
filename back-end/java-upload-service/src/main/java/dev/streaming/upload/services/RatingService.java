@@ -34,21 +34,19 @@ public class RatingService {
     RatingMapper ratingMapper;
 
     public List<RatingResponse> getMovieRatings(String movieId) {
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         List<Rating> ratings = ratingRepository.findByMovie(movie);
         return ratingMapper.toRatingResponseList(ratings);
     }
 
     public RatingResponse getUserRatingForMovie(String userId, String movieId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
-        Rating rating = ratingRepository.findByUserAndMovie(user, movie)
+        Rating rating = ratingRepository
+                .findByUserAndMovie(user, movie)
                 .orElseThrow(() -> new AppException(ErrorCode.RATING_NOT_FOUND));
 
         return ratingMapper.toRatingResponse(rating);
@@ -62,10 +60,10 @@ public class RatingService {
         }
 
         // 2. Find user and movie
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(request.getMovieId())
+        Movie movie = movieRepository
+                .findById(request.getMovieId())
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         // 3. Check if a rating already exists for this user and movie
@@ -81,7 +79,6 @@ public class RatingService {
         newRating.setStarValue(request.getStarValue());
         newRating.setComment(request.getComment());
         newRating.setCreatedAt(LocalDateTime.now());
-
         Rating savedRating = ratingRepository.save(newRating);
 
         // 5. Update the movie's average rating
@@ -93,13 +90,12 @@ public class RatingService {
 
     @Transactional
     public void deleteRating(String userId, String movieId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
-        Rating rating = ratingRepository.findByUserAndMovie(user, movie)
+        Rating rating = ratingRepository
+                .findByUserAndMovie(user, movie)
                 .orElseThrow(() -> new AppException(ErrorCode.RATING_NOT_FOUND));
 
         ratingRepository.delete(rating);

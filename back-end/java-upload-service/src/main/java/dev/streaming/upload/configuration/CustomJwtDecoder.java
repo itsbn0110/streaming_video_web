@@ -14,8 +14,10 @@ import org.springframework.stereotype.Component;
 
 import dev.streaming.upload.DTO.request.IntrospectRequest;
 import dev.streaming.upload.services.AuthenticationService;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -32,9 +34,11 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException {
 
         try {
+            log.info("Decoding token: {}", token);
             var response = authenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
 
+            log.info("Introspection response: {}", response);
             if (!response.isValid()) throw new JwtException("Token invalid");
         } catch (JwtException e) {
             throw new JwtException(e.getMessage());

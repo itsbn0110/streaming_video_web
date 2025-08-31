@@ -11,7 +11,9 @@ import dev.streaming.upload.DTO.request.UserCreationRequest;
 import dev.streaming.upload.DTO.response.UserResponse;
 import dev.streaming.upload.Entity.User;
 
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(
+        componentModel = "spring",
+        uses = {})
 public interface UserMapper {
 
     User toUser(UserCreationRequest request);

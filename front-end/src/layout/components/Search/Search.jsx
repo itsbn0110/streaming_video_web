@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
@@ -12,7 +12,7 @@ import styles from './Search.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Search() {
+const Search = React.forwardRef((props, ref) => {
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(false);
     const [searchValue, setSearchValue] = useState('');
@@ -21,7 +21,6 @@ function Search() {
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
     const inputRef = useRef();
-    const searchContainerRef = useRef();
     const resultItemsRef = useRef([]);
     const navigate = useNavigate();
     const isMobileOrTablet = useRef(window.innerWidth < 1010);
@@ -36,8 +35,17 @@ function Search() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const normalizeKeyword = (keyword) => {
+        return keyword
+            ? keyword
+                  .normalize('NFD')
+                  .replace(/\p{Diacritic}/gu, '')
+                  .toLowerCase()
+            : '';
+    };
+
     useEffect(() => {
-        if (!searchValue.trim()) {
+        if (searchValue.trim().length < 1) {
             setSearchResult([]);
             return;
         }
@@ -45,11 +53,13 @@ function Search() {
         setActiveIndex(-1);
         const timeoutId = setTimeout(async () => {
             try {
-                const res = await fetchMoviesByKeywordAPI(searchValue, 0, 10);
-                setSearchResult(
-                    res.result?.content ? res.result.content.slice(0, 10) : res.result ? res.result.slice(0, 10) : [],
-                );
-            } catch (e) {
+                // Normalize the search value
+                const normalizedSearchValue = normalizeKeyword(searchValue.trim());
+                const encodedSearchValue = encodeURIComponent(normalizedSearchValue);
+                const res = await fetchMoviesByKeywordAPI(encodedSearchValue, 0, 10);
+                const results = res?.result?.content || res?.result || [];
+                setSearchResult(Array.isArray(results) ? results.slice(0, 10) : []);
+            } catch {
                 setSearchResult([]);
             }
             setLoading(false);
@@ -195,7 +205,7 @@ function Search() {
     };
 
     return (
-        <div className={cx('search-wrapper')} ref={searchContainerRef}>
+        <div className={cx('search-wrapper')} ref={ref}>
             <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={cx('search-container')}>
                 {!isExpanded && (
                     <button className={cx('search-button')} onClick={handleSearchToggle}>
@@ -220,20 +230,26 @@ function Search() {
                                         scrollbarColor: '#888 #222',
                                     }}
                                 >
-                                    {searchResult.map((movie, index) => (
-                                        <div
-                                            ref={(el) => (resultItemsRef.current[index] = el)}
-                                            className={cx('result-item-wrapper', { active: index === activeIndex })}
-                                            key={movie.id || index}
-                                            onMouseEnter={() => setActiveIndex(index)}
-                                            onClick={() => handleMovieClick(movie.id)}
-                                        >
-                                            <MovieItem
-                                                data={movie}
-                                                handleCloseSearch={() => handleMovieClick(movie.id)}
-                                            />
-                                        </div>
-                                    ))}
+                                    {searchResult.map((movie, index) => {
+                                        if (!movie || typeof movie !== 'object' || !movie.id) {
+                                            console.error('Invalid movie object:', movie);
+                                            return null;
+                                        }
+                                        return (
+                                            <div
+                                                ref={(el) => (resultItemsRef.current[index] = el)}
+                                                className={cx('result-item-wrapper', { active: index === activeIndex })}
+                                                key={movie.id || index}
+                                                onMouseEnter={() => setActiveIndex(index)}
+                                                onClick={() => handleMovieClick(movie.id)}
+                                            >
+                                                <MovieItem
+                                                    data={movie}
+                                                    handleCloseSearch={() => handleMovieClick(movie.id)}
+                                                />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </PopperWrapper>
                         </div>
@@ -268,6 +284,6 @@ function Search() {
             </div>
         </div>
     );
-}
+});
 
 export default Search;

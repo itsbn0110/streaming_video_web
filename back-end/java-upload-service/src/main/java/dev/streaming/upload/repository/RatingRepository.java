@@ -14,7 +14,9 @@ import dev.streaming.upload.Entity.User;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     List<Rating> findByMovie(Movie movie);
+
     List<Rating> findByUser(User user);
+
     Optional<Rating> findByUserAndMovie(User user, Movie movie);
 
     @Query("SELECT AVG(r.starValue) FROM Rating r WHERE r.movie = ?1")

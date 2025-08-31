@@ -57,7 +57,7 @@ public class UserService {
         }
 
         user.setRoles(roles);
-        var avatar = cloudinaryService.uploadImage(avatarFile,50,50);
+        var avatar = cloudinaryService.uploadImage(avatarFile, 50, 50);
 
         user.setAvatar(avatar);
 
@@ -110,7 +110,7 @@ public class UserService {
 
         if (avatarFile != null && !avatarFile.isEmpty()) {
             try {
-                var avatar = cloudinaryService.uploadImage(avatarFile,50,50);
+                var avatar = cloudinaryService.uploadImage(avatarFile, 50, 50);
                 existedUser.setAvatar(avatar);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to upload avatar", e);
@@ -126,10 +126,10 @@ public class UserService {
         if (request.getEmail() != null) existedUser.setEmail(request.getEmail());
         if (request.getFullName() != null) existedUser.setFullName(request.getFullName());
         if (request.getDob() != null) existedUser.setDob(request.getDob());
-       
+
         if (avatarFile != null && !avatarFile.isEmpty()) {
             try {
-                var avatar = cloudinaryService.uploadImage(avatarFile,50,50);
+                var avatar = cloudinaryService.uploadImage(avatarFile, 50, 50);
                 existedUser.setAvatar(avatar);
             } catch (IOException e) {
                 throw new RuntimeException("Failed to upload avatar", e);

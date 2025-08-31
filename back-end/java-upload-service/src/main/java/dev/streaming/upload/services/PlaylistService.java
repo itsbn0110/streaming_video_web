@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +23,6 @@ import dev.streaming.upload.mapper.PlaylistMapper;
 import dev.streaming.upload.repository.MovieRepository;
 import dev.streaming.upload.repository.PlaylistRepository;
 import dev.streaming.upload.repository.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,8 +46,7 @@ public class PlaylistService {
     @Transactional(readOnly = true)
     public List<PlaylistResponse> getUserPlaylists(String userId) {
         try {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+            User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
             List<Playlist> playlists = playlistRepository.findByUser(user);
 
@@ -75,10 +75,8 @@ public class PlaylistService {
         PlaylistResponse response = playlistMapper.toPlaylistResponse(playlist);
 
         // Load movies separately using native query để tránh lazy loading
-        List<MovieResponse> movieResponses = getPlaylistMovies(
-                playlist.getUser().getId(),
-                playlist.getId()
-        );
+        List<MovieResponse> movieResponses =
+                getPlaylistMovies(playlist.getUser().getId(), playlist.getId());
 
         response.setMovies(movieResponses);
         return response;
@@ -87,8 +85,7 @@ public class PlaylistService {
     @Transactional
     public PlaylistResponse createPlaylist(String userId, PlaylistRequest request) {
         try {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+            User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
             Playlist playlist = playlistMapper.toPlaylist(request);
             playlist.setUser(user);
@@ -133,8 +130,8 @@ public class PlaylistService {
             Playlist playlist = findPlaylistByIdAndUserId(playlistId, userId);
 
             // Xóa tất cả relationships trước
-            entityManager.createNativeQuery(
-                            "DELETE FROM playlist_movie WHERE playlist_id = ?")
+            entityManager
+                    .createNativeQuery("DELETE FROM playlist_movie WHERE playlist_id = ?")
                     .setParameter(1, playlistId)
                     .executeUpdate();
 
@@ -153,8 +150,8 @@ public class PlaylistService {
             Playlist playlist = findPlaylistByIdAndUserId(playlistId, userId);
 
             // Kiểm tra movie tồn tại
-            Movie movie = movieRepository.findById(movieId)
-                    .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_EXISTED));
+            Movie movie =
+                    movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_EXISTED));
 
             // Kiểm tra movie có trong playlist chưa
             if (isMovieInPlaylist(playlistId, movieId)) {
@@ -162,8 +159,8 @@ public class PlaylistService {
             }
 
             // Thêm movie vào playlist bằng native query để tránh lazy loading
-            entityManager.createNativeQuery(
-                            "INSERT INTO playlist_movie (playlist_id, movie_id) VALUES (?, ?)")
+            entityManager
+                    .createNativeQuery("INSERT INTO playlist_movie (playlist_id, movie_id) VALUES (?, ?)")
                     .setParameter(1, playlistId)
                     .setParameter(2, movieId)
                     .executeUpdate();
@@ -191,8 +188,7 @@ public class PlaylistService {
             Playlist playlist = findPlaylistByIdAndUserId(playlistId, userId);
 
             // Kiểm tra movie tồn tại
-            movieRepository.findById(movieId)
-                    .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_EXISTED));
+            movieRepository.findById(movieId).orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_EXISTED));
 
             // Kiểm tra movie có trong playlist không
             if (!isMovieInPlaylist(playlistId, movieId)) {
@@ -200,8 +196,8 @@ public class PlaylistService {
             }
 
             // Xóa movie khỏi playlist bằng native query
-            int rowsAffected = entityManager.createNativeQuery(
-                            "DELETE FROM playlist_movie WHERE playlist_id = ? AND movie_id = ?")
+            int rowsAffected = entityManager
+                    .createNativeQuery("DELETE FROM playlist_movie WHERE playlist_id = ? AND movie_id = ?")
                     .setParameter(1, playlistId)
                     .setParameter(2, movieId)
                     .executeUpdate();
@@ -233,8 +229,8 @@ public class PlaylistService {
             Playlist playlist = findPlaylistByIdAndUserId(playlistId, userId);
 
             // Xóa tất cả movies khỏi playlist bằng native query
-            entityManager.createNativeQuery(
-                            "DELETE FROM playlist_movie WHERE playlist_id = ?")
+            entityManager
+                    .createNativeQuery("DELETE FROM playlist_movie WHERE playlist_id = ?")
                     .setParameter(1, playlistId)
                     .executeUpdate();
 
@@ -260,8 +256,8 @@ public class PlaylistService {
 
             // Sử dụng native query để lấy danh sách movie_id
             @SuppressWarnings("unchecked")
-            List<String> movieIds = entityManager.createNativeQuery(
-                            "SELECT movie_id FROM playlist_movie WHERE playlist_id = ?")
+            List<String> movieIds = entityManager
+                    .createNativeQuery("SELECT movie_id FROM playlist_movie WHERE playlist_id = ?")
                     .setParameter(1, playlistId)
                     .getResultList();
 
@@ -273,9 +269,7 @@ public class PlaylistService {
             List<Movie> movies = movieRepository.findAllById(movieIds);
 
             // Chuyển đổi sang MovieResponse
-            return movies.stream()
-                    .map(movieMapper::toMovieResponse)
-                    .collect(Collectors.toList());
+            return movies.stream().map(movieMapper::toMovieResponse).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Error getting movies for playlist {} and userId: {}", playlistId, userId, e);
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
@@ -283,22 +277,64 @@ public class PlaylistService {
     }
 
     private Playlist findPlaylistByIdAndUserId(Long playlistId, String userId) {
-        return playlistRepository.findByIdAndUserId(playlistId, userId)
+        return playlistRepository
+                .findByIdAndUserId(playlistId, userId)
                 .orElseThrow(() -> new AppException(ErrorCode.PLAYLIST_NOT_EXISTED));
     }
 
     private boolean isMovieInPlaylist(Long playlistId, String movieId) {
         try {
-            Number count = (Number) entityManager.createNativeQuery(
-                            "SELECT COUNT(*) FROM playlist_movie WHERE playlist_id = ? AND movie_id = ?")
+            log.info("check playlistId: {}", playlistId);
+            Number count = (Number) entityManager
+                    .createNativeQuery("SELECT COUNT(*) FROM playlist_movie WHERE playlist_id = ? AND movie_id = ?")
                     .setParameter(1, playlistId)
                     .setParameter(2, movieId)
                     .getSingleResult();
-
+            log.info("check count: {}", count);
             return count != null && count.intValue() > 0;
         } catch (Exception e) {
             log.warn("Error checking if movie is in playlist: {}", e.getMessage());
             return false;
+        }
+    }
+
+    @Transactional
+    public void addMovieToPlaylists(String userId, List<Long> playlistIds, String movieId) {
+        try {
+
+            Movie movie = movieRepository.findById(movieId).orElseThrow(() -> {
+                log.error("Movie with ID {} does not exist", movieId);
+                return new AppException(ErrorCode.MOVIE_NOT_EXISTED);
+            });
+
+            // Check if the movie is already in any of the playlists
+            List<Long> existingPlaylists = playlistIds.stream()
+                    .filter(playlistId -> isMovieInPlaylist(playlistId, movieId))
+                    .collect(Collectors.toList());
+
+            if (!existingPlaylists.isEmpty()) {
+                log.warn("Movie {} is already in playlists: {}", movieId, existingPlaylists);
+                throw new AppException(ErrorCode.MOVIE_ALREADY_IN_PLAYLIST);
+            }
+
+            // Add the movie to all playlists where it does not exist
+            for (Long playlistId : playlistIds) {
+                Playlist playlist = findPlaylistByIdAndUserId(playlistId, userId);
+
+                entityManager
+                        .createNativeQuery("INSERT INTO playlist_movie (playlist_id, movie_id) VALUES (?, ?)")
+                        .setParameter(1, playlistId)
+                        .setParameter(2, movieId)
+                        .executeUpdate();
+            }
+
+            log.info("Successfully added movie {} to playlists {} for user {}", movieId, playlistIds, userId);
+        } catch (AppException e) {
+            log.error("Error adding movie to playlists for userId: {}. Reason: {}", userId, e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error adding movie to playlists for userId: {}", userId, e);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
     }
 }

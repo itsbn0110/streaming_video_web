@@ -1,7 +1,5 @@
 package dev.streaming.upload.DTO.request;
 
-import java.util.List;
-import dev.streaming.upload.enums.MovieType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -17,15 +15,18 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class EpisodeUploadRequest {
-        @NotBlank(message = "NOT_BLANK_TITLE")
-        String title;
+public class EpisodeUploadRequest {
+    @NotBlank(message = "NOT_BLANK_TITLE")
+    String title;
 
-        @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
-        String description;
-        
-        private Integer episodeNumber; 
+    @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
+    String description;
 
-        double duration;
-    }
+    private Integer episodeNumber;
 
+    private int status;
+
+    double duration;
+
+    String movieId;
+}

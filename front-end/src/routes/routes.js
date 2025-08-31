@@ -8,6 +8,7 @@ import SearchResults from '@/pages/SearchResults';
 import ActorDetailPage from '@/pages/ActorDetailPage';
 import ProfilePage from '@/pages/ProfilePage';
 import DonatePage from '@/pages/DonatePage';
+import AiSuggestionsPage from '@/pages/AiSuggestionsPage/AiSuggestionsPage';
 const publicRoutes = [
     { path: config.routes.home, component: HomePage },
     { path: config.routes.hot, component: MovieListPage, slug: 'phim-hot' },
@@ -20,6 +21,7 @@ const publicRoutes = [
     { path: config.routes.search, component: SearchResults },
     { path: config.routes.actorDetail, component: ActorDetailPage },
     { path: config.routes.profile, component: ProfilePage },
+    { path: config.routes.aiSuggestions, component: AiSuggestionsPage },
 ];
 
 const privateRoutes = [];

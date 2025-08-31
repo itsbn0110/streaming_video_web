@@ -1,6 +1,7 @@
 package dev.streaming.upload.services;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import dev.streaming.upload.DTO.response.GenreResponse;
@@ -39,7 +40,7 @@ public class GenreService {
         return genres;
     }
 
-    public GenreResponse getGenre (Long genreId) {
+    public GenreResponse getGenre(Long genreId) {
         var genre = genreRepository.findById(genreId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         GenreResponse genreResponse = genreMapper.toGenreResponse(genre);

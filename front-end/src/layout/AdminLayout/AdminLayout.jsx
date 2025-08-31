@@ -79,20 +79,12 @@ const AdminLayout = () => {
                                     Danh sách phim
                                 </Link>
                                 <Link
-                                    to={adminRouteConfig.createSingleFilm}
+                                    to={adminRouteConfig.createFilm}
                                     className={cx('submenu-item', {
-                                        active: isActive(adminRouteConfig.createSingleFilm),
+                                        active: isActive(adminRouteConfig.createFilm),
                                     })}
                                 >
                                     Tạo phim lẻ
-                                </Link>
-                                <Link
-                                    to={adminRouteConfig.createSeriesFilm}
-                                    className={cx('submenu-item', {
-                                        active: isActive(adminRouteConfig.createSeriesFilm),
-                                    })}
-                                >
-                                    Tạo phim tập
                                 </Link>
                             </div>
                         )}

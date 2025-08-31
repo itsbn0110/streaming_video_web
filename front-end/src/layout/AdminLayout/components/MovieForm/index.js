@@ -1,3 +1,3 @@
 export { default } from './MovieForm';
-export { default as MovieSeriesForm } from './MovieSeriesForm';
+export { default as EpisodeForm } from './EpisodeForm';
 // export { default as EpisodeManager } from './EpisodeManager';

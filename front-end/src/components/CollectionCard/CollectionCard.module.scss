@@ -1,0 +1,261 @@
+// CollectionCard.module.scss
+.collection-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 28px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4ecdc4, #44a08d, #ffd93d);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+        &::before {
+            opacity: 1;
+        }
+
+        .arrow-icon {
+            transform: translateX(4px);
+            color: #ffd93d;
+        }
+    }
+}
+
+// Collection Header
+.collection-header {
+    margin-bottom: 20px;
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    gap: 16px;
+}
+
+.collection-title {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.confidence-badge {
+    background: rgba(255, 215, 61, 0.25);
+    border: 1px solid rgba(255, 215, 61, 0.3);
+    color: #ffd93d;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(5px);
+
+    .confidence-icon {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+.collection-description {
+    color: white;
+    opacity: 0.9;
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.collection-reason {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4ecdc4;
+    opacity: 0.8;
+    margin: 0;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.4;
+
+    .reason-icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+}
+
+// Movie Info
+.movie-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    opacity: 0.8;
+    font-size: 14px;
+    font-weight: 500;
+
+    .count-icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+}
+
+.arrow-icon {
+    width: 16px;
+    height: 16px;
+    color: #4ecdc4;
+    transition: all 0.3s ease;
+}
+
+// Movies Grid
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.movie-wrapper {
+    position: relative;
+}
+
+.movie-extra-info {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.genre-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.genre-tag {
+    background: rgba(78, 205, 196, 0.2);
+    color: #4ecdc4;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 500;
+    border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.release-year {
+    color: white;
+    opacity: 0.6;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+// Empty Movies State
+.empty-movies {
+    text-align: center;
+    padding: 40px 20px;
+    color: white;
+    opacity: 0.6;
+
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 12px;
+        color: #4ecdc4;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14px;
+    }
+}
+
+// Responsive Design for Collection Card
+@media (max-width: 768px) {
+    .collection-card {
+        padding: 20px;
+    }
+
+    .title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .collection-title {
+        font-size: 18px;
+    }
+
+    .confidence-badge {
+        align-self: flex-start;
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .genre-tag {
+        font-size: 9px;
+        padding: 1px 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .collection-card {
+        padding: 16px;
+    }
+
+    .collection-title {
+        font-size: 16px;
+    }
+
+    .collection-description {
+        font-size: 14px;
+    }
+
+    .collection-reason {
+        font-size: 13px;
+    }
+
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+    }
+
+    .movie-info {
+        font-size: 13px;
+    }
+}

@@ -1,6 +1,5 @@
 package dev.streaming.upload.mapper;
 
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -8,7 +7,9 @@ import dev.streaming.upload.DTO.request.PlaylistRequest;
 import dev.streaming.upload.DTO.response.PlaylistResponse;
 import dev.streaming.upload.Entity.Playlist;
 
-@Mapper(componentModel = "spring", uses = {MovieMapper.class, UserMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {MovieMapper.class, UserMapper.class})
 public interface PlaylistMapper {
 
     @Mapping(target = "id", ignore = true)

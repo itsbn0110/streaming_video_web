@@ -1,10 +1,12 @@
 package dev.streaming.upload.repository;
 
+import java.time.LocalDate;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import dev.streaming.upload.Entity.DailyMovieViews;
 import dev.streaming.upload.Entity.DailyMovieViewsId;
-import java.time.LocalDate;
 
 public interface DailyMovieViewsRepository extends JpaRepository<DailyMovieViews, DailyMovieViewsId> {
 

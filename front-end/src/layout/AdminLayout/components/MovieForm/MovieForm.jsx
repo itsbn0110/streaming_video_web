@@ -22,6 +22,7 @@ const MovieForm = ({ editMode = false }) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
+        movieType: 'SINGLE', // Thêm movieType vào state
         title: '',
         originalTitle: '',
         description: '',
@@ -51,6 +52,9 @@ const MovieForm = ({ editMode = false }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Kiểm tra xem có phải phim lẻ không
+    const isSingleMovie = formData.movieType === 'SINGLE';
+
     useEffect(() => {
         if (editMode && id) {
             const fetchMovie = async () => {
@@ -60,6 +64,7 @@ const MovieForm = ({ editMode = false }) => {
                         const movie = res.result;
                         setFormData({
                             ...formData,
+                            movieType: movie.movieType || 'SINGLE',
                             title: movie.title || '',
                             originalTitle: movie.originalTitle || '',
                             description: movie.description || '',
@@ -118,14 +123,43 @@ const MovieForm = ({ editMode = false }) => {
     const directorSelectOptions = directorOptions.map((director) => ({ value: director, label: director.name }));
     const genreSelectOptions = genreOptions.map((genre) => ({ value: genre, label: genre.name }));
     const countrySelectOptions = countryOptions.map((country) => ({ value: country, label: country.name }));
-    const categorySelectOptions = categoryOptions.map((category) => ({ value: category, label: category.name }));
+
+    // Lọc categoryOptions dựa trên movieType
+    const filteredCategoryOptions = categoryOptions.filter((category) => {
+        const categoryName = category.name.toLowerCase();
+        if (formData.movieType === 'SINGLE') {
+            // Phim lẻ: loại bỏ "phim bộ"
+            return !categoryName.includes('phim bộ') && !categoryName.includes('series');
+        } else if (formData.movieType === 'SERIES') {
+            // Phim bộ: loại bỏ "phim lẻ"
+            return !categoryName.includes('phim lẻ') && !categoryName.includes('single');
+        }
+        return true;
+    });
+
+    const categorySelectOptions = filteredCategoryOptions.map((category) => ({
+        value: category,
+        label: category.name,
+    }));
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
-        });
+        let newValue = type === 'checkbox' ? checked : value;
+
+        // Nếu thay đổi movieType, reset movieFile và categories
+        if (name === 'movieType' && value !== formData.movieType) {
+            setFormData({
+                ...formData,
+                [name]: newValue,
+                movieFile: null, // Reset file phim khi đổi loại
+                categories: [], // Reset categories khi đổi loại phim
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: newValue,
+            });
+        }
     };
 
     const handleFileChange = (e) => {
@@ -162,13 +196,13 @@ const MovieForm = ({ editMode = false }) => {
 
     const prepareRequestData = () => {
         const requestData = {
-            movieType: 'SINGLE',
+            movieType: formData.movieType,
             title: formData.title,
             originalTitle: formData.originalTitle || '',
             description: formData.description,
             releaseYear: formData.releaseYear,
             categories: formData.categories.map((category) => category.name || category),
-            status: formData.status,
+            status: formData.status, // Ensure status is sent as a number
             trailerLink: formData.trailerLink || '',
             duration: formData.duration || 0,
             premium: formData.premium,
@@ -191,11 +225,18 @@ const MovieForm = ({ editMode = false }) => {
                 throw new Error('Vui lòng chọn hình thumbnail');
             }
 
-            if (!formData.movieFile && !editMode) {
+            // Validate status field
+            if (![1, 2, 3].includes(formData.status)) {
+                throw new Error('Trạng thái không hợp lệ');
+            }
+
+            // Chỉ validate file phim khi là phim lẻ
+            if (isSingleMovie && !formData.movieFile && !editMode) {
                 throw new Error('Vui lòng chọn file phim');
             }
 
-            if (!formData.duration || formData.duration <= 0) {
+            // Với phim bộ, duration có thể bỏ qua hoặc có giá trị mặc định
+            if (isSingleMovie && (!formData.duration || formData.duration <= 0)) {
                 throw new Error('Vui lòng nhập thời lượng phim hợp lệ');
             }
 
@@ -205,9 +246,12 @@ const MovieForm = ({ editMode = false }) => {
             if (formData.thumbnail) {
                 formDataToSend.append('thumbnailFile', formData.thumbnail);
             }
-            if (formData.movieFile) {
+
+            // Chỉ append movieFile khi là phim lẻ
+            if (isSingleMovie && formData.movieFile) {
                 formDataToSend.append('movieFile', formData.movieFile);
             }
+
             if (formData.movieBackDrop) {
                 formDataToSend.append('movieBackDrop', formData.movieBackDrop);
             }
@@ -220,7 +264,8 @@ const MovieForm = ({ editMode = false }) => {
             }
 
             if (response && response.result) {
-                alert(editMode ? 'Phim lẻ đã được cập nhật!' : 'Phim lẻ đã được tạo thành công!');
+                const movieTypeText = isSingleMovie ? 'Phim lẻ' : 'Phim bộ';
+                alert(editMode ? `${movieTypeText} đã được cập nhật!` : `${movieTypeText} đã được tạo thành công!`);
                 navigate(`${adminRouteConfig.list}`);
             } else {
                 throw new Error(response.message || 'Có lỗi xảy ra');
@@ -232,6 +277,12 @@ const MovieForm = ({ editMode = false }) => {
             setLoading(false);
         }
     };
+
+    const statusOptions = [
+        { value: 0, label: 'Nháp' },
+        { value: 1, label: 'Công khai' },
+        { value: 2, label: 'Đã lưu trữ' },
+    ];
 
     return (
         <div>
@@ -251,7 +302,11 @@ const MovieForm = ({ editMode = false }) => {
                     >
                         <ArrowLeft size={20} />
                     </button>
-                    <h2>{editMode ? 'Chỉnh sửa phim lẻ' : 'Tạo phim lẻ mới'}</h2>
+                    <h2>
+                        {editMode
+                            ? `Chỉnh sửa ${isSingleMovie ? 'phim lẻ' : 'phim bộ'}`
+                            : `Tạo ${isSingleMovie ? 'phim lẻ' : 'phim bộ'} mới`}
+                    </h2>
                 </div>
                 <button className={cx('button-primary')} onClick={handleSubmit} disabled={loading}>
                     <Save size={16} />
@@ -267,6 +322,27 @@ const MovieForm = ({ editMode = false }) => {
 
             <div className={cx('card')}>
                 <form className={cx('form-container')} onSubmit={handleSubmit}>
+                    {/* Movie Type Selection */}
+                    <div className={cx('form-row')}>
+                        <div className={cx('form-group')}>
+                            <label className={cx('form-label')}>
+                                Loại phim <span style={{ color: 'red' }}>*</span>
+                            </label>
+                            <select
+                                name="movieType"
+                                // editMode thì css cho nó mờ đi khi disabled
+                                className={cx('form-control', { 'opacity-50': editMode })}
+                                value={formData.movieType}
+                                onChange={handleInputChange}
+                                required
+                                disabled={editMode ? true : false}
+                            >
+                                <option value="SINGLE">Phim lẻ</option>
+                                <option value="SERIES">Phim bộ</option>
+                            </select>
+                        </div>
+                    </div>
+
                     {/* Basic Info */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
@@ -326,20 +402,23 @@ const MovieForm = ({ editMode = false }) => {
                             />
                         </div>
 
-                        <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>
-                                Thời lượng (phút) <span style={{ color: 'red' }}>*</span>
-                            </label>
-                            <input
-                                type="number"
-                                name="duration"
-                                className={cx('form-control')}
-                                value={formData.duration}
-                                onChange={handleInputChange}
-                                min="1"
-                                required
-                            />
-                        </div>
+                        {/* Chỉ hiện duration cho phim lẻ */}
+                        {isSingleMovie && (
+                            <div className={cx('form-group')}>
+                                <label className={cx('form-label')}>
+                                    Thời lượng (phút) <span style={{ color: 'red' }}>*</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="duration"
+                                    className={cx('form-control')}
+                                    value={formData.duration}
+                                    onChange={handleInputChange}
+                                    min="1"
+                                    required
+                                />
+                            </div>
+                        )}
 
                         <div className={cx('form-group')}>
                             <label className={cx('form-label')}>Link trailer</label>
@@ -357,14 +436,14 @@ const MovieForm = ({ editMode = false }) => {
                     {/* Categories and Settings */}
                     <div className={cx('form-row')}>
                         <div className={cx('form-group')}>
-                            <label className={cx('form-label')}>Loại phim</label>
+                            <label className={cx('form-label')}>Thể loại phim</label>
                             <Select
                                 isMulti
                                 name="categories"
                                 options={categorySelectOptions}
                                 value={formData.categories.map((c) => ({ value: c, label: c.name }))}
                                 onChange={handleSelectChange}
-                                placeholder="Chọn loại phim..."
+                                placeholder="Chọn thể loại phim..."
                                 classNamePrefix="react-select"
                             />
                         </div>
@@ -375,11 +454,13 @@ const MovieForm = ({ editMode = false }) => {
                                 name="status"
                                 className={cx('form-control')}
                                 value={formData.status}
-                                onChange={handleInputChange}
+                                onChange={(e) => setFormData({ ...formData, status: parseInt(e.target.value, 10) })}
                             >
-                                <option value="PUBLIC">Công khai</option>
-                                <option value="PRIVATE">Riêng tư</option>
-                                <option value="DRAFT">Nháp</option>
+                                {statusOptions.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 
@@ -521,37 +602,39 @@ const MovieForm = ({ editMode = false }) => {
                         </div>
                     </div>
 
-                    {/* Movie File */}
-                    <div className={cx('form-group')}>
-                        <label className={cx('form-label')}>
-                            File phim <span style={{ color: 'red' }}>*</span>
-                        </label>
-                        <div className={cx('image-upload')}>
-                            <input
-                                type="file"
-                                name="movieFile"
-                                id="movieFile"
-                                accept="video/*"
-                                onChange={handleFileChange}
-                            />
-                            <label htmlFor="movieFile">
-                                <div className={cx('upload-icon')}>
-                                    <Upload size={36} />
-                                </div>
-                                <div className={cx('upload-text')}>
-                                    Kéo thả file phim vào đây hoặc click để chọn file
-                                </div>
+                    {/* Movie File - Chỉ hiện khi là phim lẻ */}
+                    {isSingleMovie && (
+                        <div className={cx('form-group')}>
+                            <label className={cx('form-label')}>
+                                File phim <span style={{ color: 'red' }}>*</span>
                             </label>
-                        </div>
-                        {formData.movieFile && (
-                            <div style={{ marginTop: '12px' }}>
-                                <span style={{ fontWeight: '500' }}>File đã chọn:</span> {formData.movieFile.name}
-                                <div style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>
-                                    Kích thước: {(formData.movieFile.size / (1024 * 1024)).toFixed(2)} MB
-                                </div>
+                            <div className={cx('image-upload')}>
+                                <input
+                                    type="file"
+                                    name="movieFile"
+                                    id="movieFile"
+                                    accept="video/*"
+                                    onChange={handleFileChange}
+                                />
+                                <label htmlFor="movieFile">
+                                    <div className={cx('upload-icon')}>
+                                        <Upload size={36} />
+                                    </div>
+                                    <div className={cx('upload-text')}>
+                                        Kéo thả file phim vào đây hoặc click để chọn file
+                                    </div>
+                                </label>
                             </div>
-                        )}
-                    </div>
+                            {formData.movieFile && (
+                                <div style={{ marginTop: '12px' }}>
+                                    <span style={{ fontWeight: '500' }}>File đã chọn:</span> {formData.movieFile.name}
+                                    <div style={{ fontSize: '14px', color: '#666', marginTop: '4px' }}>
+                                        Kích thước: {(formData.movieFile.size / (1024 * 1024)).toFixed(2)} MB
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </form>
             </div>
         </div>

@@ -1,8 +1,8 @@
 package dev.streaming.upload.DTO.request;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data

@@ -1,5 +1,7 @@
 package dev.streaming.upload.controllers;
+
 import java.text.ParseException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
-      
+
         var result = authenticationService.login(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
@@ -65,6 +67,4 @@ public class AuthenticationController {
         var result = authenticationService.refreshToken(request);
         return ApiResponse.<AuthenticationResponse>builder().result(result).build();
     }
-
-    
 }

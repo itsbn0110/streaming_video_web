@@ -4,19 +4,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Data
@@ -25,7 +27,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "comments")
 public class Comment {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +40,8 @@ public class Comment {
     @Column(name = "parent_comment_id")
     Long parentCommentId;
 
-    @NotNull(message = "Episode number is required")
-    @Column(name = "episode_number", nullable = false)
+   
+    @Column(name = "episode_number", nullable = true)
     Integer episodeNumber;
 
     @Column(name = "likes_count")
@@ -48,7 +49,6 @@ public class Comment {
 
     @Column(name = "dislikes_count")
     Integer dislikesCount = 0;
-
 
     @Column(name = "is_edited")
     Boolean isEdited = false;

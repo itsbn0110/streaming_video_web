@@ -40,7 +40,7 @@ public class CountryService {
         return countries;
     }
 
-     public CountryResponse getCountry (Long countryId) {
+    public CountryResponse getCountry(Long countryId) {
         var genre = countryRepository.findById(countryId).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         CountryResponse genreResponse = countryMapper.toCountryResponse(genre);

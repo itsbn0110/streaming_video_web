@@ -1,0 +1,246 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.rating-modal {
+    background-color: #1a1a1a; /* Replaced $darker-background */
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        h3 {
+            color: #ffffff; /* Replaced $text-color */
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a3a3a3; /* Replaced $secondary-text */
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &:hover {
+                color: #ffffff; /* Replaced $text-color */
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+    }
+
+    .current-rating-display {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+
+        .rating-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: #ffffff; /* Replaced $text-color */
+
+            span:first-of-type {
+                font-weight: bold;
+                font-size: 1.1rem;
+            }
+
+            span:last-of-type {
+                color: #a3a3a3; /* Replaced $secondary-text */
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+
+        .star-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.05);
+                transform: scale(1.1);
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+    }
+
+    .modal-comment {
+        margin-bottom: 2rem;
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #ffffff; /* Replaced $text-color */
+            font-size: 0.9rem;
+            resize: vertical;
+            font-family: inherit;
+
+            &::placeholder {
+                color: #a3a3a3; /* Replaced $secondary-text */
+            }
+
+            &:focus {
+                outline: none;
+                border-color: #dc2626;
+                box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+            }
+        }
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+
+        .submit-rating-btn {
+            background-color: #dc2626;
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+
+            &:hover:not(:disabled) {
+                background-color: #b91c1c;
+                transform: translateY(-1px);
+            }
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none;
+            }
+        }
+
+        .cancel-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a3a3a3; /* Replaced $secondary-text */
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+
+            &:hover {
+                border-color: rgba(255, 255, 255, 0.4);
+                color: #ffffff; /* Replaced $text-color */
+            }
+        }
+    }
+}
+
+// Mobile responsiveness for modal
+@media (max-width: 768px) {
+    .rating-modal {
+        padding: 1.5rem;
+        margin: 1rem;
+        width: calc(100% - 2rem);
+
+        .modal-header {
+            h3 {
+                font-size: 1.1rem;
+                max-width: 70%;
+            }
+        }
+
+        .star-rating {
+            gap: 0.25rem;
+
+            .star-button {
+                padding: 0.125rem;
+
+                svg {
+                    width: 32px !important;
+                    height: 32px !important;
+                }
+            }
+        }
+
+        .modal-actions {
+            flex-direction: column-reverse;
+            gap: 0.75rem;
+
+            .submit-rating-btn,
+            .cancel-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .rating-modal {
+        padding: 1rem;
+
+        .star-rating {
+            .star-button {
+                svg {
+                    width: 28px !important;
+                    height: 28px !important;
+                }
+            }
+        }
+
+        .modal-comment {
+            textarea {
+                min-height: 80px;
+                padding: 0.75rem;
+            }
+        }
+    }
+}

@@ -15,7 +15,10 @@ public enum ErrorCode {
     INVALID_PASSWORD(1004, "This is Invalid password!!!!", HttpStatus.BAD_REQUEST),
     INVALID_KEY(1005, "INVALID_KEY, CHECK SOMEWHERE!", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1006, "This user is not existed!!", HttpStatus.NOT_FOUND),
-    UNAUTHENTICATED(1007, "Unauthenticated error : Authentication is required to acceess this resource!", HttpStatus.UNAUTHORIZED),
+    UNAUTHENTICATED(
+            1007,
+            "Unauthenticated error : Authentication is required to acceess this resource!",
+            HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "Do not have this permission!", HttpStatus.FORBIDDEN),
     INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN),
     MISSING_FILE(1010, "Missing field: ", HttpStatus.BAD_REQUEST),
@@ -37,16 +40,20 @@ public enum ErrorCode {
     PLAYLIST_NOT_FOUND(1023, "Playlist not found", HttpStatus.NOT_FOUND),
     PLAYLIST_NOT_EXISTED(1023, "Playlist not found", HttpStatus.NOT_FOUND), // Alias for PLAYLIST_NOT_FOUND
     MOVIE_NOT_IN_PLAYLIST(1024, "Movie is not in the playlist", HttpStatus.BAD_REQUEST),
-    MOVIE_ALREADY_IN_PLAYLIST(1025, "Movie is already in the playlist", HttpStatus.BAD_REQUEST),
+    MOVIE_ALREADY_IN_PLAYLIST(1025, "Movie is already in one or many playlists", HttpStatus.BAD_REQUEST),
     CONCURRENT_MODIFICATION(1026, "Concurrent modification", HttpStatus.CONFLICT),
     PLAYLIST_ALREADY_EXISTED(1027, "Playlist with this name already exists", HttpStatus.BAD_REQUEST),
-    DATABASE_ERROR( 1028, "Database error", HttpStatus.INTERNAL_SERVER_ERROR),
-
+    DATABASE_ERROR(1028, "Database error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Comment
     COMMENT_NOT_FOUND(1029, "Comment not found", HttpStatus.NOT_FOUND),
     COMMENT_ALREADY_EXISTED(1030, "Comment already existed", HttpStatus.BAD_REQUEST),
-    ;
+
+    INVALID_MOVIE_TYPE(1031, "Invalid movie type", HttpStatus.BAD_REQUEST),
+    EPISODE_ALREADY_EXISTS(1032, "Episode already exists", HttpStatus.BAD_REQUEST),
+    EPISODE_NOT_FOUND(1033, "Episode not found", HttpStatus.NOT_FOUND),
+    EPISODE_NUMBER_ALREADY_EXISTS(1034, "Episode number already exists", HttpStatus.BAD_REQUEST);
+
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
         this.message = message;

@@ -3,6 +3,7 @@ package dev.streaming.upload.DTO.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+
 import dev.streaming.upload.enums.MovieType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,9 +38,15 @@ public class MovieResponse {
 
     String streamUrl;
 
-    String status;
+    String ratingCount;
 
-    MovieType type;
+    String averageRating;
+
+    Integer views;
+
+    int status;
+
+    MovieType movieType;
 
     Boolean premium;
 
@@ -53,8 +60,7 @@ public class MovieResponse {
 
     Set<PersonSimpleResponse> actors;
 
-    List <EpisodeResponse> episodes;
-    
-    LocalDateTime createdAt;
+    List<EpisodeResponse> episodes;
 
+    LocalDateTime createdAt;
 }

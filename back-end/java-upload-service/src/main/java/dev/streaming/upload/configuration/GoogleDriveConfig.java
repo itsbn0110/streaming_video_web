@@ -27,12 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GoogleDriveConfig {
-    
+
     private final ResourceLoader resourceLoader;
-    
+
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String APPLICATION_NAME = "StreamingServiceApp";
-    
+
     @Value("${google.service-account.key-file}")
     private String serviceAccountKeyPath;
 
@@ -41,11 +41,8 @@ public class GoogleDriveConfig {
         try {
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             GoogleCredentials credentials = getServiceAccountCredentials();
-            
-            return new Drive.Builder(
-                    httpTransport,
-                    JSON_FACTORY,
-                    new HttpCredentialsAdapter(credentials))
+
+            return new Drive.Builder(httpTransport, JSON_FACTORY, new HttpCredentialsAdapter(credentials))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
         } catch (GeneralSecurityException | IOException e) {
@@ -53,13 +50,13 @@ public class GoogleDriveConfig {
             throw new RuntimeException("Failed to create drive: ", e);
         }
     }
-    
+
     private GoogleCredentials getServiceAccountCredentials() throws IOException {
         try {
             Resource resource = resourceLoader.getResource(serviceAccountKeyPath);
             GoogleCredentials credentials = ServiceAccountCredentials.fromStream(resource.getInputStream())
                     .createScoped(Collections.singleton(DriveScopes.DRIVE));
-            
+
             return credentials;
         } catch (IOException e) {
             log.error("Eror loading: {}", e.getMessage(), e);

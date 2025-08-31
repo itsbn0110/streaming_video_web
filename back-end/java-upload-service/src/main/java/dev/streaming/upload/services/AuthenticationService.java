@@ -80,12 +80,14 @@ public class AuthenticationService {
                 throw new IllegalArgumentException("SIGNER_KEY must be at least 32 characters long!");
             }
             boolean isValid = true;
-
+            log.info("1");
             try {
                 verifyToken(token, false);
             } catch (AppException e) {
+                log.info("Token is invalid: {}", token);
                 isValid = false;
             }
+            log.info("2");
 
             return IntrospectResponse.builder().valid(isValid).build();
 
@@ -130,9 +132,7 @@ public class AuthenticationService {
         roleRepositiory.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
         user.setRoles(roles);
         userRepository.save(user);
-        return AuthenticationResponse.builder()
-                .authenticated(true)
-                .build();
+        return AuthenticationResponse.builder().authenticated(true).build();
     }
 
     public void logout(LogoutRequest request) throws ParseException, JOSEException {

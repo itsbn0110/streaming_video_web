@@ -29,7 +29,7 @@ public class PersonService {
     PersonMapper personMapper;
 
     public PersonResponse create(PersonRequest request, MultipartFile personAvatar) throws IOException {
-        String avatar = cloudinaryService.uploadImage(personAvatar,50,50);
+        String avatar = cloudinaryService.uploadImage(personAvatar, 50, 50);
         log.info("avatar: ", avatar);
         Person person = personRepository.save(Person.builder()
                 .name(request.getName())
@@ -53,9 +53,6 @@ public class PersonService {
         return actors;
     }
 
-    
-
-
     public PersonResponse updatePerson(PersonRequest request, MultipartFile personAvatar, Long personId)
             throws IOException {
         Person existedPerson =
@@ -64,7 +61,7 @@ public class PersonService {
         personMapper.updateFromRequest(request, existedPerson);
 
         if (personAvatar != null && !personAvatar.isEmpty()) {
-            String avatarUrl = cloudinaryService.uploadImage(personAvatar,50,50);
+            String avatarUrl = cloudinaryService.uploadImage(personAvatar, 50, 50);
             existedPerson.setAvatar(avatarUrl);
         }
 
@@ -77,7 +74,9 @@ public class PersonService {
     }
 
     public dev.streaming.upload.Entity.Person getPersonById(Long personId) {
-        return personRepository.findById(personId)
-                .orElseThrow(() -> new dev.streaming.upload.exception.AppException(dev.streaming.upload.exception.ErrorCode.NOT_FOUND));
+        return personRepository
+                .findById(personId)
+                .orElseThrow(() -> new dev.streaming.upload.exception.AppException(
+                        dev.streaming.upload.exception.ErrorCode.NOT_FOUND));
     }
 }

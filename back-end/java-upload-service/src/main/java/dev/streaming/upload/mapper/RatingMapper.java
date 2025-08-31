@@ -9,7 +9,9 @@ import dev.streaming.upload.DTO.request.RatingRequest;
 import dev.streaming.upload.DTO.response.RatingResponse;
 import dev.streaming.upload.Entity.Rating;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {UserMapper.class})
 public interface RatingMapper {
 
     @Mapping(target = "id", ignore = true)

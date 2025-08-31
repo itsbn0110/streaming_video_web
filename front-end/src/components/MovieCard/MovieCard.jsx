@@ -28,13 +28,13 @@ function MovieCard({ movie, isMovieCardPersonInfoPage }) {
         <div className={cx('movie-card')}>
             <Link to={`/movies/${movie.id}`} onClick={handleClickMovieCard} className={cx('movie-link')}>
                 <img
-                    src={movie.thumbnail || images.user_avatar || '/placeholder-movie.jpg'}
-                    alt={movie.title}
+                    src={movie?.thumbnail || images.user_avatar || '/placeholder-movie.jpg'}
+                    alt={movie?.title || 'No title'}
                     className={!isMovieCardPersonInfoPage ? cx('movie-poster') : cx('joined-movie-poster')}
                 />
                 <div className={cx('movie-info')}>
-                    <h3 className={cx('movie-title')}>{movie.title}</h3>
-                    <div className={cx('movie-subtitle')}>{movie.originalTitle}</div>
+                    <h3 className={cx('movie-title')}>{movie?.title || 'No title'}</h3>
+                    <div className={cx('movie-subtitle')}>{movie?.originalTitle || ''}</div>
                 </div>
             </Link>
         </div>

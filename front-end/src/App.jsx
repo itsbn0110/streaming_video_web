@@ -6,6 +6,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { NotFound } from './components/Auth/NotFound/NotFound';
 import AdminLayout from './layout/AdminLayout';
+
 export const ProtectedRoute = ({ children, requiredRoles = [], redirectPath = '/login' }) => {
     const location = useLocation();
     const { hasAnyRole } = useAuth();

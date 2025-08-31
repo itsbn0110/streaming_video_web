@@ -3,11 +3,11 @@ package dev.streaming.upload.services;
 import java.io.IOException;
 import java.util.Map;
 
-import com.cloudinary.Transformation;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
 import lombok.AccessLevel;
@@ -22,13 +22,13 @@ public class CloudinaryService {
 
     @SuppressWarnings("unchecked")
     public String uploadImage(MultipartFile file, int width, int height) throws IOException {
-        Map<String, Object> uploadResult =
-                cloudinary.uploader().upload(
+        Map<String, Object> uploadResult = cloudinary
+                .uploader()
+                .upload(
                         file.getBytes(),
                         ObjectUtils.asMap(
-                                "transformation", new Transformation().width(width).height(height).crop("fill")
-                        )
-                );
+                                "transformation",
+                                new Transformation().width(width).height(height).crop("fill")));
         return uploadResult.get("secure_url").toString();
     }
 }

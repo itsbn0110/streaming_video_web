@@ -121,6 +121,9 @@ function Header({ isHeaderHidden = 'hello' }) {
                     <li>
                         <Link to={routes.series}>Phim bộ</Link>
                     </li>
+                    <li>
+                        <Link to={routes.aiSuggestions}>Gợi ý AI</Link>
+                    </li>
                 </ul>
             </div>
 
@@ -131,7 +134,7 @@ function Header({ isHeaderHidden = 'hello' }) {
                     <Account />
                 ) : (
                     <Button outline sizeType="small" to="/login">
-                        Sign In
+                        Đăng nhập
                     </Button>
                 )}
             </div>
@@ -201,6 +204,10 @@ function Header({ isHeaderHidden = 'hello' }) {
                     <Link to={routes.hot} className={cx('nav-item')} onClick={closeMobileMenu}>
                         <TrendingUp size={20} />
                         <span>Mới & Phổ biến</span>
+                    </Link>
+                    <Link to={routes.aiSuggestions} className={cx('nav-item')} onClick={closeMobileMenu}>
+                        <TrendingUp size={20} />
+                        <span>Gợi ý AI</span>
                     </Link>
                 </nav>
 

@@ -31,40 +31,33 @@ public class RatingController {
     RatingService ratingService;
 
     @GetMapping("/movies/{movieId}")
-    public ApiResponse<List<RatingResponse>> getMovieRatings(
-            @PathVariable String movieId) {
+    public ApiResponse<List<RatingResponse>> getMovieRatings(@PathVariable String movieId) {
         List<RatingResponse> ratings = ratingService.getMovieRatings(movieId);
-        return ApiResponse.<List<RatingResponse>>builder()
-                .result(ratings)
-                .build();
+        return ApiResponse.<List<RatingResponse>>builder().result(ratings).build();
     }
 
     @GetMapping("/movies/{movieId}/user")
     public ApiResponse<RatingResponse> getUserRatingForMovie(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable String movieId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable String movieId) {
+        log.info("1");
         String userId = jwt.getSubject();
+        log.info("2");
+
         RatingResponse rating = ratingService.getUserRatingForMovie(userId, movieId);
-        return ApiResponse.<RatingResponse>builder()
-                .result(rating)
-                .build();
+        log.info("3");
+
+        return ApiResponse.<RatingResponse>builder().result(rating).build();
     }
 
     @PostMapping
-    public ApiResponse<RatingResponse> rateMovie(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody RatingRequest request) {
+    public ApiResponse<RatingResponse> rateMovie(@AuthenticationPrincipal Jwt jwt, @RequestBody RatingRequest request) {
         String userId = jwt.getSubject();
         RatingResponse rating = ratingService.rateMovie(userId, request);
-        return ApiResponse.<RatingResponse>builder()
-                .result(rating)
-                .build();
+        return ApiResponse.<RatingResponse>builder().result(rating).build();
     }
 
     @DeleteMapping("/movies/{movieId}")
-    public ApiResponse<Void> deleteRating(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable String movieId) {
+    public ApiResponse<Void> deleteRating(@AuthenticationPrincipal Jwt jwt, @PathVariable String movieId) {
         String userId = jwt.getSubject();
         ratingService.deleteRating(userId, movieId);
         return ApiResponse.<Void>builder().build();

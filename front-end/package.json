@@ -20,6 +20,7 @@
     "classnames": "^2.5.1",
     "dotenv": "^16.4.7",
     "lucide-react": "^0.487.0",
+    "moment": "^2.30.1",
     "normalize.css": "^8.0.1",
     "postcss": "^8.5.3",
     "prop-types": "^15.8.1",
@@ -29,6 +30,7 @@
     "react-router-dom": "^7.4.1",
     "react-select": "^5.10.1",
     "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.5",
     "sass": "^1.86.1",
     "slick-carousel": "^1.8.1",
     "tailwindcss": "^4.1.1"
@@ -43,6 +45,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-svgr": "^4.5.0"
   }
 }

@@ -16,21 +16,19 @@ import dev.streaming.upload.Entity.Comment;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // Find comments by movie and episode (only parent comments)
-    @Query("SELECT c FROM Comment c WHERE c.movie.id = :movieId AND c.episodeNumber = :episodeNumber AND c.parentCommentId IS NULL ORDER BY c.createdAt DESC")
+    @Query(
+            "SELECT c FROM Comment c WHERE c.movie.id = :movieId AND c.episodeNumber = :episodeNumber AND c.parentCommentId IS NULL ORDER BY c.createdAt DESC")
     Page<Comment> findByMovieIdAndEpisodeNumberAndParentCommentIdIsNull(
-            @Param("movieId") String movieId,
-            @Param("episodeNumber") Integer episodeNumber,
-            Pageable pageable
-    );
+            @Param("movieId") String movieId, @Param("episodeNumber") Integer episodeNumber, Pageable pageable);
 
     Page<Comment> findByUser_Id(String userId, Pageable pageable);
+
     long countByUser_Id(String userId);
 
-    @Query("SELECT c FROM Comment c " +
-            "LEFT JOIN FETCH c.user " +
-            "LEFT JOIN FETCH c.movie " +
-            "WHERE c.user.id = :userId " +
-            "ORDER BY c.createdAt DESC")
+    @Query("SELECT c FROM Comment c " + "LEFT JOIN FETCH c.user "
+            + "LEFT JOIN FETCH c.movie "
+            + "WHERE c.user.id = :userId "
+            + "ORDER BY c.createdAt DESC")
     Page<Comment> findByUserIdWithFetch(@Param("userId") String userId, Pageable pageable);
 
     @Query("SELECT c FROM Comment c WHERE c.user.id = :userId")
@@ -54,4 +52,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // Delete comments by movie ID
     void deleteByMovieId(String movieId);
+
+    Page<Comment> findByMovieId(String movieId, Pageable pageable);
 }

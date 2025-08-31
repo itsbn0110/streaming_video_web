@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.streaming.upload.DTO.ApiResponse;
+import dev.streaming.upload.DTO.request.AddMovieToPlaylistsRequest;
 import dev.streaming.upload.DTO.request.PlaylistRequest;
 import dev.streaming.upload.DTO.response.MovieResponse;
 import dev.streaming.upload.DTO.response.PlaylistResponse;
-
-import dev.streaming.upload.mapper.MovieMapper;
 import dev.streaming.upload.services.PlaylistService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,34 +34,25 @@ import lombok.extern.slf4j.Slf4j;
 public class PlaylistController {
 
     PlaylistService playlistService;
-    MovieMapper movieMapper;
-
     @GetMapping
-    public ApiResponse<List<PlaylistResponse>> getUserPlaylists(
-            @AuthenticationPrincipal Jwt jwt) {
+    public ApiResponse<List<PlaylistResponse>> getUserPlaylists(@AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         List<PlaylistResponse> playlists = playlistService.getUserPlaylists(userId);
-        return ApiResponse.<List<PlaylistResponse>>builder()
-                .result(playlists)
-                .build();
+        return ApiResponse.<List<PlaylistResponse>>builder().result(playlists).build();
     }
 
     @GetMapping("/{playlistId}")
     public ApiResponse<PlaylistResponse> getPlaylistById(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId) {
         String userId = jwt.getSubject();
         PlaylistResponse playlist = playlistService.getPlaylistById(userId, playlistId);
-        return ApiResponse.<PlaylistResponse>builder()
-                .result(playlist)
-                .build();
+        return ApiResponse.<PlaylistResponse>builder().result(playlist).build();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<PlaylistResponse> createPlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @RequestBody PlaylistRequest request) {
+            @AuthenticationPrincipal Jwt jwt, @RequestBody PlaylistRequest request) {
         String userId = jwt.getSubject();
         PlaylistResponse playlist = playlistService.createPlaylist(userId, request);
         return ApiResponse.<PlaylistResponse>builder()
@@ -73,9 +63,7 @@ public class PlaylistController {
 
     @PutMapping("/{playlistId}")
     public ApiResponse<PlaylistResponse> updatePlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId,
-            @RequestBody PlaylistRequest request) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId, @RequestBody PlaylistRequest request) {
         String userId = jwt.getSubject();
         PlaylistResponse playlist = playlistService.updatePlaylist(userId, playlistId, request);
         return ApiResponse.<PlaylistResponse>builder()
@@ -86,9 +74,7 @@ public class PlaylistController {
 
     @DeleteMapping("/{playlistId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ApiResponse<Void> deletePlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId) {
+    public ApiResponse<Void> deletePlaylist(@AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId) {
         String userId = jwt.getSubject();
         playlistService.deletePlaylist(userId, playlistId);
         return ApiResponse.<Void>builder()
@@ -98,9 +84,7 @@ public class PlaylistController {
 
     @PostMapping("/{playlistId}/movies/{movieId}")
     public ApiResponse<PlaylistResponse> addMovieToPlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId,
-            @PathVariable String movieId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId, @PathVariable String movieId) {
         String userId = jwt.getSubject();
         PlaylistResponse playlist = playlistService.addMovieToPlaylist(userId, playlistId, movieId);
         return ApiResponse.<PlaylistResponse>builder()
@@ -111,9 +95,7 @@ public class PlaylistController {
 
     @DeleteMapping("/{playlistId}/movies/{movieId}")
     public ApiResponse<PlaylistResponse> removeMovieFromPlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId,
-            @PathVariable String movieId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId, @PathVariable String movieId) {
         String userId = jwt.getSubject();
         log.info("playlistId: {}, movieId: {}", playlistId, movieId);
         PlaylistResponse playlist = playlistService.removeMovieFromPlaylist(userId, playlistId, movieId);
@@ -125,8 +107,7 @@ public class PlaylistController {
 
     @DeleteMapping("/{playlistId}/clear")
     public ApiResponse<PlaylistResponse> clearPlaylist(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId) {
         String userId = jwt.getSubject();
         PlaylistResponse playlist = playlistService.clearPlaylist(userId, playlistId);
         return ApiResponse.<PlaylistResponse>builder()
@@ -137,12 +118,22 @@ public class PlaylistController {
 
     @GetMapping("/{playlistId}/movies")
     public ApiResponse<List<MovieResponse>> getPlaylistMovies(
-            @AuthenticationPrincipal Jwt jwt,
-            @PathVariable Long playlistId) {
+            @AuthenticationPrincipal Jwt jwt, @PathVariable Long playlistId) {
         String userId = jwt.getSubject();
         List<MovieResponse> movieResponses = playlistService.getPlaylistMovies(userId, playlistId);
-        return ApiResponse.<List<MovieResponse>>builder()
-                .result(movieResponses)
+        return ApiResponse.<List<MovieResponse>>builder().result(movieResponses).build();
+    }
+
+    @PostMapping("/movies/add")
+    public ApiResponse<Void> addMovieToPlaylists(
+            @AuthenticationPrincipal Jwt jwt, @RequestBody AddMovieToPlaylistsRequest request) {
+        String userId = jwt.getSubject();
+        log.info("1");
+        playlistService.addMovieToPlaylists(userId, request.getPlaylistIds(), request.getMovieId());
+        log.info("1");
+
+        return ApiResponse.<Void>builder()
+                .message("Movie added to selected playlists successfully")
                 .build();
     }
 }

@@ -1,8 +1,8 @@
 package dev.streaming.upload.DTO.response;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -12,6 +12,8 @@ public class CommentResponse {
     private Integer episodeNumber;
     private Long parentCommentId;
     private Integer likesCount;
+    private Integer dislikesCount;
+
     private Boolean isEdited;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

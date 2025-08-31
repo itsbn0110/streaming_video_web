@@ -1,10 +1,11 @@
 package dev.streaming.upload.DTO.request;
 
 import java.util.List;
-import dev.streaming.upload.enums.MovieType;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import dev.streaming.upload.enums.MovieType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,35 +18,34 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-    public class MovieUploadRequest {
-        @NotBlank(message = "NOT_BLANK_TITLE")
-        String title;
+public class MovieUploadRequest {
+    @NotBlank(message = "NOT_BLANK_TITLE")
+    String title;
 
-        String originalTitle;
+    String originalTitle;
 
-        String trailerLink;
+    String trailerLink;
 
-        int releaseYear;
+    int releaseYear;
 
-        String status;
+    int status;
 
-        Boolean premium;
+    Boolean premium;
 
-        @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
-        String description;
+    @Size(max = 500, message = "NOT_BLANK_DESCRIPTION")
+    String description;
 
-        List<String> categories;
+    List<String> categories;
 
-        List<String> genres;
+    List<String> genres;
 
-        List<String> countries;
+    List<String> countries;
 
-        List<String> actors;
+    List<String> actors;
 
-        List<String> directors;
+    List<String> directors;
 
-        MovieType type;
+    MovieType movieType;
 
-        double duration;
-    }
-
+    double duration;
+}

@@ -4,7 +4,10 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import axios from 'axios';
-
+import dotenv from 'dotenv';
+import { data } from 'react-router-dom';
+import e from 'express';
+dotenv.config({ path: '../.env' });
 const app = express();
 
 const port = 3000;
@@ -18,21 +21,32 @@ app.use(
         origin: 'http://localhost:5173',
     }),
 );
+// Lấy biến từ env đúng cách
 
 const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
-const getVideoResponse = async (movieId) => {
-    const res = await axios.get(`http://localhost:8082/api/movies/golang/${movieId}`);
-
+const getVideoIdResponse = async (movieId, episodeNumber) => {
+    console.log('movieId', movieId, 'episode: ', episodeNumber);
+    const res = await axios.get(
+        `http://localhost:8082/api/movies/golang/${movieId}`,
+        episodeNumber
+            ? {
+                  params: {
+                      ep: episodeNumber,
+                  },
+              }
+            : {},
+    );
     return res;
 };
 app.get('/stream/:movieId', async (req, res) => {
     const movieId = req.params.movieId;
+    const episodeNumber = req.query.ep;
     const range = req.headers.range;
-    const videoResponse = await getVideoResponse(movieId);
 
-    const videoID = videoResponse.data.result.videoId;
+    const dataRes = await getVideoIdResponse(movieId, episodeNumber);
+    const videoID = dataRes.data.result;
+    console.log('videoID', videoID);
 
-    console.log('videoID: ', videoID);
     if (!range) {
         return res.status(400).send('Requires Range header');
     }
@@ -40,8 +54,7 @@ app.get('/stream/:movieId', async (req, res) => {
     try {
         // Lấy thông tin về file từ Google Drive API
         const googleDriveURL = `https://www.googleapis.com/drive/v3/files/${videoID}?alt=media&key=${GOOGLE_API_KEY}`;
-        console.log('hello');
-        console.log('googleDriveURL: ', googleDriveURL);
+
         // Gửi request đến Google Drive với range từ trình duyệt
         const response = await axios({
             method: 'GET',

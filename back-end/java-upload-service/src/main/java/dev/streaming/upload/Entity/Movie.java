@@ -1,15 +1,16 @@
 package dev.streaming.upload.Entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import dev.streaming.upload.enums.MovieType;
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import dev.streaming.upload.enums.MovieType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,20 +51,21 @@ public class Movie {
     String backdrop;
 
     @Column(nullable = false)
-    String status;
+    int status;
 
-    @Column(nullable = false)
+    @Column()
     Boolean premium;
 
+    @Column(name = "folder_id", nullable = true)
     String folderId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     double duration;
 
-    @Column(name = "stream_url", nullable = false)
+    @Column(name = "stream_url", nullable = true)
     String streamUrl;
 
-    @Column(name = "video_id", nullable = false)
+    @Column(name = "video_id", nullable = true)
     String videoId;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -116,7 +118,6 @@ public class Movie {
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
 
-    
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     Set<Episode> episodes = new HashSet<>();
 
@@ -132,7 +133,7 @@ public class Movie {
     @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
     @JsonIgnore
     Set<Playlist> playlists = new HashSet<>();
-    
+
     @Enumerated(EnumType.STRING)
     private MovieType movieType;
 
@@ -143,4 +144,3 @@ public class Movie {
         playlist.getMovies().remove(this);
     }
 }
-

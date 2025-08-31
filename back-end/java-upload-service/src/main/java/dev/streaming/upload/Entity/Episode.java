@@ -1,7 +1,9 @@
 package dev.streaming.upload.Entity;
 
 import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+
 import lombok.*;
 
 @Entity
@@ -14,18 +16,22 @@ public class Episode {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    
-    private String title; 
-    private String description; 
-    private Integer episodeNumber; 
+
+    private String title;
+    private String description;
+    private Integer episodeNumber;
     private Double duration;
-    private String streamUrl; 
-    private String videoId; 
+    private String streamUrl;
+    private String videoId;
     private String folderId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-        
-    @ManyToOne(fetch = FetchType.LAZY)
+    private int status;
+
+    @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
+
+    @Column(name = "movie_id", insertable = false, updatable = false)
+    private String movieId;
 }

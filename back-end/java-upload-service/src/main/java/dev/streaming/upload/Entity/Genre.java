@@ -39,6 +39,4 @@ public class Genre {
     List<Movie> movies;
 
     String slug;
-
-
 }

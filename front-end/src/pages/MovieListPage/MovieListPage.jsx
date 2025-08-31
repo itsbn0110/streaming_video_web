@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './MovieListPage.module.scss';
 import classNames from 'classnames/bind';
 import MovieCard from '@/components/MovieCard';
-import { fetchMoviesByCategoryAPI, fetchMoviesWithFiltersAPI, fetchAllCountriesAPI } from '@/apis';
+import { fetchMoviesByCategoryAPI, fetchMoviesWithFiltersAPI, fetchAllCountriesAPI, fetchAllGenresAPI } from '@/apis';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +14,7 @@ function MovieListPage() {
 
     const [countryOptions, setCountryOptions] = useState([]);
     const [yearOptions, setYearOptions] = useState([]);
+    const [genreOptions, setGenreOptions] = useState([]); // Add state for genre options
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,6 +24,7 @@ function MovieListPage() {
         releaseYear: searchParams.get('releaseYear') || '',
         countryId: searchParams.get('countryId') || '',
         duration: searchParams.get('duration') || '',
+        genreId: searchParams.get('genreId') || '', // Add genreId to filters
         // sort: searchParams.get("sort") || "latest",
     });
 
@@ -40,6 +42,11 @@ function MovieListPage() {
                 const countriesRes = await fetchAllCountriesAPI();
                 if (countriesRes && countriesRes.result) {
                     setCountryOptions(countriesRes.result || []);
+                }
+
+                const genresRes = await fetchAllGenresAPI(); // Fetch genres from API
+                if (genresRes && genresRes.result) {
+                    setGenreOptions(genresRes.result || []);
                 }
 
                 const currentYear = new Date().getFullYear();
@@ -101,6 +108,7 @@ function MovieListPage() {
             releaseYear: searchParams.get('releaseYear') || '',
             countryId: searchParams.get('countryId') || '',
             duration: searchParams.get('duration') || '',
+            genreId: searchParams.get('genreId') || '', // Add genreId to filters
             // sort: searchParams.get("sort") || "latest",
         };
 
@@ -204,6 +212,18 @@ function MovieListPage() {
                             <option value="short">Dưới 90 phút</option>
                             <option value="medium">90-120 phút</option>
                             <option value="long">Trên 120 phút</option>
+                        </select>
+                    </div>
+
+                    <div className={cx('filter-group')}>
+                        <label>Thể loại:</label>
+                        <select name="genreId" onChange={handleFilterChange} value={filters.genreId}>
+                            <option value="">- Tất cả -</option>
+                            {genreOptions.map((genre) => (
+                                <option key={genre.id} value={genre.id}>
+                                    {genre.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
 

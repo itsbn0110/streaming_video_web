@@ -25,9 +25,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "favorites", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"user_id", "movie_id"})
-})
+@Table(
+        name = "favorites",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "movie_id"})})
 public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
